@@ -74,10 +74,10 @@ migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path 
 # n：执行的迁移文件数量（回滚的文件数量）例如：1，2，3...
 
 # 执行迁移操作：
-go run migrate.go {n} {env}
+go run main.go migrate {n} {env}
 
 # 执行回滚操作：
-go run migrate.go -{n} {env}
+go run main.go migrate -{n} {env}
 ```
 ### 2、自动生成model
 ```shell script
@@ -85,9 +85,9 @@ go run migrate.go -{n} {env}
 # env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
 
 # 执行生成所有model
-go run model.go all {env}
+go run main.go model all {env}
 #
-go run model.go {数据表名} {env}
+go run main.go model {数据表名} {env}
 # 例如：go run model.go gin_admin
 ```
 
@@ -145,6 +145,11 @@ go get -u github.com/casbin/casbin/v2
 go get -u github.com/casbin/gorm-adapter/v3
 ```
 
+### 安装snowflake
+```shell script
+go get -u github.com/bwmarrin/snowflake
+```
+
 ### 安装golang-migrate迁移组件
 ```shell script
 go get -u github.com/golang-migrate/migrate/v4
@@ -171,8 +176,8 @@ migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path 
 # env为 dev, test, prod与config.*.yaml文件保持一致
 # n为：执行的迁移文件数量（回滚的文件数量）
 # 执行迁移操作：
-go run migrate.go {n} {env}
+go run main.go migrate {n} {env}
 
 # 执行回滚操作：
-go run migrate.go -{n} {env}
+go run main.go migrate -{n} {env}
 ```

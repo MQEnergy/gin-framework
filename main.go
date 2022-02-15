@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/urfave/cli/v2"
 	"lyky-go/bootstrap"
+	"lyky-go/command"
 	"lyky-go/config"
 	"lyky-go/pkg/validator"
 	"lyky-go/router"
@@ -65,7 +66,32 @@ func Stack() *cli.App {
 			//	注册路由 启动程序
 			return router.Register().Run(":" + AppPort)
 		},
-		Commands: []*cli.Command{},
+		Commands: []*cli.Command{
+			{
+				Name:  "migrate",
+				Usage: "Create migration command",
+				Action: func(ctx *cli.Context) error {
+					command.GenerateMigrate()
+					return nil
+				},
+			},
+			{
+				Name:  "model",
+				Usage: "Create a new model class",
+				Action: func(ctx *cli.Context) error {
+					command.GenerateModel()
+					return nil
+				},
+			},
+			{
+				Name:  "account",
+				Usage: "Create a new admin account",
+				Action: func(ctx *cli.Context) error {
+					command.GenerateAdmin()
+					return nil
+				},
+			},
+		},
 	}
 }
 

@@ -1,4 +1,4 @@
-package main
+package command
 
 import (
 	"database/sql"
@@ -14,11 +14,16 @@ import (
 	"time"
 )
 
-func main() {
-	var env = "dev"
-	n, _ := strconv.Atoi(os.Args[1])
-	if len(os.Args) >= 3 {
-		env = os.Args[2]
+func GenerateMigrate() {
+	env := "dev"
+	args := os.Args
+	if len(args) < 4 {
+		fmt.Println("参数缺失：至少需要一个参数 {n} {env}")
+		return
+	}
+	n, _ := strconv.Atoi(args[2])
+	if len(args) >= 4 {
+		env = args[3]
 	}
 	config.ConfEnv = env
 	config.InitConfig()
