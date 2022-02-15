@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS gin_admin;
