@@ -52,7 +52,7 @@ http://127.0.0.1:9527/ping
 ```
 ## 工具
 ```
-运行 go run main.go --help 可查看到一下命令急
+运行 go run main.go --help 可查看到一下命令集
 
 COMMANDS:
    migrate  Create migration command // 执行migrate
