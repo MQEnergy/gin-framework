@@ -25,6 +25,9 @@
 ```
 
 ## 二、启动服务
+```
+注意启动前需要将 mysql服务和redis服务开启，并配置config.dev.yaml文件(默认读取dev环境)中的mysql和redis配置
+```
 ### 1、安装依赖
 ```shell script
 go mod tidy 
@@ -48,7 +51,15 @@ http://127.0.0.1:9527/ping
 }
 ```
 ## 工具
+```
+运行 go run main.go --help 可查看到一下命令急
 
+COMMANDS:
+   migrate  Create migration command // 执行migrate
+   model    Create a new model class  // 自动生成model
+   account  Create a new admin account // 生成基于admin表的管理账号信息
+   help, h  Shows a list of commands or help for one command
+```
 ### 1、执行migrate
 ```shell script
 # 安装migrate cli工具
