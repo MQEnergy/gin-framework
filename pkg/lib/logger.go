@@ -14,7 +14,7 @@ type Logger struct {
 
 // NewLogger 构造日志服务
 func NewLogger(logPath, module string) (*Logger, error) {
-	src, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_RDONLY, os.ModeAppend)
+	src, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		return nil, err
 	}

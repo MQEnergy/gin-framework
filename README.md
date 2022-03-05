@@ -177,18 +177,8 @@ scoop install migrate
 # 创建迁移文件语法例如:
 migrate create -ext sql -dir migrations -seq create_users_table
 
-# 第一种方式执行迁移
 # 执行迁移操作：
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations up
 # 执行回滚操作：
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations down
-
-# 第二种方式执行迁移
-# env为 dev, test, prod与config.*.yaml文件保持一致
-# n为：执行的迁移文件数量（回滚的文件数量）
-# 执行迁移操作：
-go run main.go migrate {n} {env}
-
-# 执行回滚操作：
-go run main.go migrate -{n} {env}
 ```
