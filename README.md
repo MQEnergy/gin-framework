@@ -50,10 +50,75 @@ http://127.0.0.1:9527/ping
     data: "Pong!"
 }
 ```
-## 工具
+## 三、组件使用
+### 1、基于gorm的查询分页构造器
+分页代码在pkg/paginator中
+使用方法如下：
+```shell script
+import 	"lyky-go/pkg/paginator"
+var memberList = make([]models.GinAdmin, 0) // make 返回的list数据是[]数组 如果没有make 那么返回response就是null
+paginator, err := paginator.Builder.
+    WithDB(global.DB).
+    WithFields([]string{"id", "uuid", "account", "omit"})
+    WithCondition("id = ?", 1).
+    Pagination(memberList, 1, 10)
+return paginator, err
 ```
-运行 go run main.go --help 可查看到一下命令集
+返回数据格式如下：
+```json
+{
+    "status": 200,
+    "errcode": 0,
+    "message": "请求成功",
+    "data": {
+        "list": [],
+        "current_page": 2,
+        "count": 13,
+        "last_page": 2,
+        "per_page": 10
+    }
+}
+```
+#### 1）WithDB(db *gorm.DB) *PageBuilder db连接方法 `此处必须在链式操作中`
+```
+传入全局global.DB 
+```
+#### 2）WithFields(fields []string) *PageBuilder 查询或过滤字段方法 `此处非必须在链式操作中`
+```
+最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段。
+```
+#### 3）WithCondition(query interface{}, args ...interface{}) *PageBuilder 数据查询条件方法 `此处非必须在链式操作中`
+```
+如上所示 传入查询条件 支持gorm中where条件中的一些查询方式（非struct方式） query, args参数参照gorm where条件传入方式
+```
+#### 4）Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法 `此处必须在链式操作中最后一环`
+```
+list 传入数据表的struct model，currentPage 为当前页码，pageSize为每页查询数量
+```
+#### 5）获取当前页码
+```
+paginator.CurrentPage
+```
+#### 6）获取分页列表
+```
+paginator.List
+```
+#### 7）获取数据总数
+```
+paginator.Count
+```
+#### 8）获取最后一页页码
+```
+paginator.LastPage
+```
+#### 9）获取每页数据条数
+```
+paginator.PerPage
+```
 
+## 四、工具
+运行 go run main.go --help 可查看到以下命令集
+```
 COMMANDS:
    migrate  Create migration command // 执行migrate
    model    Create a new model class  // 自动生成model
@@ -101,8 +166,13 @@ go run main.go model all {env}
 go run main.go model {数据表名} {env}
 # 例如：go run model.go gin_admin
 ```
+### 3、创建后台管理员账号
+```
+go run main.go account {账号名称} {密码}  
+```
+账号名称，密码需要修改成自己想要设置的
 
-## 参考 
+## 五、参考 
 ### 初始化一个接口项目需要安装的依赖包
 ### 初始化go.mod
 ```shell script
