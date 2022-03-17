@@ -5,10 +5,10 @@ import (
 )
 
 type TreeList struct {
-	ID       uint64
-	Pid      uint64
-	Name     string
-	Children []TreeList
+	ID       uint64     `json:"id"`
+	Pid      uint64     `json:"parent_id"`
+	Name     string     `json:"name"`
+	Children []TreeList `json:"children"`
 }
 
 // GenerateTree 无限极分类
