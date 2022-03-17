@@ -8,6 +8,7 @@ import (
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hashicorp/go-uuid"
 	"io"
+	"strconv"
 )
 
 // InStringSlice 判断某个字符串是否在字符串切片中
@@ -71,4 +72,32 @@ func GeneratePasswordHash(password string, salt string) string {
 	io.WriteString(s, password+salt)
 	str = fmt.Sprintf("%x", s.Sum(nil))
 	return str
+}
+
+// FormatToString 格式化转化成string
+func FormatToString(originStr interface{}) string {
+	str := ""
+	switch originStr.(type) {
+	case float64:
+		str = strconv.FormatFloat(originStr.(float64), 'f', 10, 64)
+	case float32:
+		str = strconv.FormatFloat(originStr.(float64), 'f', 10, 32)
+	case nil:
+		str = ""
+	case int, rune, int64:
+		str = strconv.FormatInt(originStr.(int64), 10)
+	default:
+		str = originStr.(string)
+	}
+	return str
+}
+
+// IsArray 是否array
+func IsArray(array interface{}) bool {
+	switch array.(type) {
+	case []string, []int, []int64, []rune, []interface{}:
+		return true
+	default:
+		return false
+	}
 }
