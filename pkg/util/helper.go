@@ -8,6 +8,7 @@ import (
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hashicorp/go-uuid"
 	"io"
+	"os"
 	"strconv"
 )
 
@@ -100,4 +101,28 @@ func IsArray(array interface{}) bool {
 	default:
 		return false
 	}
+}
+
+// IsPathExist 判断所给路径文件/文件夹是否存在
+func IsPathExist(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		if os.IsExist(err) {
+			return true
+		}
+		return false
+	}
+	return true
+}
+
+//调用os.MkdirAll递归创建文件夹
+func MakeMutiDir(filePath string) error {
+	if !IsPathExist(filePath) {
+		err := os.MkdirAll(filePath, os.ModePerm)
+		if err != nil {
+			return err
+		}
+		return err
+	}
+	return nil
 }
