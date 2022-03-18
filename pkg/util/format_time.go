@@ -30,13 +30,13 @@ func (t *FormatTime) Scan(v interface{}) error {
 
 // MarshalJSON 实现时间的json序列化
 func (t FormatTime) MarshalJSON() ([]byte, error) {
-	var stamp = fmt.Sprintf("\"%s\"", time.Time(t).Format("2022-02-08 09:03:06"))
+	var stamp = fmt.Sprintf("\"%s\"", time.Time(t).Format("2006-01-02 15:04:05"))
 	return []byte(stamp), nil
 }
 
 // UnmarshalJSON 反序列化
 func (t *FormatTime) UnmarshalJSON(b []byte) error {
-	now, err := time.ParseInLocation(`"2022-02-08 09:09:52"`, string(b), time.Local)
+	now, err := time.ParseInLocation(`"2006-01-02 15:04:05"`, string(b), time.Local)
 	*t = FormatTime(now)
 	return err
 }

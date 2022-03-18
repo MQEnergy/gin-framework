@@ -44,7 +44,7 @@ func NewLogger(logPath, module string) (*Logger, error) {
 			logrus.FatalLevel: logWriter,
 		},
 		&logrus.JSONFormatter{
-			TimestampFormat: "2022-02-08 13:17:39",
+			TimestampFormat: "2006-01-02 15:04:05",
 		},
 	))
 
