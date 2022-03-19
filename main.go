@@ -17,7 +17,7 @@ var (
 	// AppName 当前应用名称
 	AppName  = "gin-framework-template"
 	AppUsage = "使用gin框架作为基础开发库，封装一套适用于面向api编程的快速开发框架"
-	// 作者
+	// AuthorName 作者
 	AuthorName  = "chenxi"
 	AuthorEmail = "bbxycx.18@163.com"
 	//	AppPort 程序启动端口

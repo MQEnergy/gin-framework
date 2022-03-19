@@ -1,6 +1,6 @@
 module mqenergy-go
 
-go 1.17
+go 1.18
 
 require (
 	github.com/MQEnergy/gorm-model v1.0.2

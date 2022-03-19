@@ -21,11 +21,13 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	// 定义文件前缀和日志名称
 	prefix := logPath + "/" + module
 	latestLogFile := prefix + ".log"
-
-	logClient := logrus.New()
-	logClient.Out = src
-
-	logClient.SetLevel(logrus.DebugLevel)
+	logger := logrus.New()
+	//设置输出
+	logger.Out = src
+	//设置日志级别
+	//logger.SetLevel(logrus.DebugLevel)
+	//设置日志格式
+	//logger.SetFormatter(&logrus.JSONFormatter{})
 
 	logWriter, err := rotatelogs.New(
 		prefix+"-%Y-%m-%d.log",                    // 生成实际文件名的模式
@@ -37,16 +39,19 @@ func NewLogger(logPath, module string) (*Logger, error) {
 		return nil, err
 	}
 
-	logClient.Hooks.Add(lfshook.NewHook(
+	logger.Hooks.Add(lfshook.NewHook(
 		lfshook.WriterMap{
 			logrus.DebugLevel: logWriter,
 			logrus.InfoLevel:  logWriter,
 			logrus.FatalLevel: logWriter,
+			logrus.PanicLevel: logWriter,
+			logrus.WarnLevel:  logWriter,
+			logrus.ErrorLevel: logWriter,
 		},
 		&logrus.JSONFormatter{
 			TimestampFormat: "2006-01-02 15:04:05",
 		},
 	))
 
-	return &Logger{logClient}, err
+	return &Logger{logger}, err
 }
