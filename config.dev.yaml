@@ -8,7 +8,7 @@ server:
   jwtSecret: '3jQSRZXeXzr09hq0GrZuL9Dgtk2XV9Ax'
 log:
   debug: true
-  fileName: 'lyky-go' # 日志文件名称
+  fileName: 'mqenergy-go' # 日志文件名称
   dirPath: 'runtime/logs' # 日志默认存放目录
 mysql:
   host: '127.0.0.1'
@@ -16,7 +16,7 @@ mysql:
   user: 'root'
   password: '123456'
   dbname: 'gin_framework'
-  prefix: "gin_"
+  prefix: ""
   maxIdleConns: 10 # 设置空闲连接池中连接的最大数量
   maxOpenConns: 100 # 设置打开数据库连接的最大数量
   maxLifeTime: 60 # 设置了连接可复用的最大时间（分钟）
@@ -26,3 +26,8 @@ redis:
   password: '123456'
   dbNum: 0
   loginPrefix: 'lyky_gin_framework_login_' # 登录用户存入redis键名的前缀
+oss:
+  endPoint: 'https://oss-cn-shanghai.aliyuncs.com'
+  accessKeyID: ''
+  accessKeySecret: ''
+  bucketName: ''

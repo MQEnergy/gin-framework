@@ -6,14 +6,14 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/config"
+	"mqenergy-go/entities/admin"
 	"mqenergy-go/global"
-	"mqenergy-go/models"
 	"mqenergy-go/pkg/auth"
 	"strconv"
 )
 
 type AdminInfo struct {
-	models.GinAdmin
+	admin.Admin
 }
 
 type TokenPayload struct {
@@ -59,7 +59,7 @@ func GetAdminInfo(ctx *gin.Context) (AdminInfo, error) {
 	if err != nil {
 		return AdminInfo{}, nil
 	}
-	var user models.GinAdmin
+	var user admin.Admin
 	err = json.Unmarshal([]byte(result), &user)
 	if err != nil {
 		return AdminInfo{}, nil

@@ -8,7 +8,7 @@ server:
   jwtSecret: '3jQSRZXeXzr09hq0GrZuL9Dgtk2XV9Ax'
 log:
   debug: true
-  fileName: 'lyky-go' # 日志文件名称
+  fileName: 'mqenergy-go' # 日志文件名称
   dirPath: 'runtime/logs' # 日志默认存放目录
 mysql:
   host: '127.0.0.1'
@@ -26,3 +26,8 @@ redis:
   password: '123456'
   dbNum: 0
   loginPrefix: 'lyky_gin_framework_login_' # 登录用户存入redis键名的前缀
+oss:
+  endPoint: 'https://oss-cn-shanghai.aliyuncs.com'
+  accessKeyID: ''
+  accessKeySecret: ''
+  bucketName: ''

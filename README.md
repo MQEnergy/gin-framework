@@ -46,9 +46,10 @@ http://127.0.0.1:9527/ping
 
 # 返回：
 {
-    code: 0,
-    message: "请求成功",
-    data: "Pong!"
+    "status": 200,
+    "errcode": 0,
+    "message": "Pong!",
+    "data": ""
 }
 ```
 ### 4、安装热更新
