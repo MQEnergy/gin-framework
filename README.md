@@ -148,7 +148,18 @@ paginator.LastPage
 ```
 paginator.PerPage
 ```
-
+### 2、基于gin上传组件
+```
+UploadFile(path string, r *gin.Context) (*FileHeader, error)
+```
+默认存储在项目中upload目录，如果没有会自动创建
+path：upload目录模块目录 如：user 则目录是：upload/user/{yyyy-mm-dd}/...
+上传附件案例参照：
+```
+目录：
+app/controller/backend/attachment.go
+router/routes/common.go
+```
 ## 四、工具
 运行 go run main.go --help 可查看到以下命令集
 ```

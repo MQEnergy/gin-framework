@@ -19,6 +19,8 @@ func InitPublicCommonRouter(r *gin.RouterGroup) (router gin.IRoutes) {
 		commonGroup.POST("/user/login", backend.Auth.Login)
 		// 获取用户列表
 		commonGroup.GET("/user/index", backend.User.Index)
+		// 上传附件
+		commonGroup.POST("/attachment/upload", backend.Attachment.Upload)
 	}
 	return commonGroup
 }
