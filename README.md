@@ -102,44 +102,44 @@ http://127.0.0.1:9527/user/index?page=1
     }
 }
 ```
-#### 1）WithDB(db *gorm.DB) *PageBuilder db连接方法 `此处必须在链式操作中`
+#### 1）`必须在链式操作中` WithDB(db *gorm.DB) *PageBuilder db连接方法
 ```
 传入全局global.DB 
 ```
-#### 1）WithModel(db *gorm.DB) *PageBuilder db连接方法 `此处必须在链式操作中`
+#### 2）`必须在链式操作中` WithModel(db *gorm.DB) *PageBuilder db连接方法
 ```
 传入查询主表model
 ```
-#### 2）WithFields(fields []string) *PageBuilder 查询或过滤字段方法 `此处非必须在链式操作中`
+#### 3）`非必须在链式操作中` WithFields(fields []string) *PageBuilder 查询或过滤字段方法
 ```
-最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段。
+最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段（此处功能待完善）。
 ```
-#### 3）WithCondition(query interface{}, args ...interface{}) *PageBuilder 数据查询条件方法 `此处非必须在链式操作中`
+#### 4）`非必须在链式操作中` WithCondition(query interface{}, args ...interface{}) *PageBuilder 数据查询条件方法
 ```
 如上所示 传入查询条件 支持gorm中where条件中的一些查询方式（非struct方式） query, args参数参照gorm where条件传入方式
 ```
-#### 4）WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder 数据查询条件方法 `此处非必须在链式操作中`
+#### 5）`非必须在链式操作中` WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder 数据查询条件方法
 ```
 joinType：join类型 可传入：left,right,inner
 joinFields结构体： LeftField：如：主表.ID  RightField：如：关联表.主表的ID
 ```
-#### 5）Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法 `此处必须在链式操作中最后一环`
+#### 6）`必须在链式操作中最后一环` Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法
 ```
 list 传入数据表的struct model，currentPage 为当前页码，pageSize为每页查询数量
 ```
-#### 6）获取当前页码
+#### 7）获取当前页码
 ```
 paginator.CurrentPage
 ```
-#### 7）获取分页列表
+#### 8）获取分页列表
 ```
 paginator.List
 ```
-#### 8）获取数据总数
+#### 9）获取数据总数
 ```
 paginator.Count
 ```
-#### 9）获取最后一页页码
+#### 10）获取最后一页页码
 ```
 paginator.LastPage
 ```
@@ -222,24 +222,23 @@ go run main.go service {service名称} {module名称}
 ```
 go run main.go account {账号名称} {密码}  
 ```
-账号名称，密码需要修改成自己想要设置的
 
 ## 五、参考 
 ### 初始化一个接口项目需要安装的依赖包（主要）
-### 安装model自动生成包
-```
-go get -u github.com/MQEnergy/gorm-model
-```
-
 ### 初始化go.mod
 ```shell script
-go mod init lyky/gin-framework-template
+go mod init mqenergy-go/gin-framework
 go mod tidy
 ```
 
 ### 安装gin框架
 ```shell script
 go get -u github.com/gin-gonic/gin
+```
+
+### 安装model自动生成包
+```shell script
+go get -u github.com/MQEnergy/gorm-model
 ```
 
 ### 安装gorm
