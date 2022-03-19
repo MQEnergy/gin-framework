@@ -8,7 +8,7 @@ import (
 	dmysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"log"
-	"lyky-go/config"
+	"mqenergy-go/config"
 	"os"
 	"strconv"
 	"time"

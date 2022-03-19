@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"lyky-go/config"
-	"lyky-go/pkg/auth"
-	"lyky-go/pkg/response"
+	"mqenergy-go/config"
+	"mqenergy-go/pkg/auth"
+	"mqenergy-go/pkg/response"
 	"net/http"
 	"strings"
 )

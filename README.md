@@ -5,17 +5,18 @@
 │   ├── controller              # 控制器
 │   └── service                 # 服务层
 ├── bootstrap                   # 初始化程序加载服务
+├── command                     # command命令
 ├── config                      # 解析配置文件
-├── entities                    # 存放表对应的实体
+├── entities                    # 存放表对应的实体 / 请求参数的结构体
 ├── global                      # 一些全局变量和全局方法
 ├── main.go                     # 主进程启动文件
 ├── middleware                  # 中间件
-├── migrate.go                  # 数据迁移文件
 ├── migrations                  # 数据迁移的sql文件目录
 ├── models                      # 对应数据库的模型
 ├── pkg                         # 自定义的常用服务，JWT,助手函数等
 │   ├── auth                    # jwt
 │   ├── lib                     # 日志服务，数据库服务，redis服务
+│   ├── paginator               # 分页器
 │   ├── response                # http请求返回的状态和格式化
 │   ├── util                    # 助手函数
 │   └── validator               # 验证器
@@ -50,20 +51,42 @@ http://127.0.0.1:9527/ping
     data: "Pong!"
 }
 ```
+### 4、安装热更新
+```shell script
+go install github.com/cosmtrek/air@latest
+```
+```
+命令行敲入：air 即可执行热更新 代码编辑即更新
+```
+
 ## 三、组件使用
 ### 1、基于gorm的查询分页构造器
-分页代码在pkg/paginator中
-使用方法如下：
+
+单表查询使用方法如下：
 ```shell script
-import 	"lyky-go/pkg/paginator"
+import 	"mqenergy-go/pkg/paginator"
 var memberList = make([]models.GinAdmin, 0) // make 返回的list数据是[]数组 如果没有make 那么返回response就是null
 paginator, err := paginator.Builder.
     WithDB(global.DB).
-    WithFields([]string{"id", "uuid", "account", "omit"})
+    WithModel(&models.GinAdmin{}).
+    WithFields([]string{"id", "uuid", "account"})
     WithCondition("id = ?", 1).
     Pagination(memberList, 1, 10)
 return paginator, err
 ```
+
+连表查询使用方法如下：
+```
+可查看案例 获取用户列表：
+app/controller/backend/user.go
+app/service/backend/user.go
+router/routes/common.go
+
+访问地址：
+http://127.0.0.1:9527/user/index?page=1
+可查看效果
+```
+
 返回数据格式如下：
 ```json
 {
@@ -83,6 +106,10 @@ return paginator, err
 ```
 传入全局global.DB 
 ```
+#### 1）WithModel(db *gorm.DB) *PageBuilder db连接方法 `此处必须在链式操作中`
+```
+传入查询主表model
+```
 #### 2）WithFields(fields []string) *PageBuilder 查询或过滤字段方法 `此处非必须在链式操作中`
 ```
 最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段。
@@ -91,27 +118,32 @@ return paginator, err
 ```
 如上所示 传入查询条件 支持gorm中where条件中的一些查询方式（非struct方式） query, args参数参照gorm where条件传入方式
 ```
-#### 4）Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法 `此处必须在链式操作中最后一环`
+#### 4）WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder 数据查询条件方法 `此处非必须在链式操作中`
+```
+joinType：join类型 可传入：left,right,inner
+joinFields结构体： LeftField：如：主表.ID  RightField：如：关联表.主表的ID
+```
+#### 5）Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法 `此处必须在链式操作中最后一环`
 ```
 list 传入数据表的struct model，currentPage 为当前页码，pageSize为每页查询数量
 ```
-#### 5）获取当前页码
+#### 6）获取当前页码
 ```
 paginator.CurrentPage
 ```
-#### 6）获取分页列表
+#### 7）获取分页列表
 ```
 paginator.List
 ```
-#### 7）获取数据总数
+#### 8）获取数据总数
 ```
 paginator.Count
 ```
-#### 8）获取最后一页页码
+#### 9）获取最后一页页码
 ```
 paginator.LastPage
 ```
-#### 9）获取每页数据条数
+#### 10）获取每页数据条数
 ```
 paginator.PerPage
 ```
@@ -120,11 +152,14 @@ paginator.PerPage
 运行 go run main.go --help 可查看到以下命令集
 ```
 COMMANDS:
-   migrate  Create migration command // 执行migrate
-   model    Create a new model class  // 自动生成model
-   account  Create a new admin account // 生成基于admin表的管理账号信息
-   help, h  Shows a list of commands or help for one command
+  migrate     Create migration command
+  account     Create a new admin account
+  model       Create a new model class
+  controller  Create a new controller class
+  service     Create a new service class
+  help, h     Shows a list of commands or help for one command
 ```
+
 ### 1、执行migrate
 ```shell script
 # 安装migrate cli工具
@@ -166,14 +201,36 @@ go run main.go model all {env}
 go run main.go model {数据表名} {env}
 # 例如：go run model.go gin_admin
 ```
-### 3、创建后台管理员账号
+### 3、自动生成controller
+```shell script
+# 参数一：all：生成所有 或者写入数据表名生成单个
+# env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
+
+go run main.go controller {controller名称} {module名称}
+# module名称是app/controller目录下的模块名称
+# 例如：go run main.go controller admin backend
+```
+### 4、自动生成service
+```shell script
+# env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
+
+go run main.go service {service名称} {module名称}
+# module名称是app/controller目录下的模块名称
+# 例如：go run main.go service admin backend
+```
+### 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
 ```
 go run main.go account {账号名称} {密码}  
 ```
 账号名称，密码需要修改成自己想要设置的
 
 ## 五、参考 
-### 初始化一个接口项目需要安装的依赖包
+### 初始化一个接口项目需要安装的依赖包（主要）
+### 安装model自动生成包
+```
+go get -u github.com/MQEnergy/gorm-model
+```
+
 ### 初始化go.mod
 ```shell script
 go mod init lyky/gin-framework-template
@@ -251,4 +308,9 @@ migrate create -ext sql -dir migrations -seq create_users_table
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations up
 # 执行回滚操作：
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations down
+```
+
+### 安装热更新
+```shell script
+go install github.com/cosmtrek/air@latest
 ```

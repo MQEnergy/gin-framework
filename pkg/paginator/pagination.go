@@ -3,22 +3,30 @@ package paginator
 import (
 	"gorm.io/gorm"
 	"math"
+	"mqenergy-go/config"
+	"strings"
 )
 
 type PageBuilder struct {
 	DB        *gorm.DB
-	Query     interface{}
-	Args      interface{}
-	Fields    []string
-	FieldType string
+	Query     interface{} // 查询条件
+	Args      interface{} // 查询条件映射的参数
+	Fields    []string    // 查询的字段
+	FieldType string      // 查询类型 _select：代表查询前面字段 _omit：代表过滤前面字段
+	Joins     string      // 连表查询拼接的字符串 例如："LEFT JOIN {关联表} ON 主表.ID = 关联表.主表ID"
+	Model     interface{} // model struct
+}
+
+type OnJoins struct {
+	LeftField, RightField string // LeftField：如：主表.ID  RightField：如：关联表.主表ID
 }
 
 type Page struct {
-	List        interface{} `json:"list"`
-	CurrentPage int         `json:"current_page"`
-	Count       int64       `json:"count"`
-	LastPage    int         `json:"last_page"`
-	PerPage     int         `json:"per_page"`
+	List        interface{} `json:"list"`         // 查询的列表
+	CurrentPage int         `json:"current_page"` // 当前页
+	Count       int64       `json:"count"`        // 查询记录总数
+	LastPage    int         `json:"last_page"`    // 最后一页
+	PerPage     int         `json:"per_page"`     // 每页条数
 }
 
 var Builder = PageBuilder{}
@@ -33,18 +41,34 @@ func (pb *PageBuilder) WithDB(db *gorm.DB) *PageBuilder {
 func (pb *PageBuilder) WithFields(fields []string) *PageBuilder {
 	// 返回列表
 	if len(fields) == 1 {
-		if fields[0] == "omit" || fields[0] == "select" {
+		if fields[0] == "_omit" || fields[0] == "_select" {
 			fields = []string{"*"}
 		}
 	} else {
-		if fields[len(fields)-1] == "omit" {
-			pb.FieldType = "omit"
-		} else {
-			pb.FieldType = "select"
+		switch fields[len(fields)-1] {
+		case "_omit", "_select":
+			pb.FieldType = fields[len(fields)-1]
+			fields = fields[:len(fields)-1]
+		default:
+			pb.FieldType = "_select"
+			fields = fields[:]
 		}
-		fields = fields[:len(fields)-1]
 	}
 	pb.Fields = fields
+	return pb
+}
+
+// WithModel 查询的model struct
+func (pb *PageBuilder) WithModel(model interface{}) *PageBuilder {
+	pb.Model = model
+	return pb
+}
+
+// WithJoins join查询
+func (pb *PageBuilder) WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder {
+	joinType = strings.ToUpper(joinType)
+	joins := joinType + " JOIN " + joinTable + " ON " + joinFields.LeftField + "=" + joinFields.RightField
+	pb.Joins = joins
 	return pb
 }
 
@@ -67,10 +91,10 @@ func (pb *PageBuilder) ParsePage(currentPage, pageSize int) Page {
 		page.CurrentPage = 1
 	}
 	if pageSize < 1 {
-		page.PerPage = 20
+		page.PerPage = config.Conf.Server.DefaultPageSize
 	}
-	if pageSize > 100 {
-		page.PerPage = 100
+	if pageSize > config.Conf.Server.MaxPageSize {
+		page.PerPage = config.Conf.Server.MaxPageSize
 	}
 	if page.LastPage < 1 {
 		page.LastPage = 1
@@ -78,22 +102,32 @@ func (pb *PageBuilder) ParsePage(currentPage, pageSize int) Page {
 	return page
 }
 
-// Pagination 分页
-func (pb *PageBuilder) Pagination(list interface{}, currentPage, pageSize int) (Page, error) {
+// Pagination 分页查询
+func (pb *PageBuilder) Pagination(dst interface{}, currentPage, pageSize int) (Page, error) {
 	page := pb.ParsePage(currentPage, pageSize)
 	offset := (page.CurrentPage - 1) * page.PerPage
-	queryBuilder := pb.DB
-	if len(pb.Fields) > 0 {
-		queryBuilder = pb.DB.Select(pb.Fields)
+	query := pb.DB
+
+	// 查询的model
+	if pb.Model != nil {
+		query = query.Model(pb.Model)
 	}
-	if pb.FieldType == "omit" {
-		queryBuilder = pb.DB.Omit(pb.Fields...)
+	// 查询字段
+	if pb.FieldType == "_select" {
+		query = query.Select(pb.Fields)
+	}
+	if pb.FieldType == "_omit" {
+		// TODO omit只有在更新操作才生效 可实现基于传递的omit 结合model过滤查询的字段
+		query = query.Omit(pb.Fields...)
 	}
 	if pb.Query != nil && pb.Args != nil {
-		queryBuilder = queryBuilder.Where(pb.Query, pb.Args)
+		query = query.Where(pb.Query, pb.Args)
 	}
-	// 查询总数 total queryBuilder变量随着记录的查询会改变到相应的数据表struct中，所以无需model即可查询到count总数 此处二维struct传给model也可以获取到总数
-	if err := queryBuilder.Model(&list).Count(&page.Count).Error; err != nil {
+	// join查询
+	if pb.Joins != "" {
+		query = query.Joins(pb.Joins)
+	}
+	if err := query.Count(&page.Count).Error; err != nil {
 		return page, err
 	}
 	// 计算总页数
@@ -102,10 +136,10 @@ func (pb *PageBuilder) Pagination(list interface{}, currentPage, pageSize int) (
 	}
 	// 判断总数跟最后一页的关系
 	if page.CurrentPage <= page.LastPage {
-		if err := queryBuilder.Limit(page.PerPage).Offset(offset).Find(&list).Error; err != nil {
+		if err := query.Limit(page.PerPage).Offset(offset).Find(&dst).Error; err != nil {
 			return page, err
 		}
 	}
-	page.List = list
+	page.List = dst
 	return page, nil
 }

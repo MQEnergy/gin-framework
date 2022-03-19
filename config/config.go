@@ -17,6 +17,7 @@ type Yaml struct {
 	Log    `yaml:"log"`
 	Mysql  `yaml:"mysql"`
 	Redis  `yaml:"redis"`
+	Oss    `yaml:"oss"`
 }
 
 type Server struct {
@@ -53,6 +54,13 @@ type Redis struct {
 	Password    string `yaml:"password"`
 	DbNum       int    `yaml:"dbNum"`
 	LoginPrefix string `yaml:"loginPrefix"`
+}
+
+type Oss struct {
+	EndPoint        string `yaml:"endPoint"`
+	AccessKeyID     string `yaml:"accessKeyID"`
+	AccessKeySecret string `yaml:"accessKeySecret"`
+	BucketName      string `yaml:"bucketName"`
 }
 
 func InitConfig() {

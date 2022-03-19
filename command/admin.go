@@ -2,11 +2,11 @@ package command
 
 import (
 	"fmt"
-	"lyky-go/bootstrap"
-	"lyky-go/config"
-	"lyky-go/global"
-	"lyky-go/models"
-	"lyky-go/pkg/util"
+	"mqenergy-go/bootstrap"
+	"mqenergy-go/config"
+	"mqenergy-go/global"
+	"mqenergy-go/models"
+	"mqenergy-go/pkg/util"
 	"os"
 	"time"
 )
@@ -35,7 +35,7 @@ func GenerateAdmin() {
 		Uuid:         util.GenerateBaseSnowId(32),
 		Account:      account,
 		Password:     util.GeneratePasswordHash(password, salt),
-		Phone:        "18656999023",
+		Phone:        "12345678901",
 		Avatar:       "",
 		Salt:         salt,
 		RealName:     account,

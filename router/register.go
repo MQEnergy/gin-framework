@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"lyky-go/config"
-	"lyky-go/middleware"
-	"lyky-go/router/routes"
+	"mqenergy-go/config"
+	"mqenergy-go/middleware"
+	"mqenergy-go/router/routes"
 	"net/http"
 )
 

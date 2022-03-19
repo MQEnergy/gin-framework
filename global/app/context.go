@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
-	"lyky-go/config"
-	"lyky-go/entities"
-	"lyky-go/global"
-	"lyky-go/pkg/auth"
+	"mqenergy-go/config"
+	"mqenergy-go/global"
+	"mqenergy-go/models"
+	"mqenergy-go/pkg/auth"
 	"strconv"
 )
 
-type LoginUser struct {
-	entities.User
+type AdminInfo struct {
+	models.GinAdmin
 }
 
 type TokenPayload struct {
@@ -47,22 +47,22 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 	return user, nil
 }
 
-// GetLoginUser 获取登陆者的用户信息
-func GetLoginUser(ctx *gin.Context) (LoginUser, error) {
+// GetAdminInfo 获取登陆者的用户信息
+func GetAdminInfo(ctx *gin.Context) (AdminInfo, error) {
 	info, err := ParseUserByToken(ctx.GetHeader(config.Conf.Server.TokenKey))
 	if err != nil {
-		return LoginUser{}, nil
+		return AdminInfo{}, nil
 	}
 	Uid := info.UserId
 	//	从redis查询
 	result, err := global.Redis.Get(context.Background(), config.Conf.Redis.LoginPrefix+strconv.FormatInt(Uid, 10)).Result()
 	if err != nil {
-		return LoginUser{}, nil
+		return AdminInfo{}, nil
 	}
-	var user entities.User
+	var user models.GinAdmin
 	err = json.Unmarshal([]byte(result), &user)
 	if err != nil {
-		return LoginUser{}, nil
+		return AdminInfo{}, nil
 	}
-	return LoginUser{user}, nil
+	return AdminInfo{user}, nil
 }

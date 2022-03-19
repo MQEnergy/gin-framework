@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/urfave/cli/v2"
-	"lyky-go/bootstrap"
-	"lyky-go/command"
-	"lyky-go/config"
-	"lyky-go/pkg/validator"
-	"lyky-go/router"
+	"mqenergy-go/bootstrap"
+	"mqenergy-go/command"
+	"mqenergy-go/config"
+	"mqenergy-go/pkg/validator"
+	"mqenergy-go/router"
 	"os"
 	"runtime"
 )
@@ -76,6 +76,14 @@ func Stack() *cli.App {
 				},
 			},
 			{
+				Name:  "account",
+				Usage: "Create a new admin account",
+				Action: func(ctx *cli.Context) error {
+					command.GenerateAdmin()
+					return nil
+				},
+			},
+			{
 				Name:  "model",
 				Usage: "Create a new model class",
 				Action: func(ctx *cli.Context) error {
@@ -84,10 +92,18 @@ func Stack() *cli.App {
 				},
 			},
 			{
-				Name:  "account",
-				Usage: "Create a new admin account",
+				Name:  "controller",
+				Usage: "Create a new controller class",
 				Action: func(ctx *cli.Context) error {
-					command.GenerateAdmin()
+					command.GenerateController()
+					return nil
+				},
+			},
+			{
+				Name:  "service",
+				Usage: "Create a new service class",
+				Action: func(ctx *cli.Context) error {
+					command.GenerateService()
 					return nil
 				},
 			},

@@ -2,12 +2,12 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"lyky-go/app/controller/frontend"
+	"mqenergy-go/app/controller/frontend"
 )
 
 // InitFrontendGroup 初始化前台接口路由
 func InitFrontendGroup(r *gin.RouterGroup) gin.IRoutes {
-	frontendGroup := r.Group("frontend")
+	frontendGroup := r.Group("api")
 	{
 		frontendGroup.POST("/user/create", frontend.User.Create)
 		frontendGroup.GET("/user/view", frontend.User.View)

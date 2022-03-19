@@ -2,21 +2,23 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"lyky-go/app/controller"
-	"lyky-go/app/controller/common"
+	"mqenergy-go/app/controller/backend"
+	"mqenergy-go/app/controller/common"
 )
 
 func InitPublicCommonRouter(r *gin.RouterGroup) (router gin.IRoutes) {
 	commonGroup := r.Group("")
 	{
 		// ping
-		commonGroup.GET("/ping", controller.Base.Ping)
+		commonGroup.GET("/ping", common.Common.Ping)
 		// 生成token
-		commonGroup.GET("/token-create", common.Token.TokenCreate)
+		commonGroup.GET("/token/create", common.Token.Create)
 		// 解析token
-		commonGroup.POST("/token-parse", common.Token.TokenParse)
+		commonGroup.POST("/token/view", common.Token.View)
 		// 登录
-		commonGroup.POST("/user/login", controller.Base.Login)
+		commonGroup.POST("/user/login", backend.Auth.Login)
+		// 获取用户列表
+		commonGroup.GET("/user/index", backend.User.Index)
 	}
 	return commonGroup
 }

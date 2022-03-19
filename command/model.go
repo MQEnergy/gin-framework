@@ -2,8 +2,10 @@ package command
 
 import (
 	"fmt"
-	"lyky-go/bootstrap"
-	"lyky-go/config"
+	gorm_model "github.com/MQEnergy/gorm-model"
+	"mqenergy-go/bootstrap"
+	"mqenergy-go/config"
+	"mqenergy-go/global"
 	"os"
 )
 
@@ -11,7 +13,7 @@ import (
 func GenerateModel() {
 	env := "dev"
 	args := os.Args
-	if len(args) < 4 {
+	if len(args) < 3 {
 		fmt.Println("参数缺失：至少需要一个参数 {n} {env}")
 		return
 	}
@@ -23,11 +25,11 @@ func GenerateModel() {
 	bootstrap.BootMysql()
 
 	if args[2] == "all" {
-		GenerateAllModel(config.Conf.Mysql.DbName)
+		gorm_model.GenerateAllModel(global.DB, config.Conf.Mysql.DbName)
 	} else {
-		var table Table
-		table = GetSingleTable(config.Conf.Mysql.DbName, args[2])
-		err := GenerateSingleModel(config.Conf.Mysql.DbName, args[2], table)
+		var table gorm_model.Table
+		table = gorm_model.GetSingleTable(global.DB, config.Conf.Mysql.DbName, args[2])
+		err := gorm_model.GenerateSingleModel(global.DB, args[2], table)
 		if err != nil {
 			fmt.Println(err)
 		}

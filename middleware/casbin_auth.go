@@ -4,9 +4,9 @@ import (
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gin-gonic/gin"
-	"lyky-go/global"
-	"lyky-go/global/app"
-	"net/http"
+	"mqenergy-go/global"
+	"mqenergy-go/global/app"
+	"mqenergy-go/pkg/response"
 	"strconv"
 )
 
@@ -19,9 +19,9 @@ func CasbinAuth() gin.HandlerFunc {
 		//	获取当前请求的url
 		obj := ctx.Request.URL.RequestURI()
 		act := ctx.Request.Method
-		user, err := app.GetLoginUser(ctx)
+		user, err := app.GetAdminInfo(ctx)
 		if err != nil {
-			ctx.JSON(http.StatusUnauthorized, "权限异常")
+			response.UnauthorizedException(ctx, "权限异常")
 			ctx.Abort()
 		}
 		var flag = false
@@ -35,7 +35,7 @@ func CasbinAuth() gin.HandlerFunc {
 		if flag {
 			ctx.Next()
 		} else {
-			ctx.JSON(http.StatusOK, "该用户无此权限")
+			response.UnauthorizedException(ctx, "该用户无此权限")
 			ctx.Abort()
 		}
 	}

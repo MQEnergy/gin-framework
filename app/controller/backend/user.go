@@ -1,27 +1,31 @@
 package backend
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"mqenergy-go/app/controller/base"
+	"mqenergy-go/app/service/backend"
+	"mqenergy-go/entities/user"
+	"mqenergy-go/pkg/response"
+	"net/http"
+)
 
-type UserController struct{}
+type UserController struct {
+	base.Controller
+}
 
 var User = UserController{}
 
-// Create 增加
-func (c UserController) Create(ctx *gin.Context) {
-
-}
-
-// Delete 删除
-func (c UserController) Delete(ctx *gin.Context) {
-
-}
-
-// Update 修改
-func (c UserController) Update(ctx *gin.Context) {
-
-}
-
-// View 详情
-func (c UserController) View(ctx *gin.Context) {
-
+// Index 获取列表
+func (c UserController) Index(ctx *gin.Context) {
+	var requestParams user.IndexRequest
+	if err := ctx.Bind(&requestParams); err != nil {
+		response.BadRequestException(ctx, "")
+		return
+	}
+	list, err := backend.User.GetList(requestParams)
+	if err != nil {
+		response.BadRequestException(ctx, err.Error())
+		return
+	}
+	response.ResponseJson(ctx, http.StatusOK, response.Success, "", list)
 }

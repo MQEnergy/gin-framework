@@ -1,6 +1,8 @@
 package models
 
-// 后台管理员表
+var GinAdminTbName = "gin_admin"
+
+// GinAdmin 后台管理员表
 type GinAdmin struct {
 	Id           uint64 `gorm:"primaryKey;autoIncrement;column:id;type:bigint unsigned;NOT NULL;" json:"id"`
 	Uuid         string `gorm:"column:uuid;type:varchar(32);NOT NULL;comment:唯一id号" json:"uuid"`                             // 唯一id号

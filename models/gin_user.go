@@ -1,6 +1,8 @@
 package models
 
-// 用户表
+var GinUserTbName = "gin_user"
+
+// GinUser 用户表
 type GinUser struct {
 	Id           uint64 `gorm:"primaryKey;autoIncrement;column:id;type:bigint unsigned;NOT NULL;" json:"id"`
 	Uuid         string `gorm:"column:uuid;type:varchar(32);NOT NULL;comment:唯一id号" json:"uuid"`                             // 唯一id号

@@ -2,10 +2,10 @@ package bootstrap
 
 import (
 	"fmt"
-	"lyky-go/config"
-	"lyky-go/global"
-	"lyky-go/pkg/lib"
-	"lyky-go/pkg/util"
+	"mqenergy-go/config"
+	"mqenergy-go/global"
+	"mqenergy-go/pkg/lib"
+	"mqenergy-go/pkg/util"
 )
 
 // 定义服务列表

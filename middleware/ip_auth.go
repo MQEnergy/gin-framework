@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"lyky-go/config"
+	"mqenergy-go/config"
 	"net/http"
 )
 
