@@ -1,4 +1,11 @@
 ## 以gin框架为基础，封装一套基于go1.18+的适用于面向api编程的快速开发框架
+本项目积极拥抱Go 1.18+版本，建议用户升级到v1.18及以上版本
+```
+注意：因本框架使用了一个基于Go1.18+泛型的Lodash风格的Go库，所以需要go版本升级到v1.18，如果Go版本 < v1.18
+可自行修改pagination.go文件的Pagination方法中此段代码，自行比较：
+difference, _ := lo.Difference[string](fields, pb.Fields)
+如非特殊情况，建议将版本升级到Go v1.18及以上
+```
 ## 一、目录结构
 ```
 ├── app                         # 模块存放目录
@@ -330,4 +337,9 @@ migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path 
 ### 安装热更新
 ```shell script
 go install github.com/cosmtrek/air@latest
+```
+
+### 基于Go 1.18+泛型的Lodash风格的Go库
+```shell script
+go get -u github.com/samber/lo
 ```
