@@ -22,7 +22,7 @@ func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, erro
 	}
 	pagination, err := paginator.Builder.
 		WithDB(global.DB).
-		WithModel(&models.GinUser{}).
+		WithModel(models.GinUser{}).
 		WithFields(fields).
 		WithJoins("left", models.GinUserInfoTbName, paginator.OnJoins{
 			LeftField:  models.GinUserTbName + ".id",

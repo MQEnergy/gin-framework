@@ -1,9 +1,11 @@
 package paginator
 
 import (
+	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"math"
 	"mqenergy-go/config"
+	"mqenergy-go/pkg/util"
 	"strings"
 )
 
@@ -110,15 +112,17 @@ func (pb *PageBuilder) Pagination(dst interface{}, currentPage, pageSize int) (P
 
 	// 查询的model
 	if pb.Model != nil {
-		query = query.Model(pb.Model)
+		query = query.Model(&pb.Model)
 	}
 	// 查询字段
 	if pb.FieldType == "_select" {
 		query = query.Select(pb.Fields)
 	}
+	// 过滤字段
 	if pb.FieldType == "_omit" {
-		// TODO omit只有在更新操作才生效 可实现基于传递的omit 结合model过滤查询的字段
-		query = query.Omit(pb.Fields...)
+		fields, _ := util.GetStructColumnName(pb.Model, 1)
+		difference, _ := lo.Difference(fields, pb.Fields)
+		query = query.Select(difference)
 	}
 	if pb.Query != nil && pb.Args != nil {
 		query = query.Where(pb.Query, pb.Args)
