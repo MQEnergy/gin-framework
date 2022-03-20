@@ -121,7 +121,7 @@ func (pb *PageBuilder) Pagination(dst interface{}, currentPage, pageSize int) (P
 	// 过滤字段
 	if pb.FieldType == "_omit" {
 		fields, _ := util.GetStructColumnName(pb.Model, 1)
-		difference, _ := lo.Difference(fields, pb.Fields)
+		difference, _ := lo.Difference[string](fields, pb.Fields)
 		query = query.Select(difference)
 	}
 	if pb.Query != nil && pb.Args != nil {

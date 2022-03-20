@@ -1,4 +1,4 @@
-## 以gin框架为基础，封装一套适用于面向api编程的快速开发框架
+## 以gin框架为基础，封装一套基于go1.18+的适用于面向api编程的快速开发框架
 ## 一、目录结构
 ```
 ├── app                         # 模块存放目录
@@ -66,11 +66,11 @@ go install github.com/cosmtrek/air@latest
 单表查询使用方法如下：
 ```shell script
 import 	"mqenergy-go/pkg/paginator"
-var memberList = make([]models.GinAdmin, 0) // make 返回的list数据是[]数组 如果没有make 那么返回response就是null
+var memberList = make([]models.GinAdmin, 0)
 paginator, err := paginator.Builder.
     WithDB(global.DB).
-    WithModel(&models.GinAdmin{}).
-    WithFields([]string{"id", "uuid", "account"})
+    WithModel(models.GinAdmin{}).
+    WithFields([]string{"password", "salt", "updated_at", "_omit"}).
     WithCondition("id = ?", 1).
     Pagination(memberList, 1, 10)
 return paginator, err
@@ -113,7 +113,13 @@ http://127.0.0.1:9527/user/index?page=1
 ```
 #### 3）`非必须在链式操作中` WithFields(fields []string) *PageBuilder 查询或过滤字段方法
 ```
-最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段（此处功能待完善）。
+最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
+注意： _select / _omit 必须在最后
+      WithModel 参数不能传结构体取地址 例如：&models.GinAdmin 必须 models.GinAdmin
+      不然 _omit 参数失效
+如：
+WithFields([]string{"created_at", "updated_at", "_omit"}) // 表示过滤前面字段
+WithFields([]string{"created_at", "updated_at", "_select"}) // 表示查询前面的字段
 ```
 #### 4）`非必须在链式操作中` WithCondition(query interface{}, args ...interface{}) *PageBuilder 数据查询条件方法
 ```
