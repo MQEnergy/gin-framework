@@ -6,7 +6,6 @@ import (
 	"math"
 	"mqenergy-go/config"
 	"mqenergy-go/pkg/util"
-	"strings"
 )
 
 type PageBuilder struct {
@@ -20,7 +19,11 @@ type PageBuilder struct {
 }
 
 type OnJoins struct {
-	LeftField, RightField string // LeftField：如：主表.ID  RightField：如：关联表.主表ID
+	LeftTableField, RightTableField TableField // LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
+}
+
+type TableField struct {
+	Table, Field string
 }
 
 type Page struct {
@@ -67,15 +70,16 @@ func (pb *PageBuilder) WithModel(model interface{}) *PageBuilder {
 }
 
 // WithJoins join查询
-func (pb *PageBuilder) WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder {
-	joinType = strings.ToUpper(joinType)
-	joins := joinType + " JOIN " + joinTable + " ON " + joinFields.LeftField + "=" + joinFields.RightField
+func (pb *PageBuilder) WithJoins(joinType string, joinFields OnJoins) *PageBuilder {
+	joins := joinType + " JOIN " + joinFields.RightTableField.Table + " ON "
+	joins += joinFields.LeftTableField.Table + "." + joinFields.LeftTableField.Field + "="
+	joins += joinFields.RightTableField.Table + "." + joinFields.RightTableField.Field
 	pb.Joins = joins
 	return pb
 }
 
 // WithCondition 查询条件
-func (pb *PageBuilder) WithCondition(query interface{}, args ...interface{}) *PageBuilder {
+func (pb *PageBuilder) WithCondition(query interface{}, args interface{}) *PageBuilder {
 	pb.Query = query
 	pb.Args = args
 	return pb
@@ -118,7 +122,6 @@ func (pb *PageBuilder) Pagination(dst interface{}, currentPage, pageSize int) (P
 	if pb.FieldType == "_select" {
 		query = query.Select(pb.Fields)
 	}
-	// 过滤字段
 	if pb.FieldType == "_omit" {
 		fields, _ := util.GetStructColumnName(pb.Model, 1)
 		difference, _ := lo.Difference[string](fields, pb.Fields)
