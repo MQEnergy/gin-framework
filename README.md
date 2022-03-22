@@ -48,7 +48,7 @@ difference, _ := lo.Difference[string](fields, pb.Fields)
 go mod tidy 
 ```
 
-### 2、执行主进程
+### 2、服务启动
 
 ```shell script
 go run main.go 
