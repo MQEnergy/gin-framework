@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"mqenergy-go/config"
 	"mqenergy-go/global"
 	"mqenergy-go/pkg/lib"
@@ -18,14 +19,16 @@ const (
 type bootServiceMap map[string]func() error
 
 // BootedService 已经加载的服务
-var BootedService []string
-
-// serviceMap 程序启动时需要自动加载的服务
-var serviceMap = bootServiceMap{
-	MysqlService:  BootMysql,
-	RedisService:  BootRedis,
-	LoggerService: BootLogger,
-}
+var (
+	BootedService []string
+	err           error
+	// serviceMap 程序启动时需要自动加载的服务
+	serviceMap = bootServiceMap{
+		MysqlService:  BootMysql,
+		RedisService:  BootRedis,
+		LoggerService: BootLogger,
+	}
+)
 
 // BootService 加载服务
 func BootService(services ...string) {
@@ -36,7 +39,6 @@ func BootService(services ...string) {
 	if len(services) == 0 {
 		services = serviceMap.keys()
 	}
-	fmt.Println(services)
 	BootedService = make([]string, 0)
 	for k, val := range serviceMap {
 		if util.InStringSlice(k, services) {
@@ -53,11 +55,8 @@ func BootLogger() error {
 	if global.Logger != nil {
 		return nil
 	}
-	var err error
-	global.Logger, err = lib.NewLogger(config.Conf.DirPath, config.Conf.FileName)
-
-	if err == nil {
-		fmt.Println("程序载入Logger日志服务成功\n模块名为:" + config.Conf.FileName + "\n日志路径为:" + config.Conf.DirPath)
+	if global.Logger, err = lib.NewLogger(config.Conf.DirPath, config.Conf.FileName); err == nil {
+		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", config.Conf.FileName, config.Conf.DirPath)
 	}
 	return err
 }
@@ -78,10 +77,9 @@ func BootMysql() error {
 		MaxOpenConns: config.Conf.Mysql.MaxOpenConns,
 		MaxLifeTime:  config.Conf.Mysql.MaxLifeTime,
 	}
-	var err error
 	global.DB, err = lib.NewMysql(dbConfig)
 	if err == nil {
-		fmt.Printf("程序载入MySQL服务成功\n")
+		logrus.Printf("程序载入MySQL服务成功")
 	}
 	return err
 }
@@ -93,10 +91,9 @@ func BootRedis() error {
 		Password: config.Conf.Redis.Password,
 		DbNum:    config.Conf.Redis.DbNum,
 	}
-	var err error
 	global.Redis, err = lib.NewRedis(redisConfig)
 	if err == nil {
-		fmt.Printf("程序载入Redis服务成功\n")
+		logrus.Printf("程序载入Redis服务成功")
 	}
 	return err
 }

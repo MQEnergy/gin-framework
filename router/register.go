@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/config"
 	"mqenergy-go/middleware"
@@ -15,8 +16,10 @@ func Register() *gin.Engine {
 	router := gin.New()
 	// [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 	router.SetTrustedProxies(config.AllowIpList)
-
-	//	404处理
+	// header add X-Request-Id
+	router.Use(requestid.New())
+	router.Use(middleware.RequestIdAuth())
+	// 404 not found
 	router.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
 		method := ctx.Request.Method

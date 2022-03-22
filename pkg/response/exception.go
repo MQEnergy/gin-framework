@@ -1,15 +1,17 @@
 package response
 
 import (
+	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type JsonResponse struct {
-	Status  int         `json:"status"`
-	ErrCode Code        `json:"errcode"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Status    int         `json:"status"`
+	ErrCode   Code        `json:"errcode"`
+	RequestId string      `json:"requestid"`
+	Message   string      `json:"message"`
+	Data      interface{} `json:"data"`
 }
 
 // ResponseJson 基础返回
@@ -17,11 +19,13 @@ func ResponseJson(ctx *gin.Context, status int, errcode Code, message string, da
 	if message == "" {
 		message = CodeMap[errcode]
 	}
+
 	ctx.JSON(status, JsonResponse{
-		Status:  status,
-		ErrCode: errcode,
-		Message: message,
-		Data:    data,
+		Status:    status,
+		ErrCode:   errcode,
+		Message:   message,
+		RequestId: requestid.Get(ctx),
+		Data:      data,
 	})
 }
 

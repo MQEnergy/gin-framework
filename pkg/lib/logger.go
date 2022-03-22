@@ -22,12 +22,14 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	prefix := logPath + "/" + module
 	latestLogFile := prefix + ".log"
 	logger := logrus.New()
-	//设置输出
+	// 设置输出
 	logger.Out = src
-	//设置日志级别
+	// 设置日志级别
 	//logger.SetLevel(logrus.DebugLevel)
-	//设置日志格式
+	// 设置日志格式
 	//logger.SetFormatter(&logrus.JSONFormatter{})
+	// If you wish to add the calling method as a field, instruct the logger via:
+	//logger.SetReportCaller(true)
 
 	logWriter, err := rotatelogs.New(
 		prefix+"-%Y-%m-%d.log",                    // 生成实际文件名的模式

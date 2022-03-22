@@ -117,8 +117,8 @@ func IsPathExist(path string) bool {
 	return true
 }
 
-//调用os.MkdirAll递归创建文件夹
-func MakeMutiDir(filePath string) error {
+// MakeMultiDir 调用os.MkdirAll递归创建文件夹
+func MakeMultiDir(filePath string) error {
 	if !IsPathExist(filePath) {
 		err := os.MkdirAll(filePath, os.ModePerm)
 		if err != nil {

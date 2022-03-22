@@ -43,7 +43,7 @@ func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 		filePath += path + "/"
 	}
 	filePath += time.Now().Format("2006-01-02") + "/"
-	b := MakeMutiDir(filePath)
+	b := MakeMultiDir(filePath)
 	if b != nil {
 		return nil, err
 	}
