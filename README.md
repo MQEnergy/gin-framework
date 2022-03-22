@@ -66,6 +66,7 @@ http://127.0.0.1:9527/ping
 {
     "status": 200,
     "errcode": 0,
+    "requestid": "9ac7f4f2-1271-4f87-8df7-599a478af9cb",
     "message": "Pong!",
     "data": ""
 }
@@ -130,6 +131,7 @@ http://127.0.0.1:9527/user/index?page=1
 {
   "status": 200,
   "errcode": 0,
+  "requestid": "9ac7f4f2-1271-4f87-8df7-599a478af9cb",
   "message": "请求成功",
   "data": {
     "list": [],
