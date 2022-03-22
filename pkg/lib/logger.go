@@ -4,6 +4,7 @@ import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
+	"mqenergy-go/config"
 	"os"
 	"time"
 )
@@ -25,7 +26,9 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	// 设置输出
 	logger.Out = src
 	// 设置日志级别
-	//logger.SetLevel(logrus.DebugLevel)
+	if config.Conf.Log.Debug == "true" {
+		logger.SetLevel(logrus.DebugLevel)
+	}
 	// 设置日志格式
 	//logger.SetFormatter(&logrus.JSONFormatter{})
 	// If you wish to add the calling method as a field, instruct the logger via:
