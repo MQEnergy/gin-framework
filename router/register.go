@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/config"
 	"mqenergy-go/middleware"
+	"mqenergy-go/pkg/response"
 	"mqenergy-go/router/routes"
-	"net/http"
 )
 
 func Register() *gin.Engine {
@@ -20,7 +20,7 @@ func Register() *gin.Engine {
 	router.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
 		method := ctx.Request.Method
-		ctx.JSON(http.StatusNotFound, fmt.Sprintf("%s %s not found", method, path))
+		response.NotFoundException(ctx, fmt.Sprintf("%s %s not found", method, path))
 	})
 
 	// 路由分组
@@ -33,7 +33,7 @@ func Register() *gin.Engine {
 		authGroup   = router.Group("/", append(publicMiddleware, middleware.LoginAuth, middleware.CasbinAuth())...)
 	)
 	// 公用组
-	routes.InitPublicCommonRouter(commonGroup)
+	routes.InitCommonGroup(commonGroup)
 	// 后台组
 	routes.InitBackendGroup(authGroup)
 	// 前台组

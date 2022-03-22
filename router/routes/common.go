@@ -6,7 +6,7 @@ import (
 	"mqenergy-go/app/controller/common"
 )
 
-func InitPublicCommonRouter(r *gin.RouterGroup) (router gin.IRoutes) {
+func InitCommonGroup(r *gin.RouterGroup) (router gin.IRoutes) {
 	commonGroup := r.Group("")
 	{
 		// ping

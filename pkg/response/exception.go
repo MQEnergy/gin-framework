@@ -49,7 +49,15 @@ func ForbiddenException(ctx *gin.Context, message string) {
 	ResponseJson(ctx, http.StatusForbidden, Failed, message, nil)
 }
 
-// ServerException 500错误
+// NotFoundException 404错误
+func NotFoundException(ctx *gin.Context, message string) {
+	if message == "" {
+		message = CodeMap[RequestMethodErr]
+	}
+	ResponseJson(ctx, http.StatusNotFound, RequestMethodErr, message, nil)
+}
+
+// InternalServerException 500错误
 func InternalServerException(ctx *gin.Context, message string) {
 	if message == "" {
 		message = CodeMap[InternalErr]
