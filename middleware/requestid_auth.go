@@ -40,8 +40,10 @@ func RequestIdAuth() gin.HandlerFunc {
 		if ctx.Writer.Status() != 200 {
 			responseData = writer.body.String()
 			fields["_header"] = ctx.Request.Header
+			// 记录request日志
+			global.Logger.WithFields(fields).Warn(responseData)
+		} else {
+			global.Logger.WithFields(fields).Info(responseData)
 		}
-		// 记录request日志
-		global.Logger.WithFields(fields).Info(responseData)
 	}
 }
