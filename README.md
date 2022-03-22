@@ -89,8 +89,8 @@ go build main.go
 # 安装在GOPATH的bin目录中
 go install
 
-# 执行一下即可运行
-$GOPATH/bin/mqenergy-go 
+# 执行可查看命令
+mqenergy-go help
 ```
 
 ## 三、组件使用
