@@ -12,7 +12,7 @@ type UserService struct{}
 
 var User = UserService{}
 
-// GetList
+// GetList 获取列表
 func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, error) {
 	var userList = make([]user.UserList, 0)
 	fields := []string{
@@ -24,9 +24,9 @@ func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, erro
 		WithDB(global.DB).
 		WithModel(models.GinUser{}).
 		WithFields(fields).
-		WithJoins("left", models.GinUserInfoTbName, paginator.OnJoins{
-			LeftField:  models.GinUserTbName + ".id",
-			RightField: models.GinUserInfoTbName + ".user_id",
+		WithJoins("left", paginator.OnJoins{
+			LeftTableField:  paginator.TableField{Table: models.GinUserTbName, Field: "id"},
+			RightTableField: paginator.TableField{Table: models.GinUserInfoTbName, Field: "user_id"},
 		}).
 		Pagination(userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
 	return pagination, err

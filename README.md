@@ -114,9 +114,9 @@ http://127.0.0.1:9527/user/index?page=1
 ```
 传入全局global.DB 
 ```
-#### 2）`必须在链式操作中` WithModel(db *gorm.DB) *PageBuilder db连接方法
+#### 2）`必须在链式操作中` WithModel(db *gorm.DB) *PageBuilder model连接方法
 ```
-传入查询主表model
+传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址
 ```
 #### 3）`非必须在链式操作中` WithFields(fields []string) *PageBuilder 查询或过滤字段方法
 ```
@@ -128,14 +128,15 @@ http://127.0.0.1:9527/user/index?page=1
 WithFields([]string{"created_at", "updated_at", "_omit"}) // 表示过滤前面字段
 WithFields([]string{"created_at", "updated_at", "_select"}) // 表示查询前面的字段
 ```
-#### 4）`非必须在链式操作中` WithCondition(query interface{}, args ...interface{}) *PageBuilder 数据查询条件方法
+#### 4）`非必须在链式操作中` WithCondition(query interface{}, args interface{}) *PageBuilder 数据查询条件方法
 ```
 如上所示 传入查询条件 支持gorm中where条件中的一些查询方式（非struct方式） query, args参数参照gorm where条件传入方式
 ```
-#### 5）`非必须在链式操作中` WithJoins(joinType, joinTable string, joinFields OnJoins) *PageBuilder 数据查询条件方法
+#### 5）`非必须在链式操作中` WithJoins(joinType string, joinFields OnJoins) *PageBuilder 数据查询条件方法
 ```
 joinType：join类型 可传入：left,right,inner
-joinFields结构体： LeftField：如：主表.ID  RightField：如：关联表.主表的ID
+joinFields结构体： LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
+具体参考 上述连表查询使用案例
 ```
 #### 6）`必须在链式操作中最后一环` Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法
 ```

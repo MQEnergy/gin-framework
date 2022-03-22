@@ -19,7 +19,7 @@ type ` + firstUpperCtlName + `Service struct{}
 
 var ` + firstUpperCtlName + ` = ` + firstUpperCtlName + `Service{}
 
-// GetList 
+// GetList 获取列表
 func (s ` + firstUpperCtlName + `Service) GetList(requestParams interface{}) (interface{}, error) {
 	// Todo list 
 	return nil, nil

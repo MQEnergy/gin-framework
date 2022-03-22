@@ -26,7 +26,7 @@ type ` + firstUpperCtlName + `Controller struct {
 
 var ` + firstUpperCtlName + ` = ` + firstUpperCtlName + `Controller{}
 
-// Index 
+// Index 获取列表
 func (c ` + firstUpperCtlName + `Controller) Index(ctx *gin.Context) {
 	// Todo list
 }
