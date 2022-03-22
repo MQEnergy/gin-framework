@@ -32,6 +32,9 @@ difference, _ := lo.Difference[string](fields, pb.Fields)
 │   ├── util                    # 助手函数
 │   └── validator               # 验证器
 ├── rbac_model.conf             # rbac配置文件
+├── config.dev.yaml             # 开发环境配置文件
+├── config.test.yaml            # 测试环境配置文件
+├── config.prod.yaml            # 正式环境配置文件
 ├── router                      # 路由配置
 ├── runtime                     # 运行时文件 如日志
 ```
