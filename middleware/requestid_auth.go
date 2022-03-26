@@ -3,6 +3,7 @@ package middleware
 import (
 	"bytes"
 	"fmt"
+	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"mqenergy-go/global"
@@ -47,6 +48,7 @@ func RequestIdAuth() gin.HandlerFunc {
 			"req_host":     ctx.Request.Host,
 			"req_method":   ctx.Request.Method,
 			"req_clientIp": ctx.ClientIP(),
+			"req_id":       requestid.Get(ctx),
 			"req_uri":      ctx.Request.RequestURI,
 			"res_time":     fmt.Sprintf("%vms", reqEndTime-reqStartTime), // 响应时间
 		}
