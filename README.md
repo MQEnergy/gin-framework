@@ -99,7 +99,7 @@ mqenergy-go help
 ```shell script
 import 	"mqenergy-go/pkg/paginator"
 var memberList = make([]models.GinAdmin, 0)
-paginator, err := paginator.Builder.
+paginator, err := paginator.NewBuilder().
     WithDB(global.DB).
     WithModel(models.GinAdmin{}).
     WithFields([]string{"password", "salt", "updated_at", "_omit"}).

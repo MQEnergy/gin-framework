@@ -34,7 +34,9 @@ type Page struct {
 	PerPage     int         `json:"per_page"`     // 每页条数
 }
 
-var Builder = PageBuilder{}
+func NewBuilder() *PageBuilder {
+	return &PageBuilder{}
+}
 
 // WithDB db连接
 func (pb *PageBuilder) WithDB(db *gorm.DB) *PageBuilder {

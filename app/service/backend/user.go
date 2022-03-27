@@ -20,7 +20,7 @@ func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, erro
 		models.GinUserInfoTbName + ".user_id",
 		models.GinUserInfoTbName + ".role_ids",
 	}
-	pagination, err := paginator.Builder.
+	pagination, err := paginator.NewBuilder().
 		WithDB(global.DB).
 		WithModel(models.GinUser{}).
 		WithFields(fields).
