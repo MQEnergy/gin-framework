@@ -289,9 +289,6 @@ go run main.go model {数据表名} {env}
 ### 3、自动生成controller
 
 ```shell script
-# 参数一：all：生成所有 或者写入数据表名生成单个
-# env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
-
 go run main.go controller {controller名称} {module名称}
 # module名称是app/controller目录下的模块名称
 # 例如：go run main.go controller admin backend
@@ -300,23 +297,18 @@ go run main.go controller {controller名称} {module名称}
 ### 4、自动生成service
 
 ```shell script
-# env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
-
 go run main.go service {service名称} {module名称}
 # module名称是app/controller目录下的模块名称
 # 例如：go run main.go service admin backend
 ```
 
 ### 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
-
 ```
 go run main.go account {账号名称} {密码}  
 ```
 
 ## 五、参考
-
 ### 初始化一个接口项目需要安装的依赖包（主要）
-
 ### 初始化go.mod
 
 ```shell script
