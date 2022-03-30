@@ -18,8 +18,8 @@ var User = UserController{}
 // Index 获取列表
 func (c UserController) Index(ctx *gin.Context) {
 	var requestParams user.IndexRequest
-	if err := ctx.Bind(&requestParams); err != nil {
-		response.BadRequestException(ctx, "")
+	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
+		response.BadRequestException(ctx, err.Error())
 		return
 	}
 	list, err := backend.User.GetIndex(requestParams)
@@ -33,8 +33,8 @@ func (c UserController) Index(ctx *gin.Context) {
 // List 获取列表
 func (c UserController) List(ctx *gin.Context) {
 	var requestParams user.IndexRequest
-	if err := ctx.Bind(&requestParams); err != nil {
-		response.BadRequestException(ctx, "")
+	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
+		response.BadRequestException(ctx, err.Error())
 		return
 	}
 	list, err := backend.User.GetList(requestParams)

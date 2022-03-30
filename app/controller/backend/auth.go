@@ -18,8 +18,8 @@ var Auth = AuthController{}
 // Login 用户登录
 func (c AuthController) Login(ctx *gin.Context) {
 	var requestParams user.LoginRequest
-	if err := ctx.Bind(&requestParams); err != nil {
-		response.BadRequestException(ctx, "")
+	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
+		response.BadRequestException(ctx, err.Error())
 		return
 	}
 	token, err := common.User.Login(requestParams)

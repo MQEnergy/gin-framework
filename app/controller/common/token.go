@@ -16,11 +16,10 @@ type TokenController struct {
 
 var Token = TokenController{}
 
-//
-// TokenCreate 生成token
+// Create 生成token
 func (c TokenController) Create(ctx *gin.Context) {
 	token, err := auth.GenerateJwtToken(config.Conf.Server.JwtSecret,
-		config.Conf.Server.TokenExpire, map[string]interface{}{"id": 1},
+		config.Conf.Server.TokenExpire, map[string]int{"id": 1},
 		config.Conf.Server.TokenIssuer)
 	if err != nil {
 		response.UnauthorizedException(ctx, err.Error())
@@ -29,7 +28,7 @@ func (c TokenController) Create(ctx *gin.Context) {
 	response.ResponseJson(ctx, http.StatusOK, response.Success, "", token)
 }
 
-// TokenParse token解析
+// View token解析
 func (c TokenController) View(ctx *gin.Context) {
 	token := ctx.GetHeader(config.Conf.Server.TokenKey)
 	if token == "" {

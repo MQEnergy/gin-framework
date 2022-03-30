@@ -15,11 +15,11 @@ type AttachmentController struct {
 
 var Attachment = AttachmentController{}
 
-// Upload
+// Upload 上传图片
 func (c AttachmentController) Upload(ctx *gin.Context) {
 	var requestParams attachment.UploadRequest
-	if err := ctx.Bind(&requestParams); err != nil {
-		response.BadRequestException(ctx, "")
+	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
+		response.BadRequestException(ctx, err.Error())
 		return
 	}
 	file, err := util.UploadFile(requestParams.FilePath, ctx)

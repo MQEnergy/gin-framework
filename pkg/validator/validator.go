@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
@@ -25,4 +26,23 @@ func NewValidate() {
 	validate = binding.Validator.Engine().(*validator.Validate)
 	// 注册翻译器
 	zh2.RegisterDefaultTranslations(validate, trans)
+}
+
+// Translate 解析错误信息
+func Translate(errs error) []string {
+	var result []string
+	switch errs.(type) {
+	case validator.ValidationErrors:
+		validationErrors := errs.(validator.ValidationErrors)
+		for _, err := range validationErrors {
+			result = append(result, err.Translate(trans))
+		}
+		break
+	case *json.UnmarshalTypeError:
+		result = append(result, "参数格式错误")
+		break
+	default:
+		result = append(result, "参数错误")
+	}
+	return result
 }

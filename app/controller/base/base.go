@@ -1,8 +1,10 @@
 package base
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/pkg/response"
+	"mqenergy-go/pkg/validator"
 	"net/http"
 )
 
@@ -28,4 +30,19 @@ func (c Controller) Update(ctx *gin.Context) {
 
 func (c Controller) View(ctx *gin.Context) {
 	response.ResponseJson(ctx, http.StatusOK, response.Success, "view", "")
+}
+
+// ValidateReqParams 验证请求参数
+func (c Controller) ValidateReqParams(ctx *gin.Context, requestParams interface{}) error {
+	var err error
+	if ctx.ContentType() != "application/json" {
+		err = ctx.Bind(requestParams)
+	} else {
+		err = ctx.BindJSON(requestParams)
+	}
+	if err != nil {
+		translate := validator.Translate(err)
+		return errors.New(translate[0])
+	}
+	return nil
 }
