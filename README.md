@@ -2,6 +2,9 @@
 
 本项目积极拥抱Go 1.18+版本，强烈建议用户升级到v1.18及以上版本，全自动化生成Model Service Controller架子，加快业务开发。
 
+[![GitHub license](https://img.shields.io/github/license/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/stargazers)
+
 # 一、目录结构
 
 ```
@@ -40,25 +43,21 @@
 
 ## 1、安装依赖
 
-```shell script
+```bash
 go mod tidy 
 ```
 
 ## 2、服务启动
 
-```shell script
+```bash
 go run main.go 
 # 查看 main.go的参数
 go run main.go --help
 ```
 
 ## 3、访问如下表示成功启动
-
-```shell script
-# 请求：
-http://127.0.0.1:9527/ping
-
-# 返回：
+请求：http://127.0.0.1:9527/ping
+```json
 {
     "status": 200,
     "errcode": 0,
@@ -70,7 +69,7 @@ http://127.0.0.1:9527/ping
 
 ## 4、安装热更新
 
-```shell script
+```bash
 go install github.com/cosmtrek/air@latest
 ```
 
@@ -78,7 +77,7 @@ go install github.com/cosmtrek/air@latest
 
 ## 5、打包上线
 
-```shell script
+```bash
 go build main.go
 # 执行可查看命令
 ./main help 
@@ -95,12 +94,14 @@ mqenergy-go help
 ## 1、基于gorm的查询分页构造器
 引用包
 
-    import 	"mqenergy-go/pkg/paginator"
+```go
+import "mqenergy-go/pkg/paginator"
+```
 
 ### 一、基础用法
 #### 1）单表分页基础用法：
 
-```shell
+```go
 var memberList = make([]models.GinAdmin, 0)
 paginator, err := paginator.NewBuilder().
     WithDB(global.DB).
@@ -113,7 +114,7 @@ return paginator, err
 
 #### 2）连表joins查询用法：
 定义接收struct
-```shell script
+```go
 type BaseUser models.GinUser
 type GinUserInfo models.GinUserInfo
 
@@ -123,15 +124,15 @@ type UserList struct {
 	GinUserInfo `gorm:"foreignKey:user_id" json:"user_info"`
 }
 ```
+
 用法一：
-```shell
+```go
 var userList = make([]user.UserList, 0)
 pagination, err := paginator.NewBuilder().
     WithDB(global.DB).
     WithModel(models.GinUser{}).
     WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"}).
     WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"}).
-    //WithMultiFields(multiFields).
     WithJoins("left", []paginator.OnJoins{{
         LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
         RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
@@ -139,8 +140,9 @@ pagination, err := paginator.NewBuilder().
     Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
 return pagination, err
 ```
+
 用法二：
-```shell
+```go
 var userList = make([]user.UserList, 0)
 multiFields := []paginator.SelectTableField{
     {Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
@@ -159,10 +161,15 @@ return pagination, err
 ```
 
 #### 3）预加载preload查询用法（强烈建议用法）：
-    注意：与joins查询方式定义的struct有些许差别，preload方式定义struct名称必须与model当前表的struct名称一致，且关联表的struct名称不能跟model对于的struct名称一样 例如：定义的`UserInfo` 写法如下
+
+```
+注意：
+与joins查询方式定义的struct有些许差别，preload方式定义struct名称必须与model当前表的struct名称一致，
+且关联表的struct名称不能跟model对于的struct名称一样 例如：定义的`UserInfo` 写法如下
+```    
 
 定义接收struct
-```shell
+```go
 type BaseUser models.GinUser
 type GinUserInfo models.GinUserInfo
 
@@ -171,8 +178,9 @@ type GinUser struct {
 	UserInfo GinUserInfo `gorm:"foreignKey:user_id" json:"user_info"`
 }
 ```
+
 用法如下：
-```shell
+```go
 var userList = make([]user.GinUser, 0)
 pagination, err := paginator.NewBuilder().
     WithDB(global.DB).
@@ -181,7 +189,9 @@ pagination, err := paginator.NewBuilder().
     Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
 return pagination, err
 ```
-    此写法不建议使用WithFields、WithField查询字段，建议直接定义接收struct规定的查询字段即可
+```
+此写法不建议使用WithFields、WithField查询字段，建议直接定义接收struct规定的查询字段即可
+```
 
 访问地址：http://127.0.0.1:9527/user/index?page=1 返回数据格式如下：
 
@@ -202,7 +212,7 @@ return pagination, err
 ```
 #### 4）案例查看：
 1）用法如下 获取用户列表：
-```shell
+```
 entities/user/gin_user.go
 app/controller/backend/user.go
 app/service/backend/user.go
@@ -211,18 +221,22 @@ router/routes/common.go
 
 ### 二、具体方法
 #### 1）`必须在链式操作中` db连接方法
-
-    WithDB(db *gorm.DB) *PageBuilder
+```go
+WithDB(db *gorm.DB) *PageBuilder
+```
 传入全局global.DB
 
 #### 2）`必须在链式操作中` model连接方法
-
-    WithModel(db *gorm.DB) *PageBuilder 
+```go
+WithModel(db *gorm.DB) *PageBuilder 
+```
 传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址
 
 #### 3）`非必须在链式操作中` 单表查询或过滤字段方法
+```go
+WithField(fields []string) *PageBuilder 
+```
 
-    WithField(fields []string) *PageBuilder 
 fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
 
 注意：
@@ -231,36 +245,38 @@ fields 最后一个参数默认为_select（可不传），如传_omit为过滤�
 - 此注意事项适用于 WithFields方法、WithMultiFields方法
 
 用法如下：
-```shell
-# 表示过滤前面字段
+```go
+// 表示过滤前面字段
 WithField([]string{"created_at", "updated_at", "_omit"})
 
-# 表示查询前面的字段
+// 表示查询前面的字段
 WithField([]string{"created_at", "updated_at", "_select"})
 WithField([]string{"created_at", "updated_at"})
 ```
 
 #### 4）`非必须在链式操作中` 多表查询或过滤字段方法（preload模式下 关联表查询有问题，preload关联查询不建议使用此方法）
-
-    WithFields(model interface{}, table string, fields []string) *PageBuilder
+```go
+WithFields(model interface{}, table string, fields []string) *PageBuilder
+```
 fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
 
 用法如下：
-```shell
-# 表示过滤前面字段
+```go
+// 表示过滤前面字段
 WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"})
 
-# 表示查询前面的字段
+// 表示查询前面的字段
 WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids", "_select"})
 WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"})
 ```
 
 #### 5）`非必须在链式操作中` 多表多字段查询（可替代WithFields方法）
-
-    WithMultiFields(fields []SelectTableField) *PageBuilder
+```go
+WithMultiFields(fields []SelectTableField) *PageBuilder
+```
 
 用法如下：
-```shell
+```go
 WithMultiFields([]paginator.SelectTableField{
     {Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
     {Model: models.GinUserInfo{}, Table: models.GinUserInfoTbName, Field: []string{"id", "user_id", "role_ids"}},
@@ -269,34 +285,44 @@ WithMultiFields([]paginator.SelectTableField{
 
 #### 6）`非必须在链式操作中` 多表关联查询主动预加载（暂不支持条件）
     
-     WithPreloads(querys []string) *PageBuilder 
+```go
+ WithPreloads(querys []string) *PageBuilder 
+```
 
 用法如下：
-```shell
+```go
 WithPreloads([]string{"UserInfo", "UserRecord"})
 ```
 
 #### 7）`非必须在链式操作中` 关联查询主动预加载（可传条件，条件参考gorm）
 
-    WithPreload(query string, args ...interface{}) *PageBuilder
+```go
+WithPreload(query string, args ...interface{}) *PageBuilder
+```
 
 用法如下：
-```shell
+```go
 WithPreload("UserInfo", "user_id = ?", "1")
 ```
 
 #### 8）`非必须在链式操作中` 数据查询条件方法
 
-    WithCondition(query interface{}, args interface{}) *PageBuilder
+```go
+WithCondition(query interface{}, args interface{}) *PageBuilder
+```
+
 传入查询条件 支持gorm中where条件中的查询方式（非struct方式） query, args参数参照gorm的where条件传入方式
 
 #### 9）`非必须在链式操作中` 数据查询条件方法
 
-    WithJoins(joinType string, joinFields []OnJoins) *PageBuilder
+```go
+WithJoins(joinType string, joinFields []OnJoins) *PageBuilder
+```
+
 joinType：join类型 可传入：left、right、inner，joinFields结构体： LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
 
 用法如下：
-```
+```go
 WithJoins("left", []paginator.OnJoins{{
     LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
     RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
@@ -305,53 +331,62 @@ WithJoins("left", []paginator.OnJoins{{
 
 #### 10）`必须在链式操作中最后一环` 分页返回方法
 
-    Pagination(dst interface{}, currentPage, pageSize int) (Page, error)
+```go
+Pagination(dst interface{}, currentPage, pageSize int) (Page, error)
+```
+
 dst 传入接收数据的struct结构体 注意：必须是应用方式传递 如：&userList，
 model，currentPage 为当前页码，pageSize为每页查询数量
 
 #### 11）`非必须在链式操作中` 对接原生查询方式
 
-     NewDB() *gorm.DB
+```go
+ NewDB() *gorm.DB
+```
+
 用此方法之后的链式操作下pagination里面的方法均不可用，后面跟gorm原生方法即可
 
 用法如下：
-```shell
+```go
 NewDB().Where("id = ?", id).First(&userList)
 ```
 
 #### 12）获取当前页码
 
-```
+```go
 paginator.CurrentPage
 ```
 
 #### 13）获取分页列表
 
-```
+```go
 paginator.List
 ```
 
 #### 14）获取数据总数
 
-```
+```go
 paginator.Count
 ```
 
 #### 15）获取最后一页页码
 
-```
+```go
 paginator.LastPage
 ```
 
 #### 16）获取每页数据条数
 
-```
+```go
 paginator.PerPage
 ```
 
 ### 2、基于gin上传组件
 
-    UploadFile(path string, r *gin.Context) (*FileHeader, error)
+```go
+UploadFile(path string, r *gin.Context) (*FileHeader, error)
+```
+
 默认存储在项目中upload目录，如果没有会自动创建 path：upload目录模块目录 如：user 则目录是：upload/user/{yyyy-mm-dd}/... 
 
 用法如下：
@@ -377,7 +412,7 @@ COMMANDS:
 
 ## 1、执行migrate
 
-```shell script
+```bash
 # 安装migrate cli工具
 curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$platform-amd64.tar.gz | tar xvz
 
@@ -409,7 +444,7 @@ go run main.go migrate -{n} {env}
 
 ## 2、自动生成model
 
-```shell script
+```bash
 # 参数一：all：生成所有 或者写入数据表名生成单个
 # env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
 
@@ -422,7 +457,7 @@ go run main.go model {数据表名} {env}
 
 ## 3、自动生成controller
 
-```shell script
+```bash
 go run main.go controller {controller名称} {module名称}
 # module名称是app/controller目录下的模块名称
 # 例如：go run main.go controller admin backend
@@ -430,14 +465,15 @@ go run main.go controller {controller名称} {module名称}
 
 ## 4、自动生成service
 
-```shell script
+```bash
 go run main.go service {service名称} {module名称}
 # module名称是app/controller目录下的模块名称
 # 例如：go run main.go service admin backend
 ```
 
 ## 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
-```
+
+```bash
 go run main.go account {账号名称} {密码}  
 ```
 
@@ -445,80 +481,80 @@ go run main.go account {账号名称} {密码}
 ## 初始化一个接口项目需要安装的依赖包（主要）
 ### 初始化go.mod
 
-```shell script
+```bash
 go mod init mqenergy-go/gin-framework
 go mod tidy
 ```
 
 ### 安装gin框架
 
-```shell script
+```bash
 go get -u github.com/gin-gonic/gin
 ```
 
 ### 安装model自动生成包
 
-```shell script
+```bash
 go get -u github.com/MQEnergy/gorm-model
 ```
 
 ### 安装gorm
 
-```shell script
+```bash
 go get -u gorm.io/gorm
-// 如果下载不了 十之八九是因为 GOSUMDB的原因 
+# 如果下载不了 十之八九是因为 GOSUMDB的原因 
 export GOSUMDB=
-// GOSUMDB置空就行
+# GOSUMDB置空就行
 ```
 
 ### 安装命令行工具
 
-```shell script
+```bash
 go get -u github.com/urfave/cli/v2
 ```
 
 ### 安装log日志
 
-```shell script
+```bash
 go get -u github.com/sirupsen/logrus
 go get -u github.com/lestrrat-go/file-rotatelogs
 ```
 
 ### 安装redis
 
-```shell script
+```bash
 go get -u github.com/go-redis/redis/v8
 go get -u github.com/go-redsync/redsync/v4
 ```
 
 ### 安装jwt
 
-```shell script
+```bash
 go get -u github.com/dgrijalva/jwt-go
 ```
 
 ### 安装cors跨域
 
-```shell script
+```bash
 go get -u github.com/gin-contrib/cors
 ```
 
 ### 安装casbin
 
-```shell script
+```bash
 go get -u github.com/casbin/casbin/v2
 go get -u github.com/casbin/gorm-adapter/v3
 ```
 
 ### 安装snowflake
 
-```shell script
+```bash
 go get -u github.com/bwmarrin/snowflake
 ```
 
 ### 安装golang-migrate迁移组件
 
-```shell script
+```bash
 go get -u github.com/golang-migrate/migrate/v4
 
 # 安装migrate cli工具
@@ -541,12 +577,12 @@ migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path 
 
 ### 安装热更新
 
-```shell script
+```bash
 go install github.com/cosmtrek/air@latest
 ```
 
 ### 基于Go 1.18+泛型的Lodash风格的Go库
 
-```shell script
+```bash
 go get -u github.com/samber/lo
 ```
