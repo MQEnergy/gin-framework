@@ -12,22 +12,34 @@ type UserService struct{}
 
 var User = UserService{}
 
-// GetList 获取列表
-func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, error) {
+// GetIndex 获取列表
+func (s UserService) GetIndex(requestParams user.IndexRequest) (interface{}, error) {
 	var userList = make([]user.UserList, 0)
-	fields := []string{
-		models.GinUserTbName + ".user_name",
-		models.GinUserInfoTbName + ".user_id",
-		models.GinUserInfoTbName + ".role_ids",
+	multiFields := []paginator.SelectTableField{
+		{Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
+		{Model: models.GinUserInfo{}, Table: models.GinUserInfoTbName, Field: []string{"id", "user_id", "role_ids"}},
 	}
 	pagination, err := paginator.NewBuilder().
 		WithDB(global.DB).
 		WithModel(models.GinUser{}).
-		WithFields(fields).
-		WithJoins("left", paginator.OnJoins{
-			LeftTableField:  paginator.TableField{Table: models.GinUserTbName, Field: "id"},
-			RightTableField: paginator.TableField{Table: models.GinUserInfoTbName, Field: "user_id"},
-		}).
-		Pagination(userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+		//WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"}).
+		//WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"}).
+		WithMultiFields(multiFields).
+		WithJoins("left", []paginator.OnJoins{{
+			LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
+			RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
+		}}).
+		Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+	return pagination, err
+}
+
+// GetList 获取列表
+func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, error) {
+	var userList = make([]user.GinUser, 0)
+	pagination, err := paginator.NewBuilder().
+		WithDB(global.DB).
+		WithModel(models.GinUser{}).
+		WithPreload("UserInfo").
+		Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
 	return pagination, err
 }

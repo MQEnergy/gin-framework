@@ -1,8 +1,8 @@
-## :zap::rocket: 以gin框架为基础，封装一套基于go1.18+的适用于面向api编程的快速开发框架
+# :zap::rocket: 以gin框架为基础，封装一套基于go1.18+的适用于面向api编程的快速开发框架
 
 本项目积极拥抱Go 1.18+版本，强烈建议用户升级到v1.18及以上版本，全自动化生成Model Service Controller架子，加快业务开发。
 
-## 一、目录结构
+# 一、目录结构
 
 ```
 ├── app                         # 模块存放目录
@@ -32,19 +32,19 @@
 ├── runtime                     # 运行时文件 如日志
 ```
 
-## 二、启动服务
+# 二、启动服务
 
 ```
 注意启动前需要将 mysql服务和redis服务开启，并配置config.dev.yaml文件(默认读取dev环境)中的mysql和redis配置
 ```
 
-### 1、安装依赖
+## 1、安装依赖
 
 ```shell script
 go mod tidy 
 ```
 
-### 2、服务启动
+## 2、服务启动
 
 ```shell script
 go run main.go 
@@ -52,7 +52,7 @@ go run main.go
 go run main.go --help
 ```
 
-### 3、访问如下表示成功启动
+## 3、访问如下表示成功启动
 
 ```shell script
 # 请求：
@@ -68,7 +68,7 @@ http://127.0.0.1:9527/ping
 }
 ```
 
-### 4、安装热更新
+## 4、安装热更新
 
 ```shell script
 go install github.com/cosmtrek/air@latest
@@ -76,7 +76,7 @@ go install github.com/cosmtrek/air@latest
 
 命令行敲入：air 即可执行热更新 代码编辑即更新
 
-### 5、打包上线
+## 5、打包上线
 
 ```shell script
 go build main.go
@@ -90,38 +90,100 @@ go install
 mqenergy-go help
 ```
 
-## 三、组件使用
+# 三、组件使用
 
-### 1、基于gorm的查询分页构造器
+## 1、基于gorm的查询分页构造器
+引用包
 
-单表查询使用方法如下：
+    import 	"mqenergy-go/pkg/paginator"
 
-```shell script
-import 	"mqenergy-go/pkg/paginator"
+### 一、基础用法
+#### 1）单表分页基础用法：
+
+```shell
 var memberList = make([]models.GinAdmin, 0)
 paginator, err := paginator.NewBuilder().
     WithDB(global.DB).
     WithModel(models.GinAdmin{}).
-    WithFields([]string{"password", "salt", "updated_at", "_omit"}).
+    WithField([]string{"password", "salt", "updated_at", "_omit"}).
     WithCondition("id = ?", 1).
     Pagination(memberList, 1, 10)
 return paginator, err
 ```
 
-连表查询使用方法如下：
+#### 2）连表joins查询用法：
+定义接收struct
+```shell script
+type BaseUser models.GinUser
+type GinUserInfo models.GinUserInfo
 
+// UserList 获取关联列表
+type UserList struct {
+	BaseUser
+	GinUserInfo `gorm:"foreignKey:user_id" json:"user_info"`
+}
 ```
-可查看案例 获取用户列表：
-app/controller/backend/user.go
-app/service/backend/user.go
-router/routes/common.go
-
-访问地址：
-http://127.0.0.1:9527/user/index?page=1
-可查看效果
+用法一：
+```shell
+var userList = make([]user.UserList, 0)
+pagination, err := paginator.NewBuilder().
+    WithDB(global.DB).
+    WithModel(models.GinUser{}).
+    WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"}).
+    WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"}).
+    //WithMultiFields(multiFields).
+    WithJoins("left", []paginator.OnJoins{{
+        LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
+        RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
+    }}).
+    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+return pagination, err
+```
+用法二：
+```shell
+var userList = make([]user.UserList, 0)
+multiFields := []paginator.SelectTableField{
+    {Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
+    {Model: models.GinUserInfo{}, Table: models.GinUserInfoTbName, Field: []string{"user_id", "role_ids"}},
+}	
+pagination, err := paginator.NewBuilder().
+    WithDB(global.DB).
+    WithModel(models.GinUser{}).
+    WithMultiFields(multiFields).
+    WithJoins("left", []paginator.OnJoins{{
+        LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
+        RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
+    }}).
+    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+return pagination, err
 ```
 
-返回数据格式如下：
+#### 3）预加载preload查询用法（强烈建议用法）：
+    注意：与joins查询方式定义的struct有些许差别，preload方式定义struct名称必须与model当前表的struct名称一致，且关联表的struct名称不能跟model对于的struct名称一样 例如：定义的`UserInfo` 写法如下
+
+定义接收struct
+```shell
+type BaseUser models.GinUser
+type GinUserInfo models.GinUserInfo
+
+type GinUser struct {
+	BaseUser
+	UserInfo GinUserInfo `gorm:"foreignKey:user_id" json:"user_info"`
+}
+```
+用法如下：
+```shell
+var userList = make([]user.GinUser, 0)
+pagination, err := paginator.NewBuilder().
+    WithDB(global.DB).
+    WithModel(models.GinUser{}).
+    WithPreload("UserInfo").
+    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+return pagination, err
+```
+    此写法不建议使用WithFields、WithField查询字段，建议直接定义接收struct规定的查询字段即可
+
+访问地址：http://127.0.0.1:9527/user/index?page=1 返回数据格式如下：
 
 ```json
 {
@@ -131,83 +193,157 @@ http://127.0.0.1:9527/user/index?page=1
   "message": "请求成功",
   "data": {
     "list": [],
-    "current_page": 2,
-    "count": 13,
-    "last_page": 2,
+    "current_page": 1,
+    "count": 2,
+    "last_page": 1,
     "per_page": 10
   }
 }
 ```
-
-#### 1）`必须在链式操作中` WithDB(db *gorm.DB) *PageBuilder db连接方法
-
+#### 4）案例查看：
+1）用法如下 获取用户列表：
+```shell
+entities/user/gin_user.go
+app/controller/backend/user.go
+app/service/backend/user.go
+router/routes/common.go
 ```
-传入全局global.DB 
-```
 
-#### 2）`必须在链式操作中` WithModel(db *gorm.DB) *PageBuilder model连接方法
+### 二、具体方法
+#### 1）`必须在链式操作中` db连接方法
 
-```
+    WithDB(db *gorm.DB) *PageBuilder
+传入全局global.DB
+
+#### 2）`必须在链式操作中` model连接方法
+
+    WithModel(db *gorm.DB) *PageBuilder 
 传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址
+
+#### 3）`非必须在链式操作中` 单表查询或过滤字段方法
+
+    WithField(fields []string) *PageBuilder 
+fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
+
+注意：
+- _select / _omit 必须在最后
+- WithModel 参数不能传结构体取地址 例如：&models.GinAdmin 必须 models.GinAdmin 不然 _omit 参数失效
+- 此注意事项适用于 WithFields方法、WithMultiFields方法
+
+用法如下：
+```shell
+# 表示过滤前面字段
+WithField([]string{"created_at", "updated_at", "_omit"})
+
+# 表示查询前面的字段
+WithField([]string{"created_at", "updated_at", "_select"})
+WithField([]string{"created_at", "updated_at"})
 ```
 
-#### 3）`非必须在链式操作中` WithFields(fields []string) *PageBuilder 查询或过滤字段方法
+#### 4）`非必须在链式操作中` 多表查询或过滤字段方法（preload模式下 关联表查询有问题，preload关联查询不建议使用此方法）
 
-```
-最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
-注意： _select / _omit 必须在最后
-      WithModel 参数不能传结构体取地址 例如：&models.GinAdmin 必须 models.GinAdmin
-      不然 _omit 参数失效
-如：
-WithFields([]string{"created_at", "updated_at", "_omit"}) // 表示过滤前面字段
-WithFields([]string{"created_at", "updated_at", "_select"}) // 表示查询前面的字段
-```
+    WithFields(model interface{}, table string, fields []string) *PageBuilder
+fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
 
-#### 4）`非必须在链式操作中` WithCondition(query interface{}, args interface{}) *PageBuilder 数据查询条件方法
+用法如下：
+```shell
+# 表示过滤前面字段
+WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"})
 
-```
-如上所示 传入查询条件 支持gorm中where条件中的一些查询方式（非struct方式） query, args参数参照gorm where条件传入方式
+# 表示查询前面的字段
+WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids", "_select"})
+WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"})
 ```
 
-#### 5）`非必须在链式操作中` WithJoins(joinType string, joinFields OnJoins) *PageBuilder 数据查询条件方法
+#### 5）`非必须在链式操作中` 多表多字段查询（可替代WithFields方法）
 
-```
-joinType：join类型 可传入：left,right,inner
-joinFields结构体： LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
-具体参考 上述连表查询使用案例
-```
+    WithMultiFields(fields []SelectTableField) *PageBuilder
 
-#### 6）`必须在链式操作中最后一环` Pagination(list interface{}, currentPage, pageSize int) (Page, error) 分页返回方法
-
-```
-list 传入数据表的struct model，currentPage 为当前页码，pageSize为每页查询数量
+用法如下：
+```shell
+WithMultiFields([]paginator.SelectTableField{
+    {Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
+    {Model: models.GinUserInfo{}, Table: models.GinUserInfoTbName, Field: []string{"id", "user_id", "role_ids"}},
+})
 ```
 
-#### 7）获取当前页码
+#### 6）`非必须在链式操作中` 多表关联查询主动预加载（暂不支持条件）
+    
+     WithPreloads(querys []string) *PageBuilder 
+
+用法如下：
+```shell
+WithPreloads([]string{"UserInfo", "UserRecord"})
+```
+
+#### 7）`非必须在链式操作中` 关联查询主动预加载（可传条件，条件参考gorm）
+
+    WithPreload(query string, args ...interface{}) *PageBuilder
+
+用法如下：
+```shell
+WithPreload("UserInfo", "user_id = ?", "1")
+```
+
+#### 8）`非必须在链式操作中` 数据查询条件方法
+
+    WithCondition(query interface{}, args interface{}) *PageBuilder
+传入查询条件 支持gorm中where条件中的查询方式（非struct方式） query, args参数参照gorm的where条件传入方式
+
+#### 9）`非必须在链式操作中` 数据查询条件方法
+
+    WithJoins(joinType string, joinFields []OnJoins) *PageBuilder
+joinType：join类型 可传入：left、right、inner，joinFields结构体： LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
+
+用法如下：
+```
+WithJoins("left", []paginator.OnJoins{{
+    LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
+    RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
+}})
+```
+
+#### 10）`必须在链式操作中最后一环` 分页返回方法
+
+    Pagination(dst interface{}, currentPage, pageSize int) (Page, error)
+dst 传入接收数据的struct结构体 注意：必须是应用方式传递 如：&userList，
+model，currentPage 为当前页码，pageSize为每页查询数量
+
+#### 11）`非必须在链式操作中` 对接原生查询方式
+
+     NewDB() *gorm.DB
+用此方法之后的链式操作下pagination里面的方法均不可用，后面跟gorm原生方法即可
+
+用法如下：
+```shell
+NewDB().Where("id = ?", id).First(&userList)
+```
+
+#### 12）获取当前页码
 
 ```
 paginator.CurrentPage
 ```
 
-#### 8）获取分页列表
+#### 13）获取分页列表
 
 ```
 paginator.List
 ```
 
-#### 9）获取数据总数
+#### 14）获取数据总数
 
 ```
 paginator.Count
 ```
 
-#### 10）获取最后一页页码
+#### 15）获取最后一页页码
 
 ```
 paginator.LastPage
 ```
 
-#### 10）获取每页数据条数
+#### 16）获取每页数据条数
 
 ```
 paginator.PerPage
@@ -215,19 +351,17 @@ paginator.PerPage
 
 ### 2、基于gin上传组件
 
-```
-UploadFile(path string, r *gin.Context) (*FileHeader, error)
-```
+    UploadFile(path string, r *gin.Context) (*FileHeader, error)
+默认存储在项目中upload目录，如果没有会自动创建 path：upload目录模块目录 如：user 则目录是：upload/user/{yyyy-mm-dd}/... 
 
-默认存储在项目中upload目录，如果没有会自动创建 path：upload目录模块目录 如：user 则目录是：upload/user/{yyyy-mm-dd}/... 上传附件案例参照：
-
+用法如下：
 ```
-目录：
 app/controller/backend/attachment.go
+pkg/util/upload.go
 router/routes/common.go
 ```
 
-## 四、工具
+# 四、工具
 
 运行 go run main.go --help 可查看到以下命令集
 
@@ -241,7 +375,7 @@ COMMANDS:
   help, h     Shows a list of commands or help for one command
 ```
 
-### 1、执行migrate
+## 1、执行migrate
 
 ```shell script
 # 安装migrate cli工具
@@ -273,7 +407,7 @@ go run main.go migrate {n} {env}
 go run main.go migrate -{n} {env}
 ```
 
-### 2、自动生成model
+## 2、自动生成model
 
 ```shell script
 # 参数一：all：生成所有 或者写入数据表名生成单个
@@ -286,7 +420,7 @@ go run main.go model {数据表名} {env}
 # 例如：go run model.go gin_admin
 ```
 
-### 3、自动生成controller
+## 3、自动生成controller
 
 ```shell script
 go run main.go controller {controller名称} {module名称}
@@ -294,7 +428,7 @@ go run main.go controller {controller名称} {module名称}
 # 例如：go run main.go controller admin backend
 ```
 
-### 4、自动生成service
+## 4、自动生成service
 
 ```shell script
 go run main.go service {service名称} {module名称}
@@ -302,13 +436,13 @@ go run main.go service {service名称} {module名称}
 # 例如：go run main.go service admin backend
 ```
 
-### 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
+## 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
 ```
 go run main.go account {账号名称} {密码}  
 ```
 
-## 五、参考
-### 初始化一个接口项目需要安装的依赖包（主要）
+# 五、参考
+## 初始化一个接口项目需要安装的依赖包（主要）
 ### 初始化go.mod
 
 ```shell script

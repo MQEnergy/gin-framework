@@ -41,7 +41,7 @@ func BootService(services ...string) {
 	}
 	BootedService = make([]string, 0)
 	for k, val := range serviceMap {
-		if util.InStringSlice(k, services) {
+		if util.InStringSlice[string](services, k) {
 			if err := val(); err != nil {
 				panic("程序服务启动失败:" + err.Error())
 			}
