@@ -228,9 +228,9 @@ WithDB(db *gorm.DB) *PageBuilder
 
 #### 2）`必须在链式操作中` model连接方法
 ```go
-WithModel(db *gorm.DB) *PageBuilder 
+WithModel(model interface{}) *PageBuilder
 ```
-传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址
+传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址方式 如：&models.GinAdmin
 
 #### 3）`非必须在链式操作中` 单表查询或过滤字段方法
 ```go
@@ -242,7 +242,7 @@ fields 最后一个参数默认为_select（可不传），如传_omit为过滤�
 注意：
 - _select / _omit 必须在最后
 - WithModel 参数不能传结构体取地址 例如：&models.GinAdmin 必须 models.GinAdmin 不然 _omit 参数失效
-- 此注意事项适用于 WithFields方法、WithMultiFields方法
+- 此注意事项适用于 `WithFields`方法、`WithMultiFields`方法
 
 用法如下：
 ```go
@@ -308,7 +308,7 @@ WithPreload("UserInfo", "user_id = ?", "1")
 #### 8）`非必须在链式操作中` 数据查询条件方法
 
 ```go
-WithCondition(query interface{}, args interface{}) *PageBuilder
+WithCondition(query interface{}, args ...interface{}) *PageBuilder
 ```
 
 传入查询条件 支持gorm中where条件中的查询方式（非struct方式） query, args参数参照gorm的where条件传入方式
