@@ -128,7 +128,7 @@ func (pb *PageBuilder) WithPreloads(querys []string) *PageBuilder {
 
 // WithPreload 关联查询主动预加载（可传条件）
 func (pb *PageBuilder) WithPreload(query string, args ...interface{}) *PageBuilder {
-	pb.DB.Preload(query, args)
+	pb.DB.Preload(query, args...)
 	return pb
 }
 
