@@ -136,7 +136,7 @@ func (pb *PageBuilder) WithPreload(query string, args ...interface{}) *PageBuild
 
 // WithCondition 查询条件
 func (pb *PageBuilder) WithCondition(query interface{}, args ...interface{}) *PageBuilder {
-	pb.DB.Where(query, args)
+	pb.DB.Where(query, args...)
 	return pb
 }
 
