@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 	"io/ioutil"
+	"mqenergy-go/config"
 	"os"
 	"strconv"
 	"strings"
@@ -19,12 +19,15 @@ var (
 )
 
 type FileHeader struct {
-	Filename string `json:"file_name"`
-	Size     int64  `json:"file_size"`
-	FilePath string `json:"file_path"`
+	Filename   string `json:"file_name"`   // 图片新名称
+	FileSize   int64  `json:"file_size"`   // 图片大小
+	FilePath   string `json:"file_path"`   // 相对路径地址
+	OriginName string `json:"origin_name"` // 图片原名称
+	MimeType   string `json:"mime_type"`   // 附件mime类型
+	Extension  string `json:"extension"`   // 附件后缀名
 }
 
-// UploadFile
+// UploadFile 上传图片
 func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 	file, err := r.FormFile("file")
 	if err != nil {
@@ -43,11 +46,11 @@ func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 		filePath += path + "/"
 	}
 	filePath += time.Now().Format("2006-01-02") + "/"
-	b := MakeMultiDir(filePath)
+	b := MakeMultiDir(config.Conf.Server.FileUploadPath + filePath)
 	if b != nil {
 		return nil, err
 	}
-	create, err := os.Create(filePath + fileName)
+	create, err := os.Create(config.Conf.Server.FileUploadPath + filePath + fileName)
 	if err != nil {
 		return nil, err
 	}
@@ -61,12 +64,13 @@ func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 		return nil, err
 	}
 	create.Write(fileBytes)
-	var fileHeader FileHeader
-	fileHeader.FilePath = filePath + fileName
-
-	err = copier.Copy(&fileHeader, file)
-	if err != nil {
-		return nil, err
+	fileHeader := FileHeader{
+		Filename:   fileName,
+		FileSize:   file.Size,
+		FilePath:   filePath + fileName,
+		OriginName: file.Filename,
+		MimeType:   file.Header.Get("Content-Type"),
+		Extension:  fileType,
 	}
 	return &fileHeader, nil
 }
