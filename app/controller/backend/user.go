@@ -16,7 +16,7 @@ type UserController struct {
 var User = UserController{}
 
 // Index 获取列表
-func (c UserController) Index(ctx *gin.Context) {
+func (c *UserController) Index(ctx *gin.Context) {
 	var requestParams user.IndexRequest
 	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
 		response.BadRequestException(ctx, err.Error())
@@ -31,7 +31,7 @@ func (c UserController) Index(ctx *gin.Context) {
 }
 
 // List 获取列表
-func (c UserController) List(ctx *gin.Context) {
+func (c *UserController) List(ctx *gin.Context) {
 	var requestParams user.IndexRequest
 	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
 		response.BadRequestException(ctx, err.Error())

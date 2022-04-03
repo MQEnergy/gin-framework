@@ -14,6 +14,6 @@ type Controller struct {
 var Common = Controller{}
 
 // Ping 心跳
-func (c Controller) Ping(ctx *gin.Context) {
+func (c *Controller) Ping(ctx *gin.Context) {
 	response.ResponseJson(ctx, http.StatusOK, response.Success, "Pong!", "")
 }

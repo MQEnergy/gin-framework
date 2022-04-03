@@ -16,7 +16,7 @@ type AttachmentController struct {
 var Attachment = AttachmentController{}
 
 // Upload 上传图片
-func (c AttachmentController) Upload(ctx *gin.Context) {
+func (c *AttachmentController) Upload(ctx *gin.Context) {
 	var requestParams attachment.UploadRequest
 	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
 		response.BadRequestException(ctx, err.Error())

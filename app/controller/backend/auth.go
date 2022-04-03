@@ -16,7 +16,7 @@ type AuthController struct {
 var Auth = AuthController{}
 
 // Login 用户登录
-func (c AuthController) Login(ctx *gin.Context) {
+func (c *AuthController) Login(ctx *gin.Context) {
 	var requestParams user.LoginRequest
 	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
 		response.BadRequestException(ctx, err.Error())
