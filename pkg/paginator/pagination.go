@@ -1,7 +1,6 @@
 package paginator
 
 import (
-	"fmt"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"math"
@@ -64,7 +63,6 @@ func (pb *PageBuilder) WithField(fields []string) *PageBuilder {
 // WithFields 单多表字段查询字段（或过滤某些字段不查询 最后一个参数默认为select（不传或者传），如传omit为过滤前面传输的字段）
 func (pb *PageBuilder) WithFields(model interface{}, table string, fields []string) *PageBuilder {
 	fieldList := filterFields(model, fields)
-	fmt.Println(fieldList)
 	for i, _field := range fieldList {
 		fieldList[i] = table + "." + _field
 	}
