@@ -32,7 +32,7 @@ func (w CustomResponseWriter) WriteString(s string) (int, error) {
 func RequestIdAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// 开始时间
-		reqStartTime := time.Now().UnixMilli()
+		reqStartTime := time.Now()
 		writer := CustomResponseWriter{
 			body:           bytes.NewBufferString(""),
 			ResponseWriter: ctx.Writer,
@@ -42,8 +42,6 @@ func RequestIdAuth() gin.HandlerFunc {
 		reqBody := getRequestParams(ctx)
 		// 处理请求
 		ctx.Next()
-		// 结束时间
-		reqEndTime := time.Now().UnixMilli()
 		fields := logrus.Fields{
 			"req_body":     reqBody,
 			"req_host":     ctx.Request.Host,
@@ -51,8 +49,9 @@ func RequestIdAuth() gin.HandlerFunc {
 			"req_clientIp": ctx.ClientIP(),
 			"req_id":       requestid.Get(ctx),
 			"req_uri":      ctx.Request.RequestURI,
-			"res_time":     fmt.Sprintf("%vms", reqEndTime-reqStartTime), // 响应时间
+			"res_time":     fmt.Sprintf("%s", time.Now().Sub(reqStartTime)), // 响应时间
 		}
+
 		if ctx.Writer.Status() != 200 {
 			responseData := writer.body.String()
 			fields["req_header"] = ctx.Request.Header
@@ -79,14 +78,14 @@ func getRequestParams(ctx *gin.Context) string {
 		return ctx.Request.PostForm.Encode()
 	}
 	rawData, _ := ctx.GetRawData()
-	//读取后，重新赋值 c.Request.Body，以供后续的其他操作
+	//读取后，重新赋值 c.Request.Body ，以供后续的其他操作
 	ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(rawData))
-	var m map[string]interface{}
+	var m map[string]string
 	var params []string
 	// 反序列化
 	json.Unmarshal(rawData, &m)
 	for key, value := range m {
-		params = append(params, key+"="+value.(string))
+		params = append(params, key+"="+value)
 	}
 	return strings.Join(params, "&")
 }
