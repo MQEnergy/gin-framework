@@ -204,7 +204,7 @@ return pagination, err
   "data": {
     "list": [],
     "current_page": 1,
-    "count": 2,
+    "total": 2,
     "last_page": 1,
     "per_page": 10
   }
