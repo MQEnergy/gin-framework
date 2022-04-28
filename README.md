@@ -366,7 +366,7 @@ paginator.List
 #### 14）获取数据总数
 
 ```go
-paginator.Count
+paginator.Total
 ```
 
 #### 15）获取最后一页页码
@@ -452,7 +452,7 @@ go run main.go migrate -{n} {env}
 go run main.go model all {env}
 #
 go run main.go model {数据表名} {env}
-# 例如：go run model.go gin_admin
+# 例如：go run main.go model gin_admin
 ```
 
 ## 3、自动生成controller
