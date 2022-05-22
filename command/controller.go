@@ -13,11 +13,13 @@ func CreateControllerContent(controller string, module string) error {
 	moduleName := strings.ToLower(module)
 	controllerName := strings.ToLower(controller)
 	firstUpperCtlName := strings.ToUpper(controllerName[:1]) + controllerName[1:]
+	projectModuleName := util.GetProjectModuleName()
+
 	content := `package ` + moduleName + `
 
 import (
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/app/controller/base"
+	"` + projectModuleName + `/app/controller/base"
 )
 
 type ` + firstUpperCtlName + `Controller struct {

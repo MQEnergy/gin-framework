@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm/schema"
 	"io"
 	"os"
+	"os/exec"
 	"reflect"
 	"strconv"
 )
@@ -141,4 +142,14 @@ func GetStructColumnName(s interface{}, _type int) ([]string, error) {
 		fields = append(fields, field)
 	}
 	return fields, nil
+}
+
+// GetProjectModuleName 获取当前项目的module名称
+func GetProjectModuleName() string {
+	cmd := exec.Command("go", "list")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		panic(err)
+	}
+	return string(output)
 }
