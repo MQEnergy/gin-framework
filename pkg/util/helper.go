@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // InStringSlice 判断某个字符串或其他类型是否在切片中
@@ -151,5 +152,5 @@ func GetProjectModuleName() string {
 	if err != nil {
 		panic(err)
 	}
-	return string(output)
+	return strings.Trim(string(output), "\n")
 }
