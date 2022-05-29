@@ -75,7 +75,20 @@ go install github.com/cosmtrek/air@latest
 
 命令行敲入：air 即可执行热更新 代码编辑即更新
 
-## 5、打包上线
+## 5、部署casbin权限（重要！（按以下步骤执行））
+```
+此步骤针对于backend接口进行权限访问
+```
+### 1）执行migrate
+```
+go run main.go migrate -s all
+```
+### 2）请求 `/routes` 接口
+```
+此接口会创建一个基于casbin的超级管理员权限
+```
+
+## 6、打包上线
 
 ```bash
 go build main.go
@@ -432,14 +445,22 @@ migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path 
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations down
 
 # 第二种方式执行迁移
-# env： dev, test, prod与config.*.yaml文件保持一致 默认是dev
-# n：执行的迁移文件数量（回滚的文件数量）例如：1，2，3...
+# 查看help命令
+go run main.go migrate --help
 
-# 执行迁移操作：
-go run main.go migrate {n} {env}
+# 格式如下：
+go run main.go migrate -s {step} -e {env}
+# env： dev, test, prod与config.*.yaml文件保持一致 默认是dev
+# step：执行的迁移文件数量（回滚的文件数量）例如：1，2，3... 如果执行所有传 all
+
+# 执行所有迁移操作：
+go run main.go migrate -s all
+
+# 执行部分迁移操作：
+# 如：go run main.go migrate -s 1
 
 # 执行回滚操作：
-go run main.go migrate -{n} {env}
+# 如：go run main.go migrate -s -1
 ```
 
 ## 2、自动生成model

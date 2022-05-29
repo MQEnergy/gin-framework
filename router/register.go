@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/config"
+	"mqenergy-go/global"
 	"mqenergy-go/middleware"
 	"mqenergy-go/pkg/response"
 	"mqenergy-go/router/routes"
@@ -41,6 +42,7 @@ func Register() *gin.Engine {
 	routes.InitBackendGroup(authGroup)
 	// 前台组
 	routes.InitFrontendGroup(authGroup)
-
+	// 赋给全局
+	global.Router = router
 	return router
 }

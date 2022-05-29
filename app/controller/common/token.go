@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/app/controller/base"
 	"mqenergy-go/config"
+	"mqenergy-go/global"
+	"mqenergy-go/models"
 	"mqenergy-go/pkg/auth"
 	"mqenergy-go/pkg/response"
 	"net/http"
@@ -18,8 +20,10 @@ var Token = TokenController{}
 
 // Create 生成token
 func (c *TokenController) Create(ctx *gin.Context) {
+	var adminInfo models.GinAdmin
+	global.DB.Where("id = 1").First(&adminInfo)
 	token, err := auth.GenerateJwtToken(config.Conf.Server.JwtSecret,
-		config.Conf.Server.TokenExpire, map[string]int{"id": 1},
+		config.Conf.Server.TokenExpire, adminInfo,
 		config.Conf.Server.TokenIssuer)
 	if err != nil {
 		response.UnauthorizedException(ctx, err.Error())

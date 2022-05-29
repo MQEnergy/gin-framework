@@ -70,8 +70,30 @@ func Stack() *cli.App {
 			{
 				Name:  "migrate",
 				Usage: "Create migration command",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "step",
+						Aliases:  []string{"s"},
+						Usage:    "Add Account",
+						Required: false,
+					},
+					&cli.StringFlag{
+						Name:        "env",
+						Value:       "dev",
+						Aliases:     []string{"e"},
+						Usage:       "请选择配置文件 [dev | test | prod]",
+						Destination: &config.ConfEnv,
+					},
+				},
 				Action: func(ctx *cli.Context) error {
-					command.GenerateMigrate()
+					step := ctx.String("step")
+					// 初始化配置文件信息
+					config.InitConfig()
+					// 程序启动时需要加载的服务
+					bootstrap.BootMysql()
+					if err := command.GenerateMigrate(step); err != nil {
+						return err
+					}
 					return nil
 				},
 			},

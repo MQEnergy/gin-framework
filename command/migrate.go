@@ -7,27 +7,13 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	dmysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"log"
 	"mqenergy-go/config"
-	"os"
 	"strconv"
 	"time"
 )
 
-func GenerateMigrate() {
-	env := "dev"
-	args := os.Args
-	if len(args) < 4 {
-		fmt.Println("参数缺失：至少需要一个参数 {n} {env}")
-		return
-	}
-	n, _ := strconv.Atoi(args[2])
-	if len(args) >= 4 {
-		env = args[3]
-	}
-	config.ConfEnv = env
-	config.InitConfig()
-
+// GenerateMigrate 执行migrate
+func GenerateMigrate(step string) error {
 	cfg := mysql.Config{
 		DBName:               config.Conf.Mysql.DbName,
 		User:                 config.Conf.Mysql.User,
@@ -41,20 +27,28 @@ func GenerateMigrate() {
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	driver, err := dmysql.WithInstance(db, &dmysql.Config{
 		DatabaseName: config.Conf.Mysql.DbName,
 	})
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	m, _ := migrate.NewWithDatabaseInstance(
 		"file://./migrations",
 		"mysql",
 		driver,
 	)
-	if err := m.Steps(n); err != nil {
-		log.Fatal(err.Error())
+	if step == "all" {
+		if err := m.Up(); err != nil {
+			return err
+		}
+	} else {
+		n, _ := strconv.Atoi(step)
+		if err := m.Steps(n); err != nil {
+			return err
+		}
 	}
+	return nil
 }

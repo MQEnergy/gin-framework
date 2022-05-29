@@ -5,11 +5,12 @@ import (
 	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gin-gonic/gin"
+	"github.com/gogf/gf/v2/util/gconv"
 	"mqenergy-go/global"
 	"mqenergy-go/global/app"
 	"mqenergy-go/pkg/response"
+	util2 "mqenergy-go/pkg/util"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -24,6 +25,7 @@ func CasbinAuth() gin.HandlerFunc {
 		}
 		e, _ := casbin.NewEnforcer(dir+"/config/rbac_model.conf", adapter)
 		e.AddFunction("ParamsMatch", ParamsMatchFunc)
+		e.AddFunction("ParamsActMatch", ParamsActMatchFunc)
 		_ = e.LoadPolicy()
 
 		//	获取当前请求的url
@@ -38,7 +40,7 @@ func CasbinAuth() gin.HandlerFunc {
 		var flag = false
 		for _, sub := range user.RoleIds {
 			//	判断策略中是否存在
-			subStr := strconv.FormatUint(sub, 10)
+			subStr := gconv.String(sub)
 			if ok, _ := e.Enforce(subStr, obj, act); ok {
 				flag = true
 				break
@@ -53,15 +55,19 @@ func CasbinAuth() gin.HandlerFunc {
 	}
 }
 
+// ParamsActMatchFunc 自定义规则函数
+func ParamsActMatchFunc(args ...interface{}) (interface{}, error) {
+	rAct := args[0].(string)
+	pAct := args[1].(string)
+	pActArr := strings.Split(pAct, ",")
+	return util2.InStringSlice[string](pActArr, rAct), nil
+}
+
 // ParamsMatchFunc 自定义规则函数
 func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 	name1 := args[0].(string)
 	name2 := args[1].(string)
-	return ParamsMatch(name1, name2), nil
-}
-
-// ParamsMatch 自定义规则函数
-func ParamsMatch(fullNameKey1 string, key2 string) bool {
-	key1 := strings.Split(fullNameKey1, "?")[0]
-	return util.KeyMatch2(key1, key2)
+	key1 := strings.Split(name1, "?")[0]
+	// 剥离路径后再使用casbin的keyMatch2
+	return util.KeyMatch2(key1, name2), nil
 }

@@ -11,6 +11,9 @@ func InitCommonGroup(r *gin.RouterGroup) (router gin.IRoutes) {
 	{
 		// ping
 		commonGroup.GET("/ping", common.Common.Ping)
+		// 默认给超级管理员角色
+		commonGroup.GET("/routes", common.Common.Routes)
+
 		// 生成token
 		commonGroup.GET("/token/create", common.Token.Create)
 		// 解析token
