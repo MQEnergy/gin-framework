@@ -26,7 +26,7 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	// 设置输出
 	logger.Out = src
 	// 设置日志级别
-	if config.Conf.Log.Debug == "true" {
+	if config.Conf.Log.Debug == true {
 		logger.SetLevel(logrus.DebugLevel)
 	}
 	// 设置日志格式
@@ -34,17 +34,17 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	// If you wish to add the calling method as a field, instruct the logger via:
 	//logger.SetReportCaller(true)
 
+	// 设置rotatelogs
 	logWriter, err := rotatelogs.New(
 		prefix+"-%Y-%m-%d.log",                    // 生成实际文件名的模式
-		rotatelogs.WithLinkName(latestLogFile),    // 生成日志软连接
-		rotatelogs.WithMaxAge(30*24*time.Hour),    // 文件最大保存时间
-		rotatelogs.WithRotationTime(24*time.Hour), // 日志切割周期
+		rotatelogs.WithLinkName(latestLogFile),    // 生成软链，指向最新日志文件
+		rotatelogs.WithMaxAge(30*24*time.Hour),    // 设置最大保存时间(30天)
+		rotatelogs.WithRotationTime(24*time.Hour), // 设置日志切割时间间隔(1天)
 	)
 	if err != nil {
 		return nil, err
 	}
-
-	logger.Hooks.Add(lfshook.NewHook(
+	logger.AddHook(lfshook.NewHook(
 		lfshook.WriterMap{
 			logrus.DebugLevel: logWriter,
 			logrus.InfoLevel:  logWriter,

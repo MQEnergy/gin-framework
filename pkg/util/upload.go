@@ -37,7 +37,7 @@ func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 		return nil, errors.New("超过最大上传大小 不能超过" + strconv.Itoa(MaxUploadSize/(1000*1000)) + "M")
 	}
 	fileType := strings.Split(file.Header.Get("Content-Type"), "/")[1]
-	if !InStringSlice[string](AllowTypes, fileType) {
+	if !InAnySlice[string](AllowTypes, fileType) {
 		return nil, errors.New("上传文件格式错误 支持格式" + strings.Join(AllowTypes, ","))
 	}
 	fileName := fmt.Sprintf("file-%s.%s", GenerateUuid(32), fileType)

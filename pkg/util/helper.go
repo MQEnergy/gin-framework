@@ -16,8 +16,8 @@ import (
 	"strings"
 )
 
-// InStringSlice 判断某个字符串或其他类型是否在切片中
-func InStringSlice[T string | int | int64 | float32 | float64](haystack []T, needle T) bool {
+// InAnySlice 判断某个字符串是否在字符串切片中
+func InAnySlice[T string | int | int64 | float32 | float64](haystack []T, needle T) bool {
 	for _, v := range haystack {
 		if v == needle {
 			return true
@@ -79,22 +79,12 @@ func FormatToString(originStr interface{}) string {
 		str = strconv.FormatFloat(originStr.(float64), 'f', 10, 32)
 	case nil:
 		str = ""
-	case int, rune, int64:
+	case int, int32, int64:
 		str = strconv.FormatInt(originStr.(int64), 10)
 	default:
 		str = originStr.(string)
 	}
 	return str
-}
-
-// IsArray 是否array
-func IsArray(array interface{}) bool {
-	switch array.(type) {
-	case []string, []int, []int64, []rune, []interface{}:
-		return true
-	default:
-		return false
-	}
 }
 
 // IsPathExist 判断所给路径文件/文件夹是否存在
@@ -119,6 +109,25 @@ func MakeMultiDir(filePath string) error {
 		return err
 	}
 	return nil
+}
+
+// MakeFileOrPath 创建文件/文件夹
+func MakeFileOrPath(path string) bool {
+	create, err := os.Create(path)
+	defer create.Close()
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+// String2Int 将数组的string转int
+func String2Int(strArr []string) []int {
+	res := make([]int, len(strArr))
+	for index, val := range strArr {
+		res[index], _ = strconv.Atoi(val)
+	}
+	return res
 }
 
 // GetStructColumnName 获取结构体中的字段名称 _type: 1: 获取tag字段值 2：获取结构体字段值

@@ -41,7 +41,7 @@ func BootService(services ...string) {
 	}
 	BootedService = make([]string, 0)
 	for k, val := range serviceMap {
-		if util.InStringSlice[string](services, k) {
+		if util.InAnySlice[string](services, k) {
 			if err := val(); err != nil {
 				panic("程序服务启动失败:" + err.Error())
 			}
@@ -55,8 +55,8 @@ func BootLogger() error {
 	if global.Logger != nil {
 		return nil
 	}
-	if global.Logger, err = lib.NewLogger(config.Conf.DirPath, config.Conf.FileName); err == nil {
-		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", config.Conf.FileName, config.Conf.DirPath)
+	if global.Logger, err = lib.NewLogger(config.Conf.Log.DirPath, config.Conf.Log.FileName); err == nil {
+		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", config.Conf.Log.FileName, config.Conf.Log.DirPath)
 	}
 	return err
 }
@@ -67,15 +67,15 @@ func BootMysql() error {
 		return nil
 	}
 	dbConfig := lib.DatabaseConfig{
-		Host:         config.Conf.Mysql.Host,
-		Port:         config.Conf.Mysql.Port,
-		User:         config.Conf.Mysql.User,
-		Pass:         config.Conf.Mysql.Pass,
-		DbName:       config.Conf.Mysql.DbName,
-		Prefix:       config.Conf.Mysql.Prefix,
-		MaxIdleConns: config.Conf.Mysql.MaxIdleConns,
-		MaxOpenConns: config.Conf.Mysql.MaxOpenConns,
-		MaxLifeTime:  config.Conf.Mysql.MaxLifeTime,
+		Host:         config.Conf.Mysql[0].Host,
+		Port:         config.Conf.Mysql[0].Port,
+		User:         config.Conf.Mysql[0].User,
+		Pass:         config.Conf.Mysql[0].Password,
+		DbName:       config.Conf.Mysql[0].DbName,
+		Prefix:       config.Conf.Mysql[0].Prefix,
+		MaxIdleConns: config.Conf.Mysql[0].MaxIdleConns,
+		MaxOpenConns: config.Conf.Mysql[0].MaxOpenConns,
+		MaxLifeTime:  config.Conf.Mysql[0].MaxLifeTime,
 	}
 	global.DB, err = lib.NewMysql(dbConfig)
 	if err == nil {

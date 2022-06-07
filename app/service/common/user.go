@@ -18,7 +18,7 @@ func (s UserService) Login(requestParams user.LoginRequest) (interface{}, error)
 	if err := global.DB.Where("phone = ?", requestParams.Phone).First(&userInfo).Error; err != nil {
 		return userInfo, errors.New("未查找到用户")
 	}
-	jwtToken, err := auth.GenerateJwtToken(config.Conf.Server.JwtSecret, config.Conf.Server.TokenExpire, userInfo, config.Conf.Server.TokenIssuer)
+	jwtToken, err := auth.GenerateJwtToken(config.Conf.Jwt.Secret, config.Conf.Jwt.TokenExpire, userInfo, config.Conf.Jwt.TokenIssuer)
 	if err != nil {
 		return "", errors.New("token生成失败")
 	}

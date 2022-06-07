@@ -1,81 +1,57 @@
 package config
 
 import (
-	"fmt"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
+	"github.com/jinzhu/configor"
 )
 
 var (
-	Conf    *Yaml
 	ConfEnv string
 )
 
-type Yaml struct {
-	Server `yaml:"server"`
-	Log    `yaml:"log"`
-	Mysql  `yaml:"mysql"`
-	Redis  `yaml:"redis"`
-	Oss    `yaml:"oss"`
-}
-
-type Server struct {
-	Mode            string `yaml:"mode"`
-	DefaultPageSize int    `yaml:"defaultPageSize"`
-	MaxPageSize     int    `yaml:"maxPageSize"`
-	FileUploadPath  string `yaml:"fileUploadPath"`
-	TokenExpire     int64  `yaml:"tokenExpire"`
-	TokenKey        string `yaml:"tokenKey"`
-	TokenIssuer     string `yaml:"tokenIssuer"`
-	JwtSecret       string `yaml:"jwtSecret"`
-}
-
-type Log struct {
-	Debug    string `yaml:"debug"`
-	FileName string `yaml:"fileName"`
-	DirPath  string `yaml:"dirPath"`
-}
-
-type Mysql struct {
-	Host         string `yaml:"host"`
-	Port         string `yaml:"port"`
-	User         string `yaml:"user"`
-	Pass         string `yaml:"password"`
-	DbName       string `yaml:"dbname"`
-	Prefix       string `yaml:"prefix"`
-	MaxIdleConns int    `yaml:"maxIdleConns"` // 设置空闲连接池中连接的最大数量
-	MaxOpenConns int    `yaml:"maxOpenConns"` // 设置打开数据库连接的最大数量
-	MaxLifeTime  int    `yaml:"maxLifeTime"`  // 设置了连接可复用的最大时间（分钟）
-}
-
-type Redis struct {
-	Host        string `yaml:"host"`
-	Port        string `yaml:"port"`
-	Password    string `yaml:"password"`
-	DbNum       int    `yaml:"dbNum"`
-	LoginPrefix string `yaml:"loginPrefix"`
-}
-
-type Oss struct {
-	EndPoint        string `yaml:"endPoint"`
-	AccessKeyID     string `yaml:"accessKeyID"`
-	AccessKeySecret string `yaml:"accessKeySecret"`
-	BucketName      string `yaml:"bucketName"`
-}
+var Conf = struct {
+	Server struct {
+		Mode            string `yaml:"mode" default:"debug"`
+		DefaultPageSize int    `yaml:"default_page_size" default:"10"`
+		MaxPageSize     int    `yaml:"max_page_size" default:"500"`
+		FileUploadPath  string `yaml:"file_upload_path" default:""`
+	}
+	Jwt struct {
+		TokenExpire int64  `yaml:"token_expire" default:"864000"`
+		TokenKey    string `yaml:"token_key" default:"Authorization"`
+		TokenIssuer string `yaml:"token_issuer" default:"gin-framework"`
+		Secret      string `yaml:"secret"`
+	}
+	Log struct {
+		Debug    bool   `yaml:"debug" default:"true"`
+		FileName string `yaml:"file_name" default:"gin-framework"`
+		DirPath  string `yaml:"dir_path" default:"runtime/logs"`
+	}
+	Mysql []struct {
+		Host         string `yaml:"host" default:"127.0.0.1"`
+		Port         string `yaml:"port" default:"3306"`
+		User         string `yaml:"user" default:"root"`
+		Password     string `yaml:"password" default:"123456"`
+		DbName       string `yaml:"dbname"`
+		Prefix       string `yaml:"prefix" default:""`
+		MaxIdleConns int    `yaml:"max_idle_conns" default:"10"`
+		MaxOpenConns int    `yaml:"max_open_conns" default:"100"`
+		MaxLifeTime  int    `yaml:"max_life_time" default:"60"`
+	}
+	Redis struct {
+		Host        string `yaml:"host" default:"127.0.0.1"`
+		Port        string `yaml:"port" default:"6379"`
+		Password    string `yaml:"password"`
+		DbNum       int    `yaml:"db_num" default:"0"`
+		LoginPrefix string `yaml:"login_prefix" default:"mqenergy_login_auth_"`
+	}
+	Oss struct {
+		EndPoint        string `yaml:"end_point" default:"https://oss-cn-shanghai.aliyuncs.com"`
+		AccessKeyId     string `yaml:"access_key_id"`
+		AccessKeySecret string `yaml:"access_key_secret"`
+		BucketName      string `yaml:"bucket_name"`
+	}
+}{}
 
 func InitConfig() {
-	var configFile = fmt.Sprintf("config.%s.yaml", ConfEnv)
-	yamlConf, err := ioutil.ReadFile(configFile)
-	if err != nil {
-		panic(fmt.Errorf("读取配置文件失败：%s", err))
-	}
-	//	根据当前环境的值来替换配置文件中的环境变量（配合docker）
-	yamlConf = []byte(os.ExpandEnv(string(yamlConf)))
-	c := &Yaml{}
-	err = yaml.Unmarshal(yamlConf, c)
-	if err != nil {
-		panic(fmt.Errorf("解析配置文件失败：%s", err))
-	}
-	Conf = c
+	configor.Load(&Conf, "config."+ConfEnv+".yaml")
 }

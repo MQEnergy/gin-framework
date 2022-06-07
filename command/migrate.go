@@ -15,11 +15,11 @@ import (
 // GenerateMigrate 执行migrate
 func GenerateMigrate(step string) error {
 	cfg := mysql.Config{
-		DBName:               config.Conf.Mysql.DbName,
-		User:                 config.Conf.Mysql.User,
-		Passwd:               config.Conf.Mysql.Pass,
+		DBName:               config.Conf.Mysql[0].DbName,
+		User:                 config.Conf.Mysql[0].User,
+		Passwd:               config.Conf.Mysql[0].Password,
 		Net:                  "tcp",
-		Addr:                 fmt.Sprintf("%s:%s", config.Conf.Mysql.Host, config.Conf.Mysql.Port),
+		Addr:                 fmt.Sprintf("%s:%s", config.Conf.Mysql[0].Host, config.Conf.Mysql[0].Port),
 		AllowNativePasswords: true,
 		MultiStatements:      true,
 		ParseTime:            true,
@@ -30,7 +30,7 @@ func GenerateMigrate(step string) error {
 		return err
 	}
 	driver, err := dmysql.WithInstance(db, &dmysql.Config{
-		DatabaseName: config.Conf.Mysql.DbName,
+		DatabaseName: config.Conf.Mysql[0].DbName,
 	})
 	if err != nil {
 		return err

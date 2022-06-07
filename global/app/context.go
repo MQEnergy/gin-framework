@@ -26,7 +26,7 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 	if token == "" {
 		return user, errors.New("token 为空")
 	}
-	jwtPayload, err := auth.ParseJwtToken(token, config.Conf.Server.JwtSecret)
+	jwtPayload, err := auth.ParseJwtToken(token, config.Conf.Jwt.Secret)
 	if err != nil {
 		return user, err
 	}
@@ -49,7 +49,7 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 
 // GetAdminInfo 获取登陆者的用户信息
 func GetAdminInfo(ctx *gin.Context) (AdminInfo, error) {
-	info, err := ParseUserByToken(ctx.GetHeader(config.Conf.Server.TokenKey))
+	info, err := ParseUserByToken(ctx.GetHeader(config.Conf.Jwt.TokenKey))
 	if err != nil {
 		return AdminInfo{}, nil
 	}

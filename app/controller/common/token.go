@@ -4,8 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/app/controller/base"
 	"mqenergy-go/config"
-	"mqenergy-go/global"
-	"mqenergy-go/models"
 	"mqenergy-go/pkg/auth"
 	"mqenergy-go/pkg/response"
 	"net/http"
@@ -20,11 +18,7 @@ var Token = TokenController{}
 
 // Create 生成token
 func (c *TokenController) Create(ctx *gin.Context) {
-	var adminInfo models.GinAdmin
-	global.DB.Where("id = 1").First(&adminInfo)
-	token, err := auth.GenerateJwtToken(config.Conf.Server.JwtSecret,
-		config.Conf.Server.TokenExpire, adminInfo,
-		config.Conf.Server.TokenIssuer)
+	token, err := auth.GenerateJwtToken(config.Conf.Jwt.Secret, config.Conf.Jwt.TokenExpire, map[string]interface{}{"id": 1}, config.Conf.Jwt.TokenIssuer)
 	if err != nil {
 		response.UnauthorizedException(ctx, err.Error())
 		return
@@ -34,7 +28,7 @@ func (c *TokenController) Create(ctx *gin.Context) {
 
 // View token解析
 func (c *TokenController) View(ctx *gin.Context) {
-	token := ctx.GetHeader(config.Conf.Server.TokenKey)
+	token := ctx.GetHeader(config.Conf.Jwt.TokenKey)
 	if token == "" {
 		response.UnauthorizedException(ctx, "")
 		return
@@ -45,7 +39,7 @@ func (c *TokenController) View(ctx *gin.Context) {
 		return
 	}
 	token = strings.TrimSpace(strings.TrimLeft(token, "Bearer"))
-	jwtTokenArr, err := auth.ParseJwtToken(token, config.Conf.Server.JwtSecret)
+	jwtTokenArr, err := auth.ParseJwtToken(token, config.Conf.Jwt.Secret)
 	if err != nil {
 		response.UnauthorizedException(ctx, "")
 		return

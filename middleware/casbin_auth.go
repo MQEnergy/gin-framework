@@ -60,7 +60,7 @@ func ParamsActMatchFunc(args ...interface{}) (interface{}, error) {
 	rAct := args[0].(string)
 	pAct := args[1].(string)
 	pActArr := strings.Split(pAct, ",")
-	return util2.InStringSlice[string](pActArr, rAct), nil
+	return util2.InAnySlice[string](pActArr, rAct), nil
 }
 
 // ParamsMatchFunc 自定义规则函数
