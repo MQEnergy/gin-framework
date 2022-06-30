@@ -1,19 +1,23 @@
 package backend
 
 import (
+	"fmt"
+	"github.com/gogf/gf/v2/util/gconv"
 	"mqenergy-go/config"
 	"mqenergy-go/entities/user"
 	"mqenergy-go/global"
 	"mqenergy-go/models"
+	"mqenergy-go/pkg/lib"
 	"mqenergy-go/pkg/paginator"
+	"sync"
 )
 
 type UserService struct{}
 
-var User = UserService{}
+var User = &UserService{}
 
 // GetIndex 获取列表
-func (s UserService) GetIndex(requestParams user.IndexRequest) (interface{}, error) {
+func (s *UserService) GetIndex(requestParams user.IndexRequest) (interface{}, error) {
 	var userList = make([]user.UserList, 0)
 	multiFields := []paginator.SelectTableField{
 		{Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
@@ -34,7 +38,7 @@ func (s UserService) GetIndex(requestParams user.IndexRequest) (interface{}, err
 }
 
 // GetList 获取列表
-func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, error) {
+func (s *UserService) GetList(requestParams user.IndexRequest) (interface{}, error) {
 	var userList = make([]user.GinUser, 0)
 	pagination, err := paginator.NewBuilder().
 		WithDB(global.DB).
@@ -42,4 +46,45 @@ func (s UserService) GetList(requestParams user.IndexRequest) (interface{}, erro
 		WithPreload("UserInfo").
 		Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
 	return pagination, err
+}
+
+// AmqpConsumerHandler 处理消费者方法
+func (s *UserService) AmqpConsumerHandler(mq *lib.RabbitMQ, data map[string]interface{}) error {
+	var wg sync.WaitGroup
+	cherrors := make(chan error)
+	consumerNum := gconv.Int(data["consumerNum"])
+	wg.Add(consumerNum)
+	for i := 0; i < consumerNum; i++ {
+		fmt.Printf("正在开启消费者：第 %d 个\n", i+1)
+		go func() {
+			defer wg.Done()
+			deliveries, err := mq.Consume()
+			if err != nil {
+				cherrors <- err
+			}
+			for d := range deliveries {
+				// 消费者逻辑 to do
+				fmt.Printf("got %dbyte delivery: [%v] %s %q\n", len(d.Body), d.DeliveryTag, d.Exchange, d.Body)
+				d.Ack(false)
+			}
+		}()
+	}
+	select {
+	case err := <-cherrors:
+		close(cherrors)
+		fmt.Printf("Consumer failed: %s\n", err)
+		return err
+	}
+	wg.Wait()
+	return nil
+}
+
+// AmqpProducerHandler 处理生产者方法
+func (s *UserService) AmqpProducerHandler(mq *lib.RabbitMQ, data []byte) error {
+	if err := mq.Push(data); err != nil {
+		fmt.Println("Push failed: " + err.Error())
+		return err
+	}
+	fmt.Println("Push succeeded!", string(data))
+	return nil
 }

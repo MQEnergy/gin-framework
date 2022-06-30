@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	ConfEnv string
+	ConfEnv string = "dev"
 )
 
 var Conf = struct {
@@ -43,6 +43,12 @@ var Conf = struct {
 		Password    string `yaml:"password"`
 		DbNum       int    `yaml:"db_num" default:"0"`
 		LoginPrefix string `yaml:"login_prefix" default:"mqenergy_login_auth_"`
+	}
+	Amqp struct {
+		Host     string `yaml:"host" default:"127.0.0.1"`
+		Port     string `yaml:"port" default:"5672"`
+		User     string `yaml:"user" default:"guest"`
+		Password string `yaml:"password"`
 	}
 	Oss struct {
 		EndPoint        string `yaml:"end_point" default:"https://oss-cn-shanghai.aliyuncs.com"`

@@ -19,14 +19,14 @@ require (
 	github.com/gogf/gf/v2 v2.0.4
 	github.com/golang-migrate/migrate/v4 v4.15.1
 	github.com/hashicorp/go-uuid v1.0.2
+	github.com/jinzhu/configor v1.2.1
 	github.com/jinzhu/copier v0.3.5
-	github.com/kr/pretty v0.3.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/samber/lo v1.11.0
 	github.com/sirupsen/logrus v1.8.1
+	github.com/streadway/amqp v1.0.0
 	github.com/urfave/cli/v2 v2.4.0
-	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.3.2
 	gorm.io/gorm v1.23.3
 )
@@ -53,12 +53,10 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.10.0 // indirect
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
-	github.com/jinzhu/configor v1.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jonboulle/clockwork v0.2.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
@@ -66,7 +64,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	go.opentelemetry.io/otel v1.5.0 // indirect
@@ -77,6 +74,7 @@ require (
 	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 	golang.org/x/text v0.3.8-0.20211105212822-18b340fc7af2 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/postgres v1.3.1 // indirect
 	gorm.io/driver/sqlserver v1.3.1 // indirect
 	gorm.io/plugin/dbresolver v1.1.0 // indirect

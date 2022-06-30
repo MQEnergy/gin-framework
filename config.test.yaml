@@ -28,6 +28,11 @@ redis:
   password: '123456'
   db_num: 0
   login_prefix: 'lyky_gin_framework_login_' # 登录用户存入redis键名的前缀
+amqp:
+  host: '127.0.0.1'
+  port: '5672'
+  user: 'guest'
+  password: ''
 oss:
   end_point: 'https://oss-cn-shanghai.aliyuncs.com'
   access_key_id: ''

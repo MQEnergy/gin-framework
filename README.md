@@ -394,7 +394,7 @@ paginator.LastPage
 paginator.PerPage
 ```
 
-### 2、基于gin上传组件
+## 2、基于gin上传组件
 
 ```go
 UploadFile(path string, r *gin.Context) (*FileHeader, error)
@@ -407,6 +407,18 @@ UploadFile(path string, r *gin.Context) (*FileHeader, error)
 app/controller/backend/attachment.go
 pkg/util/upload.go
 router/routes/common.go
+```
+## 3、rabbitmq组件使用
+配置yaml配置文件中的amqp参数
+### 1）启动消费者
+测试案例
+```shell
+go run command/test/consumer.go
+```
+### 2）启动生产者
+测试案例
+```shell
+go run command/test/producer.go
 ```
 
 # 四、工具
