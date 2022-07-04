@@ -33,6 +33,7 @@ amqp:
   port: '5672'
   user: 'guest'
   password: ''
+  vhost: ''
 oss:
   end_point: 'https://oss-cn-shanghai.aliyuncs.com'
   access_key_id: ''

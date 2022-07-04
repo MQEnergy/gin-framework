@@ -46,7 +46,8 @@ var (
 func NewRabbitMQ(queueName, exchange, exchangeType, routeKey string, prefetchCount int) *RabbitMQ {
 	// amqp 出现url.Parse导致的错误 是因为特殊字符需要进行urlencode编码
 	password := url.QueryEscape(config.Conf.Amqp.Password)
-	addr := fmt.Sprintf("amqp://%s:%s@%s:%s/", config.Conf.Amqp.User, password, config.Conf.Amqp.Host, config.Conf.Amqp.Port)
+	// amqp://账号:密码@rabbitmq服务器地址:端口号/vhost
+	addr := fmt.Sprintf("amqp://%s:%s@%s:%s/%s", config.Conf.Amqp.User, password, config.Conf.Amqp.Host, config.Conf.Amqp.Port, config.Conf.Amqp.Vhost)
 	if exchangeType == "" {
 		exchangeType = "topic"
 	}

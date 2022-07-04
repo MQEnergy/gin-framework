@@ -48,7 +48,8 @@ var Conf = struct {
 		Host     string `yaml:"host" default:"127.0.0.1"`
 		Port     string `yaml:"port" default:"5672"`
 		User     string `yaml:"user" default:"guest"`
-		Password string `yaml:"password"`
+		Password string `yaml:"password" default:""`
+		Vhost    string `yaml:"vhost" default:""`
 	}
 	Oss struct {
 		EndPoint        string `yaml:"end_point" default:"https://oss-cn-shanghai.aliyuncs.com"`
