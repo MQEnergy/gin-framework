@@ -17,10 +17,10 @@ func CreateServiceContent(service string, module string) error {
 
 type ` + firstUpperCtlName + `Service struct{}
 
-var ` + firstUpperCtlName + ` = ` + firstUpperCtlName + `Service{}
+var ` + firstUpperCtlName + ` = &` + firstUpperCtlName + `Service{}
 
 // GetList 获取列表
-func (s ` + firstUpperCtlName + `Service) GetList(requestParams interface{}) (interface{}, error) {
+func (s *` + firstUpperCtlName + `Service) GetList(requestParams interface{}) (interface{}, error) {
 	// Todo list 
 	return nil, nil
 }
@@ -40,7 +40,7 @@ func (s ` + firstUpperCtlName + `Service) GetList(requestParams interface{}) (in
 func GenerateService() {
 	args := os.Args
 	if len(args) != 4 {
-		logrus.Error("参数错误 请输入 service名称 module名称")
+		logrus.Error("参数错误 请输入参数：service名称（不限大小写） module名称（不限大小写 如：backend）")
 		os.Exit(0)
 	}
 	service := args[2]

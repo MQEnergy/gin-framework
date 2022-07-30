@@ -14,7 +14,6 @@ func CreateControllerContent(controller string, module string) error {
 	controllerName := strings.ToLower(controller)
 	firstUpperCtlName := strings.ToUpper(controllerName[:1]) + controllerName[1:]
 	projectModuleName := util.GetProjectModuleName()
-
 	content := `package ` + moduleName + `
 
 import (
@@ -23,13 +22,13 @@ import (
 )
 
 type ` + firstUpperCtlName + `Controller struct {
-	base.Controller
+	*base.Controller
 }
 
-var ` + firstUpperCtlName + ` = ` + firstUpperCtlName + `Controller{}
+var ` + firstUpperCtlName + ` = &` + firstUpperCtlName + `Controller{}
 
 // Index 获取列表
-func (c ` + firstUpperCtlName + `Controller) Index(ctx *gin.Context) {
+func (c *` + firstUpperCtlName + `Controller) Index(ctx *gin.Context) {
 	// Todo list
 }
 `
@@ -48,7 +47,7 @@ func (c ` + firstUpperCtlName + `Controller) Index(ctx *gin.Context) {
 func GenerateController() {
 	args := os.Args
 	if len(args) != 4 {
-		logrus.Error("参数错误 请输入 controller名称 module名称")
+		logrus.Error("参数错误 请输入参数：controller名称（不限大小写） module名称（不限大小写 如：backend）")
 		os.Exit(0)
 	}
 	controller := args[2]
