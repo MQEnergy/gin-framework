@@ -13,10 +13,17 @@ import (
 )
 
 type CommonController struct {
-	base.Controller
+	*base.Controller
 }
 
-var Common = CommonController{}
+var Common = &CommonController{}
+
+type routeInfo struct {
+	Method     string   `json:"method"`
+	Path       string   `json:"path"`
+	NewPath    string   `json:"new_path"`
+	MethodList []string `json:"method_list"`
+}
 
 // Ping 心跳
 func (c *CommonController) Ping(ctx *gin.Context) {
@@ -25,12 +32,7 @@ func (c *CommonController) Ping(ctx *gin.Context) {
 
 // Router 获取所有路由
 func (c *CommonController) Routes(ctx *gin.Context) {
-	type routeInfo struct {
-		Method     string   `json:"method"`
-		Path       string   `json:"path"`
-		NewPath    string   `json:"new_path"`
-		MethodList []string `json:"method_list"`
-	}
+
 	var (
 		casbinRule     = make([]models.CasbinRule, 0)
 		routeList      = make([]routeInfo, 0)
@@ -77,7 +79,7 @@ func (c *CommonController) Routes(ctx *gin.Context) {
 	// 存入到 casbin_rule中
 	for _, rule := range casbinRule {
 		var casbinRuleInfo models.CasbinRule
-		if err := global.DB.Where("V0 = 1 and V1 = ?", rule.V1).First(&casbinRuleInfo).Error; err != nil {
+		if err := global.DB.Where("v0 = 1 and v1 = ?", rule.V1).First(&casbinRuleInfo).Error; err != nil {
 			casbinRuleList = append(casbinRuleList, rule)
 		}
 	}
