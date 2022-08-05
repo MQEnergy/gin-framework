@@ -12,6 +12,7 @@
 │   ├── controller              # 控制器
 │   └── service                 # 服务层
 ├── bootstrap                   # 初始化程序加载服务
+│   ├── rbac_model.conf         # rbac配置文件
 ├── command                     # command命令
 ├── config                      # 解析配置文件
 ├── entities                    # 存放表对应的实体 / 请求参数的结构体
@@ -27,14 +28,40 @@
 │   ├── response                # http请求返回的状态和格式化
 │   ├── util                    # 助手函数
 │   └── validator               # 验证器
-├── rbac_model.conf             # rbac配置文件
 ├── config.dev.yaml             # 开发环境配置文件
 ├── config.test.yaml            # 测试环境配置文件
 ├── config.prod.yaml            # 正式环境配置文件
 ├── router                      # 路由配置
 ├── runtime                     # 运行时文件 如日志
 ```
+#### 目前已集成和实现：
+- [x] 支持 [jwt](https://github.com/dgrijalva/jwt-go) Authorization token验证组件
+- [x] 支持 [cors](https://github.com/gin-contrib/cors) 接口跨域组件
+- [x] 支持 [gorm](https://gorm.io) 数据库操作组件
+- [x] 支持 [gorm-model](https://github.com/MQEnergy/gorm-model) 自主实现的基于gorm生成的映射数据表的model结构体
+- [x] 支持 [logrus](https://github.com/sirupsen/logrus) 日志收集组件
+- [x] 支持 [go-redis](https://github.com/go-redis/redis) redis连接组件
+- [x] 支持 [migrate](https://github.com/golang-migrate/migrate) 数据库迁移组件
+- [x] 支持 命令行方式生成 [controller、service](https://github.com/MQEnergy/gin-framework/tree/main/command) 代码工具
+- [x] 支持 [go-websocket](https://github.com/MQEnergy/go-websocket) 基于[gorilla/websocket](https://github.com/gorilla/websocket) 实现的即时通讯组件，实现推送单个客户端，多个客户端，群组，广播等。
+- [x] 支持 [go-rabbitmq](https://github.com/MQEnergy/go-rabbitmq) 消息队列组件 基于官方 [amqp](https://github.com/streadway/amqp) 组件封装实现的消费者和生产者
+- [x] 支持 [casbin](https://github.com/casbin/casbin) rbac权限 集成于中间件中 [casbin_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/casbin_auth.go)
+- [x] 实现 ip白名单配置 集成于中间件中 [ip_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/ip_auth.go)
+- [x] 支持 [requestId](https://github.com/gin-contrib/requestid) 中间件 实现了方便链路追踪日志记录中间件 [requestid_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/requestid_auth.go)
+- [x] 支持 [configor](https://github.com/jinzhu/configor) yaml、json、toml等配置文件解析组件
+- [x] 支持 [validator](https://github.com/go-playground/validator) 数据字段验证器组件，同时支持中文
+- [x] 支持 [snowflake](https://github.com/bwmarrin/snowflake) 生成雪花算法全局唯一ID
+- [x] 实现 [ticker](https://github.com/MQEnergy/gin-framework/blob/main/pkg/util/ticker.go) 定时器组件 
+- [x] 实现 基于gorm的 [pagination](https://github.com/MQEnergy/gin-framework/blob/main/pkg/paginator/pagination.go) 分页构造器组件
+- [x] 支持 [code](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/code.go) 统一定义的返回码，[exception](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/exception.go) 统一错误返回处理
 
+#### 下一步计划：
+- [ ] 支持 定时任务 cron
+- [ ] 支持 [pprof](https://github.com/gin-contrib/pprof) 性能剖析组件
+- [ ] 支持 trace 项目内部链路追踪
+- [ ] 支持 [rate](https://pkg.go.dev/golang.org/x/time/rate) 接口限流组件
+- [ ] 支持 [grpc](https://github.com/grpc/grpc-go) rpc组件
+- [ ] 支持 [grpc](https://github.com/grpc/grpc-go) rpc组件
 # 二、启动服务
 
 ```
