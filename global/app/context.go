@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/config"
 	"mqenergy-go/entities/admin"
 	"mqenergy-go/global"
 	"mqenergy-go/pkg/auth"
@@ -26,7 +25,7 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 	if token == "" {
 		return user, errors.New("token 为空")
 	}
-	jwtPayload, err := auth.ParseJwtToken(token, config.Conf.Jwt.Secret)
+	jwtPayload, err := auth.ParseJwtToken(token, global.Cfg.Jwt.Secret)
 	if err != nil {
 		return user, err
 	}
@@ -40,7 +39,7 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 	if user.UserId == 0 {
 		return user, errors.New("非法登录")
 	}
-	_, err = global.Redis.Get(context.Background(), config.Conf.Redis.LoginPrefix+strconv.FormatInt(user.UserId, 10)).Result()
+	_, err = global.Redis.Get(context.Background(), global.Cfg.Redis.LoginPrefix+strconv.FormatInt(user.UserId, 10)).Result()
 	if err != nil {
 		return TokenPayload{}, errors.New("会话过期，请重新登录")
 	}
@@ -49,13 +48,13 @@ func ParseUserByToken(token string) (TokenPayload, error) {
 
 // GetAdminInfo 获取登陆者的用户信息
 func GetAdminInfo(ctx *gin.Context) (AdminInfo, error) {
-	info, err := ParseUserByToken(ctx.GetHeader(config.Conf.Jwt.TokenKey))
+	info, err := ParseUserByToken(ctx.GetHeader(global.Cfg.Jwt.TokenKey))
 	if err != nil {
 		return AdminInfo{}, nil
 	}
 	Uid := info.UserId
 	//	从redis查询
-	result, err := global.Redis.Get(context.Background(), config.Conf.Redis.LoginPrefix+strconv.FormatInt(Uid, 10)).Result()
+	result, err := global.Redis.Get(context.Background(), global.Cfg.Redis.LoginPrefix+strconv.FormatInt(Uid, 10)).Result()
 	if err != nil {
 		return AdminInfo{}, nil
 	}

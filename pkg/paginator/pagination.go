@@ -4,7 +4,7 @@ import (
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"math"
-	"mqenergy-go/config"
+	"mqenergy-go/global"
 	"mqenergy-go/pkg/util"
 )
 
@@ -186,10 +186,10 @@ func (pb *PageBuilder) ParsePage(currentPage, pageSize int) Page {
 		page.CurrentPage = 1
 	}
 	if pageSize < 1 {
-		page.PerPage = config.Conf.Server.DefaultPageSize
+		page.PerPage = global.Cfg.Server.DefaultPageSize
 	}
-	if pageSize > config.Conf.Server.MaxPageSize {
-		page.PerPage = config.Conf.Server.MaxPageSize
+	if pageSize > global.Cfg.Server.MaxPageSize {
+		page.PerPage = global.Cfg.Server.MaxPageSize
 	}
 	if page.LastPage < 1 {
 		page.LastPage = 1

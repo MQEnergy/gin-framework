@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
+	"mqenergy-go/config"
 	"mqenergy-go/pkg/lib"
 )
 
@@ -12,4 +13,5 @@ var (
 	Logger *lib.Logger   // 日志
 	Redis  *redis.Client // redis连接池
 	Router *gin.Engine   // 路由
+	Cfg    *config.Conf  // yaml配置
 )

@@ -7,7 +7,7 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	dmysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"mqenergy-go/config"
+	"mqenergy-go/global"
 	"strconv"
 	"time"
 )
@@ -15,11 +15,11 @@ import (
 // GenerateMigrate 执行migrate
 func GenerateMigrate(step string) error {
 	cfg := mysql.Config{
-		DBName:               config.Conf.Mysql[0].DbName,
-		User:                 config.Conf.Mysql[0].User,
-		Passwd:               config.Conf.Mysql[0].Password,
+		DBName:               global.Cfg.Mysql[0].DbName,
+		User:                 global.Cfg.Mysql[0].User,
+		Passwd:               global.Cfg.Mysql[0].Password,
 		Net:                  "tcp",
-		Addr:                 fmt.Sprintf("%s:%s", config.Conf.Mysql[0].Host, config.Conf.Mysql[0].Port),
+		Addr:                 fmt.Sprintf("%s:%s", global.Cfg.Mysql[0].Host, global.Cfg.Mysql[0].Port),
 		AllowNativePasswords: true,
 		MultiStatements:      true,
 		ParseTime:            true,
@@ -30,7 +30,7 @@ func GenerateMigrate(step string) error {
 		return err
 	}
 	driver, err := dmysql.WithInstance(db, &dmysql.Config{
-		DatabaseName: config.Conf.Mysql[0].DbName,
+		DatabaseName: global.Cfg.Mysql[0].DbName,
 	})
 	if err != nil {
 		return err

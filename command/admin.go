@@ -27,8 +27,7 @@ func GenerateAdmin() {
 	account := args[2]
 	password := args[3]
 	config.ConfEnv = env
-	config.InitConfig()
-	bootstrap.BootMysql()
+	bootstrap.BootService("Mysql")
 
 	salt := util.GenerateUuid(32)
 	user := Admin{

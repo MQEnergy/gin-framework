@@ -1,17 +1,17 @@
 server:
   mode: 'debug'
-  default_page_size: 10 # 默认分页条数
-  max_page_size: 500    # 最大分页条数
-  file_upload_path: './' # 文件上传路径
+  defaultPageSize: 10 # 默认分页条数
+  maxPageSize: 500    # 最大分页条数
+  fileUploadPath: './' # 文件上传路径
 jwt:
-  token_expire: 864000   # token过期时间
-  token_key: 'Authorization' # token的键名
-  token_issuer: 'gin-framework'
+  tokenExpire: 864000   # token过期时间
+  tokenKey: 'Authorization' # token的键名
+  tokenIssuer: 'gin-framework'
   secret: '3jQSRZXeXzr09hq0GrZuL9Dgtk2XV9Ax'
 log:
   debug: true
-  file_name: 'mqenergy-go' # 日志文件名称
-  dir_path: 'runtime/logs' # 日志默认存放目录
+  fileName: 'mqenergy-go' # 日志文件名称
+  dirPath: 'runtime/logs' # 日志默认存放目录
 mysql:
   - host: '127.0.0.1'
     port: '3306'
@@ -19,15 +19,15 @@ mysql:
     password: '123456'
     dbname: 'gin_framework'
     prefix: ""
-    max_idle_conns: 10 # 设置空闲连接池中连接的最大数量
-    max_open_conns: 100 # 设置打开数据库连接的最大数量
-    max_life_time: 60 # 设置了连接可复用的最大时间（分钟）
+    maxIdleConns: 10 # 设置空闲连接池中连接的最大数量
+    maxOpenConns: 100 # 设置打开数据库连接的最大数量
+    maxLifeTime: 60 # 设置了连接可复用的最大时间（分钟）
 redis:
   host: '127.0.0.1'
   port: '6379'
   password: '123456'
-  db_num: 0
-  login_prefix: 'lyky_gin_framework_login_' # 登录用户存入redis键名的前缀
+  dbNum: 0
+  loginPrefix: 'gin_framework_login_' # 登录用户存入redis键名的前缀
 amqp:
   host: '127.0.0.1'
   port: '5672'
@@ -35,7 +35,7 @@ amqp:
   password: ''
   vhost: ''
 oss:
-  end_point: 'https://oss-cn-shanghai.aliyuncs.com'
-  access_key_id: ''
-  access_key_secret: ''
-  bucket_name: ''
+  endPoint: 'https://oss-cn-shanghai.aliyuncs.com'
+  accessKeyId: ''
+  accessKeySecret: ''
+  bucketName: ''

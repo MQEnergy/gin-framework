@@ -2,7 +2,6 @@ package common
 
 import (
 	"errors"
-	"mqenergy-go/config"
 	"mqenergy-go/entities/user"
 	"mqenergy-go/global"
 	"mqenergy-go/pkg/auth"
@@ -18,7 +17,7 @@ func (s UserService) Login(requestParams user.LoginRequest) (interface{}, error)
 	if err := global.DB.Where("phone = ?", requestParams.Phone).First(&userInfo).Error; err != nil {
 		return userInfo, errors.New("未查找到用户")
 	}
-	jwtToken, err := auth.GenerateJwtToken(config.Conf.Jwt.Secret, config.Conf.Jwt.TokenExpire, userInfo, config.Conf.Jwt.TokenIssuer)
+	jwtToken, err := auth.GenerateJwtToken(global.Cfg.Jwt.Secret, global.Cfg.Jwt.TokenExpire, userInfo, global.Cfg.Jwt.TokenIssuer)
 	if err != nil {
 		return "", errors.New("token生成失败")
 	}

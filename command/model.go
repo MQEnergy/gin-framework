@@ -23,13 +23,13 @@ func GenerateModel() {
 	}
 	config.ConfEnv = env
 	config.InitConfig()
-	bootstrap.BootMysql()
+	bootstrap.BootService("Mysql")
 
 	if args[2] == "all" {
-		gorm_model.GenerateAllModel(global.DB, config.Conf.Mysql[0].DbName)
+		gorm_model.GenerateAllModel(global.DB, global.Cfg.Mysql[0].DbName)
 	} else {
 		var table gorm_model.Table
-		table = gorm_model.GetSingleTable(global.DB, config.Conf.Mysql[0].DbName, args[2])
+		table = gorm_model.GetSingleTable(global.DB, global.Cfg.Mysql[0].DbName, args[2])
 		err := gorm_model.GenerateSingleModel(global.DB, args[2], table)
 		if err != nil {
 			fmt.Println(err)

@@ -24,15 +24,18 @@ var (
 	err           error
 	// serviceMap 程序启动时需要自动加载的服务
 	serviceMap = bootServiceMap{
-		MysqlService:  BootMysql,
-		RedisService:  BootRedis,
-		LoggerService: BootLogger,
+		MysqlService:  bootMysql,
+		RedisService:  bootRedis,
+		LoggerService: bootLogger,
 	}
 )
 
 // BootService 加载服务
 func BootService(services ...string) {
-	serviceMap[LoggerService] = BootLogger
+	// 初始化配置
+	global.Cfg = config.InitConfig()
+
+	serviceMap[LoggerService] = bootLogger
 	if global.Logger != nil {
 		global.Logger.Infof("服务列表已加载完成")
 	}
@@ -50,32 +53,32 @@ func BootService(services ...string) {
 	}
 }
 
-// BootLogger 将配置载入日志服务
-func BootLogger() error {
+// bootLogger 将配置载入日志服务
+func bootLogger() error {
 	if global.Logger != nil {
 		return nil
 	}
-	if global.Logger, err = lib.NewLogger(config.Conf.Log.DirPath, config.Conf.Log.FileName); err == nil {
-		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", config.Conf.Log.FileName, config.Conf.Log.DirPath)
+	if global.Logger, err = lib.NewLogger(global.Cfg.Log.DirPath, global.Cfg.Log.FileName, global.Cfg.Log.Debug); err == nil {
+		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", global.Cfg.Log.FileName, global.Cfg.Log.DirPath)
 	}
 	return err
 }
 
-// BootMysql 装配数据库连接
-func BootMysql() error {
+// bootMysql 装配数据库连接
+func bootMysql() error {
 	if global.DB != nil {
 		return nil
 	}
 	dbConfig := lib.DatabaseConfig{
-		Host:         config.Conf.Mysql[0].Host,
-		Port:         config.Conf.Mysql[0].Port,
-		User:         config.Conf.Mysql[0].User,
-		Pass:         config.Conf.Mysql[0].Password,
-		DbName:       config.Conf.Mysql[0].DbName,
-		Prefix:       config.Conf.Mysql[0].Prefix,
-		MaxIdleConns: config.Conf.Mysql[0].MaxIdleConns,
-		MaxOpenConns: config.Conf.Mysql[0].MaxOpenConns,
-		MaxLifeTime:  config.Conf.Mysql[0].MaxLifeTime,
+		Host:         global.Cfg.Mysql[0].Host,
+		Port:         global.Cfg.Mysql[0].Port,
+		User:         global.Cfg.Mysql[0].User,
+		Pass:         global.Cfg.Mysql[0].Password,
+		DbName:       global.Cfg.Mysql[0].DbName,
+		Prefix:       global.Cfg.Mysql[0].Prefix,
+		MaxIdleConns: global.Cfg.Mysql[0].MaxIdleConns,
+		MaxOpenConns: global.Cfg.Mysql[0].MaxOpenConns,
+		MaxLifeTime:  global.Cfg.Mysql[0].MaxLifeTime,
 	}
 	global.DB, err = lib.NewMysql(dbConfig)
 	if err == nil {
@@ -84,12 +87,12 @@ func BootMysql() error {
 	return err
 }
 
-// BootRedis 装配redis服务
-func BootRedis() error {
+// bootRedis 装配redis服务
+func bootRedis() error {
 	redisConfig := lib.RedisConfig{
-		Addr:     fmt.Sprintf("%s:%s", config.Conf.Redis.Host, config.Conf.Redis.Port),
-		Password: config.Conf.Redis.Password,
-		DbNum:    config.Conf.Redis.DbNum,
+		Addr:     fmt.Sprintf("%s:%s", global.Cfg.Redis.Host, global.Cfg.Redis.Port),
+		Password: global.Cfg.Redis.Password,
+		DbNum:    global.Cfg.Redis.DbNum,
 	}
 	global.Redis, err = lib.NewRedis(redisConfig)
 	if err == nil {

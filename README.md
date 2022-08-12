@@ -47,13 +47,14 @@
 - [x] 支持 [go-rabbitmq](https://github.com/MQEnergy/go-rabbitmq) 消息队列组件 基于rabbitmq官方 [amqp](https://github.com/streadway/amqp) 组件封装实现的消费者和生产者
 - [x] 支持 [casbin](https://github.com/casbin/casbin) rbac权限 集成于中间件中 [casbin_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/casbin_auth.go)
 - [x] 支持 [requestId](https://github.com/gin-contrib/requestid) 中间件 实现了方便链路追踪日志记录中间件 [requestid_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/requestid_auth.go)
-- [x] 支持 [configor](https://github.com/jinzhu/configor) yaml、json、toml等配置文件解析组件
+- [x] 支持 [viper](https://github.com/spf13/viper) yaml、json、toml等配置文件解析组件
 - [x] 支持 [validator](https://github.com/go-playground/validator) 数据字段验证器组件，同时支持中文
 - [x] 支持 [snowflake](https://github.com/bwmarrin/snowflake) 生成雪花算法全局唯一ID
 - [x] 实现 ip白名单配置 集成于中间件中 [ip_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/ip_auth.go)
 - [x] 实现 [ticker](https://github.com/MQEnergy/gin-framework/blob/main/pkg/util/ticker.go) 定时器组件 
 - [x] 实现 基于gorm的 [pagination](https://github.com/MQEnergy/gin-framework/blob/main/pkg/paginator/pagination.go) 分页构造器组件
 - [x] 实现 [code](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/code.go) 统一定义的返回码，[exception](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/exception.go) 统一错误返回处理组件
+- [x] 支持 [go-bindata](https://github.com/go-bindata/go-bindata) 将数据文件转换为go代码，便于因编译成二进制找不到yaml文件配置的问题
 
 #### 下一步计划：
 - [ ] 支持 定时任务 cron
@@ -68,10 +69,17 @@
 注意启动前需要将 mysql服务和redis服务开启，并配置config.dev.yaml文件(默认读取dev环境)中的mysql和redis配置
 ```
 
-## 1、安装依赖
+## 1、安装依赖和初始化
 
 ```bash
 go mod tidy 
+
+# 执行make（查看Makefile文件）
+make bindata
+```
+### 注意：
+```
+当修改yaml配置文件时候，需要执行 `make bindata`，重新将数据文件转换为go代码，调试和上线才生效。
 ```
 
 ## 2、服务启动
@@ -118,16 +126,22 @@ go run main.go migrate -s all
 ## 6、打包上线
 
 ```bash
-go build main.go
-# 执行可查看命令
-./main help 
+# 查看make命令行
+make help
 
-# 安装在GOPATH的bin目录中
-go install
+# 基础打包，生成可执行文件
+make build
 
-# 执行可查看命令
-mqenergy-go help
+# 打包windows
+make windows
+
+# 打包darwin
+make darwin
+
+# 打包linux
+make linux
 ```
+在releases中查看打包的文件
 
 # 三、组件使用
 
@@ -177,7 +191,7 @@ pagination, err := paginator.NewBuilder().
         LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
         RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
     }}).
-    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+    Pagination(&userList, requestParams.Page, global.Cfg.Server.DefaultPageSize)
 return pagination, err
 ```
 
@@ -196,7 +210,7 @@ pagination, err := paginator.NewBuilder().
         LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
         RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
     }}).
-    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+    Pagination(&userList, requestParams.Page, global.Cfg.Server.DefaultPageSize)
 return pagination, err
 ```
 
@@ -226,7 +240,7 @@ pagination, err := paginator.NewBuilder().
     WithDB(global.DB).
     WithModel(models.GinUser{}).
     WithPreload("UserInfo").
-    Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+    Pagination(&userList, requestParams.Page, global.Cfg.Server.DefaultPageSize)
 return pagination, err
 ```
 ```
@@ -645,4 +659,10 @@ go install github.com/cosmtrek/air@latest
 
 ```bash
 go get -u github.com/samber/lo
+```
+
+### 配置文件解析库
+
+```bash
+go get -u github.com/spf13/viper
 ```

@@ -26,6 +26,14 @@ var (
 	BuildVersion string
 	//	BuildAt 编译时间
 	BuildAt string
+	_UI     = `
+ ██████╗ ██╗███╗   ██╗      ███████╗██████╗  █████╗ ███╗   ███╗███████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
+██╔════╝ ██║████╗  ██║      ██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔════╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
+██║  ███╗██║██╔██╗ ██║█████╗█████╗  ██████╔╝███████║██╔████╔██║█████╗  ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
+██║   ██║██║██║╚██╗██║╚════╝██╔══╝  ██╔══██╗██╔══██║██║╚██╔╝██║██╔══╝  ██║███╗██║██║   ██║██╔══██╗██╔═██╗ 
+╚██████╔╝██║██║ ╚████║      ██║     ██║  ██║██║  ██║██║ ╚═╝ ██║███████╗╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗
+ ╚═════╝ ╚═╝╚═╝  ╚═══╝      ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+`
 )
 
 // Stack 程序运行前的处理
@@ -58,7 +66,7 @@ func Stack() *cli.App {
 		},
 		Action: func(context *cli.Context) error {
 			//	初始化配置文件信息
-			config.InitConfig()
+			//config.InitConfig()
 			//	程序启动时需要加载的服务
 			bootstrap.BootService()
 			//	引入验证翻译器
@@ -88,9 +96,9 @@ func Stack() *cli.App {
 				Action: func(ctx *cli.Context) error {
 					step := ctx.String("step")
 					// 初始化配置文件信息
-					config.InitConfig()
+					//config.InitConfig()
 					// 程序启动时需要加载的服务
-					bootstrap.BootMysql()
+					bootstrap.BootService("Mysql")
 					if err := command.GenerateMigrate(step); err != nil {
 						return err
 					}
@@ -134,6 +142,7 @@ func Stack() *cli.App {
 }
 
 func main() {
+	fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", _UI))
 	if err := Stack().Run(os.Args); err != nil {
 		panic(err)
 	}

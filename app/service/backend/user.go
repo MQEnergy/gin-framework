@@ -2,12 +2,11 @@ package backend
 
 import (
 	"fmt"
+	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"github.com/gogf/gf/v2/util/gconv"
-	"mqenergy-go/config"
 	"mqenergy-go/entities/user"
 	"mqenergy-go/global"
 	"mqenergy-go/models"
-	"mqenergy-go/pkg/lib"
 	"mqenergy-go/pkg/paginator"
 	"sync"
 )
@@ -33,7 +32,7 @@ func (s *UserService) GetIndex(requestParams user.IndexRequest) (interface{}, er
 			LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
 			RightTableField: paginator.JoinTableField{Table: models.GinUserInfoTbName, Field: "user_id"},
 		}}).
-		Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+		Pagination(&userList, requestParams.Page, global.Cfg.Server.DefaultPageSize)
 	return pagination, err
 }
 
@@ -44,12 +43,12 @@ func (s *UserService) GetList(requestParams user.IndexRequest) (interface{}, err
 		WithDB(global.DB).
 		WithModel(models.GinUser{}).
 		WithPreload("UserInfo").
-		Pagination(&userList, requestParams.Page, config.Conf.Server.DefaultPageSize)
+		Pagination(&userList, requestParams.Page, global.Cfg.Server.DefaultPageSize)
 	return pagination, err
 }
 
 // AmqpConsumerHandler 处理消费者方法
-func (s *UserService) AmqpConsumerHandler(mq *lib.RabbitMQ, data map[string]interface{}) error {
+func (s *UserService) AmqpConsumerHandler(mq *gorabbitmq.RabbitMQ, data map[string]interface{}) error {
 	var wg sync.WaitGroup
 	cherrors := make(chan error)
 	consumerNum := gconv.Int(data["consumerNum"])
@@ -80,7 +79,7 @@ func (s *UserService) AmqpConsumerHandler(mq *lib.RabbitMQ, data map[string]inte
 }
 
 // AmqpProducerHandler 处理生产者方法
-func (s *UserService) AmqpProducerHandler(mq *lib.RabbitMQ, data []byte) error {
+func (s *UserService) AmqpProducerHandler(mq *gorabbitmq.RabbitMQ, data []byte) error {
 	if err := mq.Push(data); err != nil {
 		fmt.Println("Push failed: " + err.Error())
 		return err

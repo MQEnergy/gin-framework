@@ -13,7 +13,7 @@ import (
 )
 
 func Register() *gin.Engine {
-	gin.SetMode(config.Conf.Server.Mode)
+	gin.SetMode(global.Cfg.Server.Mode)
 	router := gin.New()
 	// [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 	router.SetTrustedProxies(config.AllowIpList)

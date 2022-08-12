@@ -1,21 +1,21 @@
 package producer
 
 import (
-	"mqenergy-go/pkg/lib"
+	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"time"
 )
 
 type (
 	BaseConfig struct {
-		Amqp     *lib.RabbitMQ
+		Amqp     *gorabbitmq.RabbitMQ
 		Data     []byte
 		CallBack Fn
 	}
-	Fn func(mq *lib.RabbitMQ, data []byte) error
+	Fn func(mq *gorabbitmq.RabbitMQ, data []byte) error
 )
 
 // New 实例化
-func New(mq *lib.RabbitMQ, data []byte, f Fn) *BaseConfig {
+func New(mq *gorabbitmq.RabbitMQ, data []byte, f Fn) *BaseConfig {
 	return &BaseConfig{
 		Amqp:     mq,
 		Data:     data,

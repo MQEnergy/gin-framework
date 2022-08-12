@@ -4,7 +4,6 @@ import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
-	"mqenergy-go/config"
 	"os"
 	"time"
 )
@@ -14,7 +13,7 @@ type Logger struct {
 }
 
 // NewLogger 构造日志服务
-func NewLogger(logPath, module string) (*Logger, error) {
+func NewLogger(logPath, module string, debug bool) (*Logger, error) {
 	src, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		return nil, err
@@ -26,7 +25,7 @@ func NewLogger(logPath, module string) (*Logger, error) {
 	// 设置输出
 	logger.Out = src
 	// 设置日志级别
-	if config.Conf.Log.Debug == true {
+	if debug == true {
 		logger.SetLevel(logrus.DebugLevel)
 	}
 	// 设置日志格式

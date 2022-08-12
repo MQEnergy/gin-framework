@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"mqenergy-go/config"
+	"mqenergy-go/global"
 	"os"
 	"strconv"
 	"strings"
@@ -46,11 +46,11 @@ func UploadFile(path string, r *gin.Context) (*FileHeader, error) {
 		filePath += path + "/"
 	}
 	filePath += time.Now().Format("2006-01-02") + "/"
-	b := MakeMultiDir(config.Conf.Server.FileUploadPath + filePath)
+	b := MakeMultiDir(global.Cfg.Server.FileUploadPath + filePath)
 	if b != nil {
 		return nil, err
 	}
-	create, err := os.Create(config.Conf.Server.FileUploadPath + filePath + fileName)
+	create, err := os.Create(global.Cfg.Server.FileUploadPath + filePath + fileName)
 	if err != nil {
 		return nil, err
 	}
