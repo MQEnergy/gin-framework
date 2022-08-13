@@ -21,7 +21,7 @@ lint:
 generate:
 	@go generate -x
 docker:
-	@docker build -t lyky-tech/${APP}:latest .
+	@docker build -t mqenergy/${APP}:latest .
 clean:
 	@go clean -i .
 	@rm -rf releases
