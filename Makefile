@@ -5,16 +5,12 @@ bindata:
 	@go install github.com/go-bindata/go-bindata/...
 	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
 build:
-	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
 	@go build -o releases/${APP}
 windows:
-	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
 	@GOARCH=amd64 GOOS=windows go build -o releases/${APP}-windows
 linux:
-	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
 	@GOARCH=amd64 GOOS=linux go build -o releases/${APP}-linux
 darwin:
-	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
 	@GOARCH=amd64 GOOS=darwin go build -o releases/${APP}-darwin
 lint:
 	@golint ./...
