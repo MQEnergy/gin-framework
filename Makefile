@@ -23,10 +23,10 @@ clean:
 	@rm -rf releases
 help:
 	@echo "1. make bindata - [go-bindata]"
-	@echo "2. make build - [go-bindata + go build]"
-	@echo "3. make windows - [go-bindata + make window package]"
-	@echo "4. make linux - [go-bindata + make linux package]"
-	@echo "5. make darwin - [go-bindata + make darwin package]"
+	@echo "2. make build - [go build]"
+	@echo "3. make windows - [make window package]"
+	@echo "4. make linux - [make linux package]"
+	@echo "5. make darwin - [make darwin package]"
 	@echo "6. make lint - [golint ./...]"
 	@echo "7. make generate - [go generate -x]"
 	@echo "8. make docker - [make docker images]"
