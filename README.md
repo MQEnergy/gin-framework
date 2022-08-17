@@ -2,6 +2,9 @@
 
 本项目积极拥抱Go 1.18+版本，强烈建议用户升级到v1.18及以上版本，全自动化生成Model Service Controller架子，加快业务开发。
 
+[![GoDoc](https://godoc.org/github.com/MQEnergy/gin-framework/?status.svg)](https://pkg.go.dev/github.com/MQEnergy/gin-framework)
+[![Go Report Card](https://goreportcard.com/badge/github.com/MQEnergy/gin-framework)](https://goreportcard.com/report/github.com/MQEnergy/gin-framework)
+[![codebeat badge](https://codebeat.co/badges/1bf7dd49-1283-4ec9-b56e-a755e1e9c8dd)](https://codebeat.co/projects/github-com-mqenergy-gin-framework-main)
 [![GitHub license](https://img.shields.io/github/license/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/stargazers)
 

@@ -1,26 +1,45 @@
 APP=gin-framework
 
+.PHONY: bindata
 bindata:
 	@go get -u github.com/go-bindata/go-bindata/...
 	@go install github.com/go-bindata/go-bindata/...
 	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
+
+.PHONY: build
 build:
 	@go build -o releases/${APP}
+
+.PHONY: windows
 windows:
 	@GOARCH=amd64 GOOS=windows go build -o releases/${APP}-windows
+
+.PHONY: linux
 linux:
 	@GOARCH=amd64 GOOS=linux go build -o releases/${APP}-linux
+
+.PHONY: darwin
 darwin:
 	@GOARCH=amd64 GOOS=darwin go build -o releases/${APP}-darwin
+
+.PHONY: lint
 lint:
 	@golint ./...
+
+.PHONY: generate
 generate:
 	@go generate -x
+
+.PHONY: docker
 docker:
 	@docker build -t mqenergy/${APP}:latest .
+
+.PHONY: clean
 clean:
 	@go clean -i .
 	@rm -rf releases
+
+.PHONY: help
 help:
 	@echo "1. make bindata - [go-bindata]"
 	@echo "2. make build - [go build]"
