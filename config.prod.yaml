@@ -1,5 +1,5 @@
 server:
-  mode: 'debug'
+  mode: 'release'
   defaultPageSize: 10 # 默认分页条数
   maxPageSize: 500    # 最大分页条数
   fileUploadPath: './' # 文件上传路径
