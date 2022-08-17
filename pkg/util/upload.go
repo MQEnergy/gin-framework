@@ -3,9 +3,9 @@ package util
 import (
 	"errors"
 	"fmt"
+	"github.com/MQEnergy/go-framework/global"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"mqenergy-go/global"
 	"os"
 	"strconv"
 	"strings"

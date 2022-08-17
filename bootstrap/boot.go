@@ -2,11 +2,11 @@ package bootstrap
 
 import (
 	"fmt"
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/pkg/lib"
+	"github.com/MQEnergy/go-framework/pkg/util"
 	"github.com/sirupsen/logrus"
-	"mqenergy-go/config"
-	"mqenergy-go/global"
-	"mqenergy-go/pkg/lib"
-	"mqenergy-go/pkg/util"
 )
 
 // 定义服务列表

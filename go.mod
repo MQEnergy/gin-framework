@@ -1,4 +1,4 @@
-module mqenergy-go
+module github.com/MQEnergy/go-framework
 
 go 1.18
 

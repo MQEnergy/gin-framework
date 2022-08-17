@@ -2,12 +2,12 @@ package backend
 
 import (
 	"fmt"
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/models"
+	"github.com/MQEnergy/go-framework/pkg/paginator"
+	"github.com/MQEnergy/go-framework/types/user"
 	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"github.com/gogf/gf/v2/util/gconv"
-	"mqenergy-go/global"
-	"mqenergy-go/models"
-	"mqenergy-go/pkg/paginator"
-	"mqenergy-go/types/user"
 	"sync"
 )
 

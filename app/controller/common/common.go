@@ -1,13 +1,13 @@
 package common
 
 import (
+	"github.com/MQEnergy/go-framework/app/controller/base"
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/models"
+	"github.com/MQEnergy/go-framework/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/samber/lo"
-	"mqenergy-go/app/controller/base"
-	"mqenergy-go/global"
-	"mqenergy-go/models"
-	"mqenergy-go/pkg/response"
 	"net/http"
 	"strings"
 )

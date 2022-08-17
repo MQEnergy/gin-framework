@@ -2,14 +2,14 @@ package router
 
 import (
 	"fmt"
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/middleware"
+	"github.com/MQEnergy/go-framework/pkg/response"
+	"github.com/MQEnergy/go-framework/router/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/config"
-	"mqenergy-go/global"
-	"mqenergy-go/middleware"
-	"mqenergy-go/pkg/response"
-	"mqenergy-go/router/routes"
 )
 
 func Register() *gin.Engine {

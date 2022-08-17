@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"github.com/MQEnergy/go-framework/app/controller/backend"
+	"github.com/MQEnergy/go-framework/app/controller/common"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/app/controller/backend"
-	"mqenergy-go/app/controller/common"
 )
 
 func InitCommonGroup(r *gin.RouterGroup) (router gin.IRoutes) {

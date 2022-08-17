@@ -1,11 +1,11 @@
 package backend
 
 import (
+	"github.com/MQEnergy/go-framework/app/controller/base"
+	"github.com/MQEnergy/go-framework/app/service/backend"
+	"github.com/MQEnergy/go-framework/pkg/response"
+	"github.com/MQEnergy/go-framework/types/user"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/app/controller/base"
-	"mqenergy-go/app/service/backend"
-	"mqenergy-go/pkg/response"
-	"mqenergy-go/types/user"
 	"net/http"
 )
 

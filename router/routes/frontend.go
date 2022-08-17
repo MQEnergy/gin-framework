@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/MQEnergy/go-framework/app/controller/frontend"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/app/controller/frontend"
 )
 
 // InitFrontendGroup 初始化前台接口路由

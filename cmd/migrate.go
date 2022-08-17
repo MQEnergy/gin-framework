@@ -3,14 +3,14 @@ package cmd
 import (
 	"database/sql"
 	"fmt"
+	"github.com/MQEnergy/go-framework/bootstrap"
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/global"
 	"github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
 	dmysql "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/urfave/cli/v2"
-	"mqenergy-go/bootstrap"
-	"mqenergy-go/config"
-	"mqenergy-go/global"
 	"strconv"
 	"time"
 )

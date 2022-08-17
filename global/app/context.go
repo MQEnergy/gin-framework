@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/pkg/auth"
+	"github.com/MQEnergy/go-framework/types/admin"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/global"
-	"mqenergy-go/pkg/auth"
-	"mqenergy-go/types/admin"
 	"strconv"
 )
 

@@ -2,9 +2,9 @@ package base
 
 import (
 	"errors"
+	"github.com/MQEnergy/go-framework/pkg/response"
+	"github.com/MQEnergy/go-framework/pkg/validator"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/pkg/response"
-	"mqenergy-go/pkg/validator"
 	"net/http"
 )
 

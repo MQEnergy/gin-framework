@@ -1,6 +1,6 @@
 package user
 
-import "mqenergy-go/models"
+import "github.com/MQEnergy/go-framework/models"
 
 type BaseUser models.GinUser
 type GinUserInfo models.GinUserInfo

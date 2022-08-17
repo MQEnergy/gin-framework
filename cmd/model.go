@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/MQEnergy/go-framework/bootstrap"
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/global"
 	gomodel "github.com/MQEnergy/gorm-model"
 	"github.com/urfave/cli/v2"
-	"mqenergy-go/bootstrap"
-	"mqenergy-go/config"
-	"mqenergy-go/global"
 )
 
 var (

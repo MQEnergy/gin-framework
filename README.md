@@ -152,7 +152,7 @@ make linux
 引用包
 
 ```go
-import "mqenergy-go/pkg/paginator"
+import "github.com/MQEnergy/go-framework/pkg/paginator"
 ```
 
 ### 一、基础用法
@@ -564,7 +564,7 @@ go run main.go account -help
 ### 初始化go.mod
 
 ```bash
-go mod init mqenergy-go/gin-framework
+go mod init github.com/MQEnergy/go-framework/gin-framework
 go mod tidy
 ```
 

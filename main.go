@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/MQEnergy/go-framework/bootstrap"
+	"github.com/MQEnergy/go-framework/cmd"
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/pkg/validator"
+	"github.com/MQEnergy/go-framework/router"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/urfave/cli/v2"
-	"mqenergy-go/bootstrap"
-	"mqenergy-go/cmd"
-	"mqenergy-go/config"
-	"mqenergy-go/pkg/validator"
-	"mqenergy-go/router"
 	"os"
 	"runtime"
 )

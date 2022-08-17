@@ -1,11 +1,11 @@
 package global
 
 import (
+	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/go-framework/pkg/lib"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
-	"mqenergy-go/config"
-	"mqenergy-go/pkg/lib"
 )
 
 var (

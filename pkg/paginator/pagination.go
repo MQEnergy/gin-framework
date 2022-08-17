@@ -1,11 +1,11 @@
 package paginator
 
 import (
+	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/go-framework/pkg/util"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"math"
-	"mqenergy-go/global"
-	"mqenergy-go/pkg/util"
 )
 
 type PageBuilder struct {
