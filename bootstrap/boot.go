@@ -59,7 +59,7 @@ func bootLogger() error {
 		return nil
 	}
 	if global.Logger, err = lib.NewLogger(global.Cfg.Log.DirPath, global.Cfg.Log.FileName, global.Cfg.Log.Debug); err == nil {
-		logrus.Printf("程序载入Logger服务成功 模块名为：%s 日志路径为：%s", global.Cfg.Log.FileName, global.Cfg.Log.DirPath)
+		logrus.Printf("程序载入Logger服务成功 [ 日志名：%s 日志路径：%s ]", global.Cfg.Log.FileName, global.Cfg.Log.DirPath)
 	}
 	return err
 }
