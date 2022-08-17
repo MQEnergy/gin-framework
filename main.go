@@ -53,12 +53,14 @@ func Stack() *cli.App {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "env",
+				Aliases:     []string{"e"},
 				Value:       "dev",
 				Usage:       "请选择配置文件 [dev | test | prod]",
 				Destination: &config.ConfEnv,
 			},
 			&cli.StringFlag{
 				Name:        "port",
+				Aliases:     []string{"p"},
 				Value:       "9527",
 				Usage:       "请选择启动端口",
 				Destination: &AppPort,
