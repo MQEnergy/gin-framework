@@ -10,7 +10,7 @@ jwt:
   secret: '3jQSRZXeXzr09hq0GrZuL9Dgtk2XV9Ax'
 log:
   debug: true
-  fileName: 'github.com/MQEnergy/go-framework' # 日志文件名称
+  fileName: 'mqenergy-go' # 日志文件名称
   dirPath: 'runtime/logs' # 日志默认存放目录
 mysql:
   - host: '127.0.0.1'
