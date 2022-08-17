@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/MQEnergy/go-framework/app/amqp/consumer"
-	"github.com/MQEnergy/go-framework/app/service/backend"
-	"github.com/MQEnergy/go-framework/bootstrap"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/gin-framework/app/amqp/consumer"
+	"github.com/MQEnergy/gin-framework/app/service/backend"
+	"github.com/MQEnergy/gin-framework/bootstrap"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
 	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"time"
 )

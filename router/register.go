@@ -2,11 +2,11 @@ package router
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/middleware"
-	"github.com/MQEnergy/go-framework/pkg/response"
-	"github.com/MQEnergy/go-framework/router/routes"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/middleware"
+	"github.com/MQEnergy/gin-framework/pkg/response"
+	"github.com/MQEnergy/gin-framework/router/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"

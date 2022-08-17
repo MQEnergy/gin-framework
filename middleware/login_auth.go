@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/auth"
-	"github.com/MQEnergy/go-framework/pkg/response"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/auth"
+	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/gin-gonic/gin"
 	"strings"
 )

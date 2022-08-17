@@ -1,7 +1,7 @@
 package frontend
 
 import (
-	"github.com/MQEnergy/go-framework/app/controller/base"
+	"github.com/MQEnergy/gin-framework/app/controller/base"
 )
 
 type UserController struct {

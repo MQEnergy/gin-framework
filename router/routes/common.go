@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/MQEnergy/go-framework/app/controller/backend"
-	"github.com/MQEnergy/go-framework/app/controller/common"
+	"github.com/MQEnergy/gin-framework/app/controller/backend"
+	"github.com/MQEnergy/gin-framework/app/controller/common"
 	"github.com/gin-gonic/gin"
 )
 

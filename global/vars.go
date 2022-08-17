@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/pkg/lib"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/pkg/lib"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"

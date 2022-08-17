@@ -1,10 +1,10 @@
 package backend
 
 import (
-	"github.com/MQEnergy/go-framework/app/controller/base"
-	"github.com/MQEnergy/go-framework/pkg/response"
-	"github.com/MQEnergy/go-framework/pkg/util"
-	"github.com/MQEnergy/go-framework/types/attachment"
+	"github.com/MQEnergy/gin-framework/app/controller/base"
+	"github.com/MQEnergy/gin-framework/pkg/response"
+	"github.com/MQEnergy/gin-framework/pkg/util"
+	"github.com/MQEnergy/gin-framework/types/attachment"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

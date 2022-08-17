@@ -2,9 +2,9 @@ package common
 
 import (
 	"errors"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/auth"
-	"github.com/MQEnergy/go-framework/types/user"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/auth"
+	"github.com/MQEnergy/gin-framework/types/user"
 )
 
 type UserService struct{}

@@ -1,10 +1,10 @@
 package common
 
 import (
-	"github.com/MQEnergy/go-framework/app/controller/base"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/models"
-	"github.com/MQEnergy/go-framework/pkg/response"
+	"github.com/MQEnergy/gin-framework/app/controller/base"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/models"
+	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/samber/lo"

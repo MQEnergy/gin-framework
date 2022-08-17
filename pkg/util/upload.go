@@ -3,7 +3,7 @@ package util
 import (
 	"errors"
 	"fmt"
-	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/gin-framework/global"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"os"

@@ -1,8 +1,8 @@
 package paginator
 
 import (
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/util"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/util"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 	"math"

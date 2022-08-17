@@ -1,6 +1,6 @@
 package models
 
-import "github.com/MQEnergy/go-framework/pkg/util"
+import "github.com/MQEnergy/gin-framework/pkg/util"
 
 type Model struct {
 	Id        uint64          `gorm:"primaryKey;autoIncrement;column:id;type:bigint unsigned;NOT NULL;" json:"id"`

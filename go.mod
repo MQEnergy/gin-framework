@@ -1,4 +1,4 @@
-module github.com/MQEnergy/go-framework
+module github.com/MQEnergy/gin-framework
 
 go 1.18
 

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/config"
+	"github.com/MQEnergy/gin-framework/config"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

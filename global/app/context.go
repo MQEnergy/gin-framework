@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/auth"
-	"github.com/MQEnergy/go-framework/types/admin"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/auth"
+	"github.com/MQEnergy/gin-framework/types/admin"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )

@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/bootstrap"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
+	"github.com/MQEnergy/gin-framework/bootstrap"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
 	gomodel "github.com/MQEnergy/gorm-model"
 	"github.com/urfave/cli/v2"
 )

@@ -1,6 +1,6 @@
 package admin
 
-import "github.com/MQEnergy/go-framework/models"
+import "github.com/MQEnergy/gin-framework/models"
 
 type BaseAdmin models.GinAdmin
 

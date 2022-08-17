@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/bootstrap"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/models"
-	"github.com/MQEnergy/go-framework/pkg/util"
+	"github.com/MQEnergy/gin-framework/bootstrap"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/models"
+	"github.com/MQEnergy/gin-framework/pkg/util"
 	"github.com/urfave/cli/v2"
 	"time"
 )

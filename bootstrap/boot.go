@@ -2,10 +2,10 @@ package bootstrap
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/lib"
-	"github.com/MQEnergy/go-framework/pkg/util"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/lib"
+	"github.com/MQEnergy/gin-framework/pkg/util"
 	"github.com/sirupsen/logrus"
 )
 

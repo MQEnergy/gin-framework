@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/MQEnergy/go-framework/app/amqp/producer"
-	"github.com/MQEnergy/go-framework/app/service/backend"
-	"github.com/MQEnergy/go-framework/bootstrap"
-	"github.com/MQEnergy/go-framework/config"
-	"github.com/MQEnergy/go-framework/global"
-	"github.com/MQEnergy/go-framework/pkg/util"
+	"github.com/MQEnergy/gin-framework/app/amqp/producer"
+	"github.com/MQEnergy/gin-framework/app/service/backend"
+	"github.com/MQEnergy/gin-framework/bootstrap"
+	"github.com/MQEnergy/gin-framework/config"
+	"github.com/MQEnergy/gin-framework/global"
+	"github.com/MQEnergy/gin-framework/pkg/util"
 	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"time"
 )
