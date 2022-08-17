@@ -4,10 +4,10 @@ import (
 	"fmt"
 	gorabbitmq "github.com/MQEnergy/go-rabbitmq"
 	"github.com/gogf/gf/v2/util/gconv"
-	"mqenergy-go/entities/user"
 	"mqenergy-go/global"
 	"mqenergy-go/models"
 	"mqenergy-go/pkg/paginator"
+	"mqenergy-go/types/user"
 	"sync"
 )
 

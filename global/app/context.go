@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
-	"mqenergy-go/entities/admin"
 	"mqenergy-go/global"
 	"mqenergy-go/pkg/auth"
+	"mqenergy-go/types/admin"
 	"strconv"
 )
 

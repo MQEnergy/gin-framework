@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/app/controller/base"
 	"mqenergy-go/app/service/common"
-	"mqenergy-go/entities/user"
 	"mqenergy-go/pkg/response"
+	"mqenergy-go/types/user"
 	"net/http"
 )
 

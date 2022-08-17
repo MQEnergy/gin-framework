@@ -5,7 +5,7 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/urfave/cli/v2"
 	"mqenergy-go/bootstrap"
-	"mqenergy-go/command"
+	"mqenergy-go/cmd"
 	"mqenergy-go/config"
 	"mqenergy-go/pkg/validator"
 	"mqenergy-go/router"
@@ -15,7 +15,7 @@ import (
 
 var (
 	// AppName 当前应用名称
-	AppName  = "gin-framework-template"
+	AppName  = "gin-framework"
 	AppUsage = "使用gin框架作为基础开发库，封装一套适用于面向api编程的快速开发框架"
 	// AuthorName 作者
 	AuthorName  = "chenxi"
@@ -65,8 +65,8 @@ func Stack() *cli.App {
 			},
 		},
 		Action: func(context *cli.Context) error {
-			//	初始化配置文件信息
-			//config.InitConfig()
+			fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", _UI))
+
 			//	程序启动时需要加载的服务
 			bootstrap.BootService()
 			//	引入验证翻译器
@@ -75,74 +75,16 @@ func Stack() *cli.App {
 			return router.Register().Run(":" + AppPort)
 		},
 		Commands: []*cli.Command{
-			{
-				Name:  "migrate",
-				Usage: "Create migration command",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:     "step",
-						Aliases:  []string{"s"},
-						Usage:    "Add Account",
-						Required: false,
-					},
-					&cli.StringFlag{
-						Name:        "env",
-						Value:       "dev",
-						Aliases:     []string{"e"},
-						Usage:       "请选择配置文件 [dev | test | prod]",
-						Destination: &config.ConfEnv,
-					},
-				},
-				Action: func(ctx *cli.Context) error {
-					step := ctx.String("step")
-					// 初始化配置文件信息
-					//config.InitConfig()
-					// 程序启动时需要加载的服务
-					bootstrap.BootService("Mysql")
-					if err := command.GenerateMigrate(step); err != nil {
-						return err
-					}
-					return nil
-				},
-			},
-			{
-				Name:  "account",
-				Usage: "Create a new admin account",
-				Action: func(ctx *cli.Context) error {
-					command.GenerateAdmin()
-					return nil
-				},
-			},
-			{
-				Name:  "model",
-				Usage: "Create a new model class",
-				Action: func(ctx *cli.Context) error {
-					command.GenerateModel()
-					return nil
-				},
-			},
-			{
-				Name:  "controller",
-				Usage: "Create a new controller class",
-				Action: func(ctx *cli.Context) error {
-					command.GenerateController()
-					return nil
-				},
-			},
-			{
-				Name:  "service",
-				Usage: "Create a new service class",
-				Action: func(ctx *cli.Context) error {
-					command.GenerateService()
-					return nil
-				},
-			},
+			cmd.MigrationCmd(),  // 数据库迁移
+			cmd.AccountCmd(),    // 管理账号创建
+			cmd.ModelCmd(),      // 模型创建
+			cmd.ControllerCmd(), // 控制器创建
+			cmd.ServiceCmd(),    // 服务类创建
 		},
 	}
 }
 
 func main() {
-	fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", _UI))
 	if err := Stack().Run(os.Args); err != nil {
 		panic(err)
 	}

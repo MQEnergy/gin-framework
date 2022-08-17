@@ -13,9 +13,9 @@
 │   └── service                 # 服务层
 ├── bootstrap                   # 初始化程序加载服务
 │   ├── rbac_model.conf         # rbac配置文件
-├── command                     # command命令
+├── cmd                         # command命令
 ├── config                      # 解析配置文件
-├── entities                    # 存放表对应的实体 / 请求参数的结构体
+├── types                       # 存放表对应的实体 / 请求参数的结构体
 ├── global                      # 一些全局变量和全局方法
 ├── main.go                     # 主进程启动文件
 ├── middleware                  # 中间件
@@ -115,8 +115,11 @@ go install github.com/cosmtrek/air@latest
 此步骤针对于backend接口进行权限访问
 ```
 ### 1）执行migrate
-```
-go run main.go migrate -s all
+```bash
+go run main.go migrate -s=all
+
+# 具体参数查看help
+go run main.go migrate -help
 ```
 ### 2）请求 `/routes` 接口
 ```
@@ -468,7 +471,7 @@ go run command/test/producer.go
 
 ```
 COMMANDS:
-  migrate     Create migration command
+  migrate     Create a migration command
   account     Create a new admin account
   model       Create a new model class
   controller  Create a new controller class
@@ -519,36 +522,41 @@ go run main.go migrate -s all
 ## 2、自动生成model
 
 ```bash
-# 参数一：all：生成所有 或者写入数据表名生成单个
-# env：dev, test, prod与config.*.yaml文件保持一致 默认是dev
-
 # 执行生成所有model
-go run main.go model all {env}
-#
-go run main.go model {数据表名} {env}
-# 例如：go run main.go model gin_admin
+go run main.go model -tb=all {env}
+
+# 具体参数查看help
+go run main.go model -help
 ```
 
 ## 3、自动生成controller
 
 ```bash
-go run main.go controller {controller名称} {module名称}
-# module名称是app/controller目录下的模块名称
-# 例如：go run main.go controller admin backend
+go run main.go controller -c={controller名称} -m={module名称}
+# 例如：go run main.go controller -c=admin -m=backend
+
+# 具体参数查看help
+go run main.go controller -help
 ```
 
 ## 4、自动生成service
 
 ```bash
-go run main.go service {service名称} {module名称}
+go run main.go service -s={service名称} -m={module名称}
 # module名称是app/controller目录下的模块名称
-# 例如：go run main.go service admin backend
+# 例如：go run main.go service -s=admin -m=backend
+
+# 具体参数查看help
+go run main.go service -help
 ```
 
 ## 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
 
 ```bash
-go run main.go account {账号名称} {密码}  
+go run main.go account -c={账号名称} -p={密码}  
+
+# 具体参数查看help
+go run main.go account -help
 ```
 
 # 五、参考

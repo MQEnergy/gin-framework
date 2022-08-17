@@ -3,9 +3,9 @@ package backend
 import (
 	"github.com/gin-gonic/gin"
 	"mqenergy-go/app/controller/base"
-	"mqenergy-go/entities/attachment"
 	"mqenergy-go/pkg/response"
 	"mqenergy-go/pkg/util"
+	"mqenergy-go/types/attachment"
 	"net/http"
 )
 

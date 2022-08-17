@@ -2,9 +2,9 @@ package common
 
 import (
 	"errors"
-	"mqenergy-go/entities/user"
 	"mqenergy-go/global"
 	"mqenergy-go/pkg/auth"
+	"mqenergy-go/types/user"
 )
 
 type UserService struct{}
