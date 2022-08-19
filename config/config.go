@@ -83,7 +83,25 @@ func InitConfig() *Conf {
 	}
 	var cfg Conf
 	if err := viper.Unmarshal(&cfg); err != nil {
-		log.Fatal("unmarshal config failed: %v", err)
+		log.Fatal("Unmarshal config failed: %v", err)
+		panic(err)
+	}
+	return &cfg
+}
+
+// OriginConfig 直接读取yaml配置文件
+func OriginConfig() *Conf {
+	// viper原生写法
+	viper.SetConfigName("config." + ConfEnv)
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatal("Read config failed: %v", err)
+		panic(err)
+	}
+	var cfg Conf
+	if err := viper.Unmarshal(&cfg); err != nil {
+		log.Fatal("Unmarshal config failed: %v", err)
 		panic(err)
 	}
 	return &cfg

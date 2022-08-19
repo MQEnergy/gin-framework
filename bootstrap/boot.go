@@ -32,9 +32,12 @@ var (
 
 // BootService 加载服务
 func BootService(services ...string) {
-	// 初始化配置
-	global.Cfg = config.InitConfig()
-
+	// 初始化配置 dev环境下直接读取yaml配置，其他模式下（prod、test...）需要make bindata生成配置文件来读取
+	if config.ConfEnv == "dev" {
+		global.Cfg = config.OriginConfig()
+	} else {
+		global.Cfg = config.InitConfig()
+	}
 	serviceMap[LoggerService] = bootLogger
 	if global.Logger != nil {
 		global.Logger.Infof("服务列表已加载完成")
