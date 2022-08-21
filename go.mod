@@ -4,10 +4,10 @@ go 1.18
 
 require (
 	github.com/MQEnergy/go-rabbitmq v0.1.0
-	github.com/MQEnergy/gorm-model v1.1.2
+	github.com/MQEnergy/gorm-model v1.1.3
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/casbin/casbin/v2 v2.52.0
-	github.com/casbin/gorm-adapter/v3 v3.7.4
+	github.com/casbin/casbin/v2 v2.52.2
+	github.com/casbin/gorm-adapter/v3 v3.8.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/requestid v0.0.5
@@ -32,7 +32,6 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
@@ -42,8 +41,7 @@ require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/glebarez/go-sqlite v1.18.1 // indirect
 	github.com/glebarez/sqlite v1.4.6 // indirect
-	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
-	github.com/goccy/go-json v0.9.10 // indirect
+	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -84,10 +82,10 @@ require (
 	go.opentelemetry.io/otel v1.9.0 // indirect
 	go.opentelemetry.io/otel/trace v1.9.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
+	golang.org/x/crypto v0.0.0-20220817201139-bc19a97f63c8 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/net v0.0.0-20220812174116-3211cb980234 // indirect
-	golang.org/x/sys v0.0.0-20220817070843-5a390386f1f2 // indirect
+	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
 	golang.org/x/text v0.3.8-0.20211105212822-18b340fc7af2 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

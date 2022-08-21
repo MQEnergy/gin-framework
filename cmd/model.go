@@ -64,8 +64,15 @@ func ModelCmd() *cli.Command {
 
 // generateModel 创建model
 func generateModel() error {
+	modelConfig := &gomodel.ModelConfig{
+		DB:      global.DB,
+		DbName:  global.Cfg.Mysql[0].DbName,
+		MDir:    mDir,
+		Prefix:  prefix,
+		IsCover: true,
+	}
 	if tbName == "all" {
-		strs, errs := gomodel.GenerateAllModel(global.DB, global.Cfg.Mysql[0].DbName, mDir, prefix)
+		strs, errs := gomodel.GenerateAllModel(modelConfig)
 		for i, str := range strs {
 			if errs[i] != nil {
 				fmt.Println(fmt.Sprintf("\x1b[31m%s\x1b[0m", str))
@@ -74,7 +81,7 @@ func generateModel() error {
 			}
 		}
 	} else {
-		str, err := gomodel.GenerateSingleModel(global.DB, global.Cfg.Mysql[0].DbName, tbName, mDir, prefix)
+		str, err := gomodel.GenerateSingleModel(modelConfig, tbName)
 		if err != nil {
 			fmt.Println(fmt.Sprintf("\x1b[31m%s\x1b[0m", str))
 			return err
