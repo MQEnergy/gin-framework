@@ -84,7 +84,7 @@ func generateModel() error {
 		str, err := gomodel.GenerateSingleModel(modelConfig, tbName)
 		if err != nil {
 			fmt.Println(fmt.Sprintf("\x1b[31m%s\x1b[0m", str))
-			return err
+			return nil
 		}
 		fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", str))
 	}
