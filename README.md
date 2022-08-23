@@ -284,8 +284,10 @@ app/controller/backend/user.go
 app/service/backend/user.go
 router/routes/common.go
 ```
-
 ### 二、具体方法
+<details>
+<summary>查看使用</summary>
+
 #### 1）`必须在链式操作中` db连接方法
 ```go
 WithDB(db *gorm.DB) *PageBuilder
@@ -446,6 +448,7 @@ paginator.LastPage
 ```go
 paginator.PerPage
 ```
+</details>
 
 ## 2、基于gin上传组件
 
@@ -489,6 +492,8 @@ COMMANDS:
 ```
 
 ## 1、执行migrate
+<details>
+<summary>查看使用</summary>
 
 ```bash
 # 安装migrate cli工具
@@ -527,6 +532,7 @@ go run main.go migrate -s all
 # 执行回滚操作：
 # 如：go run main.go migrate -s -1
 ```
+</details>
 
 ## 2、自动生成model
 
@@ -569,6 +575,10 @@ go run main.go account -help
 ```
 
 # 五、参考
+
+<details>
+<summary>查看使用</summary>
+
 ## 初始化一个接口项目需要安装的依赖包（主要）
 ### 初始化go.mod
 
@@ -683,3 +693,5 @@ go get -u github.com/samber/lo
 ```bash
 go get -u github.com/spf13/viper
 ```
+
+</details>
