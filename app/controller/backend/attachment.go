@@ -6,7 +6,6 @@ import (
 	"github.com/MQEnergy/gin-framework/pkg/util"
 	"github.com/MQEnergy/gin-framework/types/attachment"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type AttachmentController struct {
@@ -27,5 +26,5 @@ func (c *AttachmentController) Upload(ctx *gin.Context) {
 		response.BadRequestException(ctx, err.Error())
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", file)
+	response.SuccessJson(ctx, "", file)
 }

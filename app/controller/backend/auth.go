@@ -6,7 +6,6 @@ import (
 	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/MQEnergy/gin-framework/types/user"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type AuthController struct {
@@ -27,5 +26,5 @@ func (c *AuthController) Login(ctx *gin.Context) {
 		response.BadRequestException(ctx, "")
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", token)
+	response.SuccessJson(ctx, "", token)
 }

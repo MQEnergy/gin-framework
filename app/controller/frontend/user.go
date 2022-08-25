@@ -5,7 +5,7 @@ import (
 )
 
 type UserController struct {
-	base.Controller
+	*base.Controller
 }
 
-var User = UserController{}
+var User = &UserController{}

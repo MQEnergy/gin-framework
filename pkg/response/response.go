@@ -29,6 +29,14 @@ func ResponseJson(ctx *gin.Context, status int, errcode Code, message string, da
 	})
 }
 
+// SuccessJson 成功返回
+func SuccessJson(ctx *gin.Context, message string, data interface{}) {
+	if message == "" {
+		message = Success.Msg()
+	}
+	ResponseJson(ctx, http.StatusOK, Success, message, data)
+}
+
 // BadRequestException 400错误
 func BadRequestException(ctx *gin.Context, message string) {
 	if message == "" {

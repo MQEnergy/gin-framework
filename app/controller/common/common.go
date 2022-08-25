@@ -89,5 +89,5 @@ func (c *CommonController) Routes(ctx *gin.Context) {
 			return
 		}
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", casbinRuleList)
+	response.SuccessJson(ctx, "", casbinRuleList)
 }

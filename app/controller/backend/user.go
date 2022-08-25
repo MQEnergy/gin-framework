@@ -6,7 +6,6 @@ import (
 	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/MQEnergy/gin-framework/types/user"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type UserController struct {
@@ -27,7 +26,7 @@ func (c *UserController) Index(ctx *gin.Context) {
 		response.BadRequestException(ctx, err.Error())
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", list)
+	response.SuccessJson(ctx, "", list)
 }
 
 // List 获取列表
@@ -42,5 +41,5 @@ func (c *UserController) List(ctx *gin.Context) {
 		response.BadRequestException(ctx, err.Error())
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", list)
+	response.SuccessJson(ctx, "", list)
 }

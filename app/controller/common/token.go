@@ -6,7 +6,6 @@ import (
 	"github.com/MQEnergy/gin-framework/pkg/auth"
 	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strings"
 )
 
@@ -23,7 +22,7 @@ func (c *TokenController) Create(ctx *gin.Context) {
 		response.UnauthorizedException(ctx, err.Error())
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", token)
+	response.SuccessJson(ctx, "", token)
 }
 
 // View token解析
@@ -44,5 +43,5 @@ func (c *TokenController) View(ctx *gin.Context) {
 		response.UnauthorizedException(ctx, "")
 		return
 	}
-	response.ResponseJson(ctx, http.StatusOK, response.Success, "", jwtTokenArr)
+	response.SuccessJson(ctx, "", jwtTokenArr)
 }
