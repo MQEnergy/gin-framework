@@ -23,12 +23,12 @@ func GenerateTree(list interface{}, pid uint64) []TreeList {
 		var IsChecked bool
 		if e.Kind() == reflect.Struct {
 			IsChecked = e.FieldByName("IsChecked").Bool()
-			currentPid = e.FieldByName("ParentId").Uint()
-			currentId = e.FieldByName("Id").Uint()
+			currentPid = e.FieldByName("Pid").Uint()
+			currentId = e.FieldByName("ID").Uint()
 		} else {
 			IsChecked = e.Elem().FieldByName("IsChecked").Bool()
-			currentPid = e.Elem().FieldByName("ParentId").Uint()
-			currentId = e.Elem().FieldByName("Id").Uint()
+			currentPid = e.Elem().FieldByName("Pid").Uint()
+			currentId = e.Elem().FieldByName("ID").Uint()
 		}
 		if currentPid == pid {
 			child := GenerateTree(list, currentId)
