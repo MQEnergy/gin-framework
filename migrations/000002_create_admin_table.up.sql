@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `gin_admin` (
   `register_ip` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '注册ip',
   `login_time` bigint unsigned NOT NULL COMMENT '登录时间',
   `login_ip` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '登录ip',
+  `role_ids` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色IDs',
   `status` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '状态 1：正常 0：禁用',
   `created_at` bigint unsigned DEFAULT NULL,
   `updated_at` bigint unsigned DEFAULT NULL,

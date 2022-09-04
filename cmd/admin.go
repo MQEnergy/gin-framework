@@ -69,6 +69,7 @@ func generateAdmin() error {
 		RegisterIp:   "127.0.0.1",
 		LoginTime:    uint64(time.Now().Unix()),
 		LoginIp:      "127.0.0.1",
+		RoleIds:      "1",
 		Status:       1,
 		CreatedAt:    uint64(time.Now().Unix()),
 		UpdatedAt:    uint64(time.Now().Unix()),
