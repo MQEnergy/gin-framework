@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/MQEnergy/go-rabbitmq v0.1.0
-	github.com/MQEnergy/gorm-model v1.1.3
+	github.com/MQEnergy/gorm-model v1.1.4
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/casbin/casbin/v2 v2.52.2
 	github.com/casbin/gorm-adapter/v3 v3.9.0
@@ -28,7 +28,7 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/urfave/cli/v2 v2.11.2
 	gorm.io/driver/mysql v1.3.6
-	gorm.io/gorm v1.23.8
+	gorm.io/gorm v1.23.9
 )
 
 require (
