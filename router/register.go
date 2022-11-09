@@ -14,14 +14,15 @@ import (
 
 func Register() *gin.Engine {
 	gin.SetMode(global.Cfg.Server.Mode)
-	router := gin.New()
+	r := gin.New()
+	r.Use(gin.Recovery())
 	// [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
-	router.SetTrustedProxies(config.AllowIpList)
+	r.SetTrustedProxies(config.AllowIpList)
 	// header add X-Request-Id
-	router.Use(requestid.New())
-	router.Use(middleware.RequestIdAuth())
+	r.Use(requestid.New())
+	r.Use(middleware.RequestIdAuth())
 	// 404 not found
-	router.NoRoute(func(ctx *gin.Context) {
+	r.NoRoute(func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
 		method := ctx.Request.Method
 		response.NotFoundException(ctx, fmt.Sprintf("%s %s not found", method, path))
@@ -33,8 +34,8 @@ func Register() *gin.Engine {
 			cors.Default(),
 			middleware.IpAuth(),
 		}
-		commonGroup = router.Group("/", publicMiddleware...)
-		authGroup   = router.Group("/", append(publicMiddleware, middleware.LoginAuth(), middleware.CasbinAuth())...)
+		commonGroup = r.Group("/", publicMiddleware...)
+		authGroup   = r.Group("/", append(publicMiddleware, middleware.LoginAuth(), middleware.CasbinAuth())...)
 	)
 	// 公用组
 	routes.InitCommonGroup(commonGroup)
@@ -43,6 +44,6 @@ func Register() *gin.Engine {
 	// 前台组
 	routes.InitFrontendGroup(authGroup)
 	// 赋给全局
-	global.Router = router
-	return router
+	global.Router = r
+	return r
 }
