@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/MQEnergy/go-rabbitmq v0.1.0
-	github.com/MQEnergy/gorm-model v1.1.6
+	github.com/MQEnergy/gorm-model v1.1.7
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/casbin/casbin/v2 v2.57.0
 	github.com/casbin/gorm-adapter/v3 v3.13.0
