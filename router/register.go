@@ -7,7 +7,6 @@ import (
 	"github.com/MQEnergy/gin-framework/middleware"
 	"github.com/MQEnergy/gin-framework/pkg/response"
 	"github.com/MQEnergy/gin-framework/router/routes"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +16,9 @@ func Register() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
 	// [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
-	r.SetTrustedProxies(config.AllowIpList)
+	r.SetTrustedProxies(config.Whitelist)
+	// cors
+	r.Use(middleware.CorsAuth())
 	// header add X-Request-Id
 	r.Use(requestid.New())
 	r.Use(middleware.RequestIdAuth())
@@ -31,7 +32,6 @@ func Register() *gin.Engine {
 	// 路由分组
 	var (
 		publicMiddleware = []gin.HandlerFunc{
-			cors.Default(),
 			middleware.IpAuth(),
 		}
 		commonGroup = r.Group("/", publicMiddleware...)

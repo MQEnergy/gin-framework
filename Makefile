@@ -1,11 +1,5 @@
 APP=gin-framework
 
-.PHONY: bindata
-bindata:
-	@go get -u github.com/go-bindata/go-bindata/...
-	@go install github.com/go-bindata/go-bindata/...
-	@go-bindata -o=./config/config_yaml.go -pkg=config config.*.yaml
-
 .PHONY: build
 build:
 	@go build -o releases/${APP}
@@ -41,7 +35,6 @@ clean:
 
 .PHONY: help
 help:
-	@echo "1. make bindata - [go-bindata]"
 	@echo "2. make build - [go build]"
 	@echo "3. make windows - [make window package]"
 	@echo "4. make linux - [make linux package]"

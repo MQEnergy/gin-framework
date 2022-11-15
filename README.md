@@ -63,7 +63,6 @@
 - [x] 实现 [ticker](https://github.com/MQEnergy/gin-framework/blob/main/pkg/util/ticker.go) 定时器组件 
 - [x] 实现 基于gorm的 [pagination](https://github.com/MQEnergy/gin-framework/blob/main/pkg/paginator/pagination.go) 分页构造器组件
 - [x] 实现 [code](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/code.go) 统一定义的返回码，[exception](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/exception.go) 统一错误返回处理组件
-- [x] 支持 [go-bindata](https://github.com/go-bindata/go-bindata) 将数据文件转换为go代码，便于因编译成二进制找不到yaml文件配置的问题
 
 #### 下一步计划：
 - [ ] 支持 定时任务 cron

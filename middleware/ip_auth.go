@@ -12,7 +12,7 @@ func IpAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		clientIp := ctx.ClientIP()
 		flag := false
-		for _, value := range config.AllowIpList {
+		for _, value := range config.Whitelist {
 			if value == "*" || clientIp == value {
 				flag = true
 				break

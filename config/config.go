@@ -2,9 +2,8 @@ package config
 
 import (
 	"bytes"
-	"fmt"
+	"embed"
 	"github.com/spf13/viper"
-	"log"
 )
 
 // ConfEnv env环境变量
@@ -70,39 +69,20 @@ type (
 	}
 )
 
-// InitConfig 初始化config配置
-func InitConfig() *Conf {
-	fileobj, err := Asset("config." + ConfEnv + ".yaml")
-	if err != nil {
-		panic("Asset() can not found setting file " + err.Error())
-	}
-	viper.SetConfigType("yaml")
-	if err := viper.ReadConfig(bytes.NewBuffer(fileobj)); err != nil {
-		fmt.Printf("Read Config err:%v\n", err)
-		panic(err)
-	}
-	var cfg Conf
-	if err := viper.Unmarshal(&cfg); err != nil {
-		log.Fatal("Unmarshal config failed: %v", err)
-		panic(err)
-	}
-	return &cfg
-}
+//go:embed yaml
+var yamlCfg embed.FS
 
-// OriginConfig 直接读取yaml配置文件
-func OriginConfig() *Conf {
-	// viper原生写法
-	viper.SetConfigName("config." + ConfEnv)
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Read config failed: %v", err)
-		panic(err)
+// InitConfig 初始化配置
+func InitConfig() (*Conf, error) {
+	var cfg *Conf
+	v := viper.New()
+	v.SetConfigType("yaml")
+	yamlConf, _ := yamlCfg.ReadFile("yaml/config." + ConfEnv + ".yaml")
+	if err := v.ReadConfig(bytes.NewBuffer(yamlConf)); err != nil {
+		return nil, err
 	}
-	var cfg Conf
-	if err := viper.Unmarshal(&cfg); err != nil {
-		log.Fatal("Unmarshal config failed: %v", err)
-		panic(err)
+	if err := v.Unmarshal(&cfg); err != nil {
+		return nil, err
 	}
-	return &cfg
+	return cfg, nil
 }
