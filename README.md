@@ -81,19 +81,13 @@
 
 ```bash
 go mod tidy 
-
-# 执行make（查看Makefile文件）
-make bindata
-```
-### 注意：
-```
-除dev的环境配置外，修改yaml配置文件内容时候，需要执行 make bindata，重新将数据文件转换为go代码，部署test,prod环境上线才生效。
 ```
 
 ## 2、服务启动
 
 ```bash
 go run main.go 
+
 # 查看 main.go的参数
 go run main.go --help
 ```
