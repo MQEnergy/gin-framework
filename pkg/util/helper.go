@@ -27,12 +27,15 @@ func InAnySlice[T string | int | int64 | float32 | float64](haystack []T, needle
 }
 
 // GenerateBaseSnowId 生成雪花算法ID
-func GenerateBaseSnowId(num int) string {
-	node, err := snowflake.NewNode(1)
-	if err != nil {
-		return ""
+func GenerateBaseSnowId(num int, n *snowflake.Node) string {
+	if n == nil {
+		node, err := snowflake.NewNode(1)
+		if err != nil {
+			return ""
+		}
+		n = node
 	}
-	id := node.Generate()
+	id := n.Generate()
 	switch num {
 	case 2:
 		return id.Base2()
