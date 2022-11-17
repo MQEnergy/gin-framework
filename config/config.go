@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"embed"
 	"github.com/spf13/viper"
+	"gorm.io/gorm/logger"
 )
 
 // ConfEnv env环境变量
@@ -37,15 +38,16 @@ type (
 		DirPath  string `yaml:"dirPath" default:"runtime/logs"`
 	}
 	Mysql []struct {
-		Host         string `yaml:"host" default:"127.0.0.1"`
-		Port         string `yaml:"port" default:"3306"`
-		User         string `yaml:"user" default:"root"`
-		Password     string `yaml:"password" default:"123456"`
-		DbName       string `yaml:"dbname"`
-		Prefix       string `yaml:"prefix" default:""`
-		MaxIdleConns int    `yaml:"maxIdleConns" default:"10"`
-		MaxOpenConns int    `yaml:"maxOpenConns" default:"100"`
-		MaxLifeTime  int    `yaml:"maxLifeTime" default:"60"`
+		Host         string          `yaml:"host" default:"127.0.0.1"`
+		Port         string          `yaml:"port" default:"3306"`
+		User         string          `yaml:"user" default:"root"`
+		Password     string          `yaml:"password" default:"123456"`
+		DbName       string          `yaml:"dbname"`
+		Prefix       string          `yaml:"prefix" default:""`
+		MaxIdleConns int             `yaml:"maxIdleConns" default:"10"`
+		MaxOpenConns int             `yaml:"maxOpenConns" default:"100"`
+		MaxLifeTime  int             `yaml:"maxLifeTime" default:"60"`
+		LogLevel     logger.LogLevel `yaml:"logLevel" default:"1"`
 	}
 	Redis struct {
 		Host        string `yaml:"host" default:"127.0.0.1"`

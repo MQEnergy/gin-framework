@@ -22,6 +22,7 @@ mysql:
     maxIdleConns: 10 # 设置空闲连接池中连接的最大数量
     maxOpenConns: 100 # 设置打开数据库连接的最大数量
     maxLifeTime: 60 # 设置了连接可复用的最大时间（分钟）
+    logLevel: 3 # 日志模式 1:slient 2:error 3:warn 4:info
 redis:
   host: '127.0.0.1'
   port: '6379'

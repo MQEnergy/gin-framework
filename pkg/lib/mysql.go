@@ -1,9 +1,11 @@
 package lib
 
 import (
+	"database/sql"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"time"
 )
@@ -18,6 +20,7 @@ type DatabaseConfig struct {
 	MaxIdleConns int
 	MaxOpenConns int
 	MaxLifeTime  int // 分钟
+	LogLevel     logger.LogLevel
 }
 
 // NewMysql 数据库连接
@@ -28,6 +31,7 @@ func NewMysql(config DatabaseConfig) (*gorm.DB, error) {
 			TablePrefix:   config.Prefix,
 			SingularTable: true, // 是否设置单数表名，设置为 是
 		},
+		Logger: logger.Default.LogMode(config.LogLevel),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("Unable to connect to the database, please check the MySQL configuration information first,the error details are:" + err.Error())
@@ -41,4 +45,26 @@ func NewMysql(config DatabaseConfig) (*gorm.DB, error) {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Duration(config.MaxLifeTime))
 	return db, nil
+}
+
+// NewNullString
+func NewNullString(s string) sql.NullString {
+	if len(s) == 0 {
+		return sql.NullString{}
+	}
+	return sql.NullString{
+		String: s,
+		Valid:  true,
+	}
+}
+
+// NewNullInt64
+func NewNullInt64(s int64) sql.NullInt64 {
+	if s == 0 {
+		return sql.NullInt64{}
+	}
+	return sql.NullInt64{
+		Int64: s,
+		Valid: true,
+	}
 }
