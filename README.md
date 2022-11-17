@@ -17,31 +17,42 @@
 # 一、目录结构
 
 ```
-├── app                         # 模块存放目录
-│   ├── controller              # 控制器
-│   └── service                 # 服务层
-├── bootstrap                   # 初始化程序加载服务
-│   ├── rbac_model.conf         # rbac配置文件
-├── cmd                         # command命令
-├── config                      # 解析配置文件
-├── types                       # 存放表对应的实体 / 请求参数的结构体
-├── global                      # 一些全局变量和全局方法
-├── main.go                     # 主进程启动文件
-├── middleware                  # 中间件
-├── migrations                  # 数据迁移的sql文件目录
-├── models                      # 对应数据库的模型
-├── pkg                         # 自定义的常用服务，JWT,助手函数等
-│   ├── auth                    # jwt
-│   ├── lib                     # 日志服务，数据库服务，redis服务
-│   ├── paginator               # 分页器
-│   ├── response                # http请求返回的状态和格式化
-│   ├── util                    # 助手函数
-│   └── validator               # 验证器
-├── config.dev.yaml             # 开发环境配置文件
-├── config.test.yaml            # 测试环境配置文件
-├── config.prod.yaml            # 正式环境配置文件
-├── router                      # 路由配置
-├── runtime                     # 运行时文件 如日志
+├── Dockerfile
+├── LICENSE
+├── Makefile                        # makefile 
+├── README.md
+├── app                             # 模块存放目录
+│   ├── amqp                        # 消息队列
+│   ├── controller                  # 控制器
+│   └── service                     # 服务层
+├── bootstrap                       # 初始化程序加载服务
+├── cmd                             # command命令
+│   ├── admin.go                    # 生成admin后台账号
+│   ├── controller.go               # 生成controller控制器
+│   ├── migrate.go                  # 生成migrate数据库迁移
+│   ├── model.go                    # 生成model数据模型
+│   ├── service.go                  # 生成服务层
+├── config
+│   ├── config.go                   # yaml配置文件映射成结构体
+│   ├── white_list.go               # 白名单
+│   └── yaml                        # yaml配置文件目录
+├── global                          # 全局变量和全局方法
+├── go.mod
+├── go.sum
+├── main.go
+├── middleware                      # 中间件
+├── migrations                      # 迁移文件
+├── models                          # 模型
+├── pkg                             # 自定义的常用服务，JWT,助手函数等
+│   ├── auth                        # jwt
+│   ├── lib                         # 日志服务，数据库服务，redis服务等
+│   ├── paginator                   # 分页器
+│   ├── response                    # http请求返回的状态和格式化
+│   ├── util                        # 助手函数
+│   └── validator                   # 参数验证器
+├── router                          # 路由配置
+├── runtime                         # 运行时产生的文件 如日志等
+├── types                           # 所有自定义的结构体
 ```
 #### 目前已集成和实现：
 - [x] 支持 [jwt](https://github.com/dgrijalva/jwt-go) Authorization token验证组件
