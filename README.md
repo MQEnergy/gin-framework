@@ -145,7 +145,7 @@ go run main.go migrate -help
 # 查看make命令行
 make help
 
-# 基础打包，生成可执行文件
+# 基础打包，生成可执行文件（根据当前系统）
 make build
 
 # 打包windows
