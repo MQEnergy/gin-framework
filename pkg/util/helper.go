@@ -17,7 +17,7 @@ import (
 )
 
 // InAnySlice 判断某个字符串是否在字符串切片中
-func InAnySlice[T string | int | int64 | float32 | float64](haystack []T, needle T) bool {
+func InAnySlice[T comparable](haystack []T, needle T) bool {
 	for _, v := range haystack {
 		if v == needle {
 			return true

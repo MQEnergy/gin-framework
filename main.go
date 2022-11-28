@@ -17,9 +17,13 @@ var (
 	// AppName 当前应用名称
 	AppName  = "gin-framework"
 	AppUsage = "使用gin框架作为基础开发库，封装一套适用于面向api编程的快速开发框架"
-	// AuthorName 作者
-	AuthorName  = "chenxi"
-	AuthorEmail = "bbxycx.18@163.com"
+	// Authors 作者
+	Authors = []*cli.Author{
+		{
+			Name:  "chenxi",
+			Email: "bbxycx.18@163.com",
+		},
+	}
 	//	AppPort 程序启动端口
 	AppPort string
 	//	BuildVersion 编译的app版本
@@ -44,12 +48,7 @@ func Stack() *cli.App {
 		Name:    AppName,
 		Version: buildInfo,
 		Usage:   AppUsage,
-		Authors: []*cli.Author{
-			{
-				Name:  AuthorName,
-				Email: AuthorEmail,
-			},
-		},
+		Authors: Authors,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "env",
