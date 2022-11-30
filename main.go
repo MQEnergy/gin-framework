@@ -30,7 +30,8 @@ var (
 	BuildVersion string
 	//	BuildAt 编译时间
 	BuildAt string
-	_UI     = `
+	// https://patorjk.com/software/taag/#p=testall&v=1&f=ANSI%20Shadow&t=O2O-AMQP%20
+	_UI = `
  ██████╗ ██╗███╗   ██╗      ███████╗██████╗  █████╗ ███╗   ███╗███████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
 ██╔════╝ ██║████╗  ██║      ██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔════╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
 ██║  ███╗██║██╔██╗ ██║█████╗█████╗  ██████╔╝███████║██╔████╔██║█████╗  ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
@@ -81,6 +82,7 @@ func Stack() *cli.App {
 			cmd.ModelCmd(),      // 模型创建
 			cmd.ControllerCmd(), // 控制器创建
 			cmd.ServiceCmd(),    // 服务类创建
+			cmd.CommandCmd(),    // 命令工具创建
 		},
 	}
 }
