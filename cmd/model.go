@@ -10,10 +10,11 @@ import (
 )
 
 var (
-	tbName string
-	mDir   string // 模型存储目录
-	prefix string // 数据表前缀
-	dsn    string // 数据库连接信息
+	tbName  string
+	mDir    string // 模型存储目录
+	prefix  string // 数据表前缀
+	dsn     string // 数据库连接信息
+	isCover bool   // 是否覆盖
 )
 
 // ModelCmd 数据库模型创建命令
@@ -54,6 +55,14 @@ func ModelCmd() *cli.Command {
 				Destination: &prefix,
 				Required:    false,
 			},
+			&cli.BoolFlag{
+				Name:        "isCover",
+				Aliases:     []string{"ic"},
+				Value:       false,
+				Usage:       "是否覆盖 true:覆盖已经生成的 false:不覆盖",
+				Destination: &isCover,
+				Required:    false,
+			},
 		},
 		Action: func(ctx *cli.Context) error {
 			bootstrap.BootService(bootstrap.MysqlService)
@@ -69,7 +78,7 @@ func generateModel() error {
 		DbName:  global.Cfg.Mysql[0].DbName,
 		MDir:    mDir,
 		Prefix:  prefix,
-		IsCover: true,
+		IsCover: isCover,
 	}
 	if tbName == "all" {
 		strs, errs := gomodel.GenerateAllModel(modelConfig)
