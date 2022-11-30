@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gogf/gf/v2/text/gstr"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/hashicorp/go-uuid"
 	"gorm.io/gorm/schema"
 	"io"
@@ -29,10 +30,11 @@ func InAnySlice[T comparable](haystack []T, needle T) bool {
 // GenerateBaseSnowId 生成雪花算法ID
 func GenerateBaseSnowId(num int, n *snowflake.Node) string {
 	if n == nil {
-		node, err := snowflake.NewNode(1)
+		localIp, err := GetLocalIpToInt()
 		if err != nil {
 			return ""
 		}
+		node, err := snowflake.NewNode(int64(localIp) % 1023)
 		n = node
 	}
 	id := n.Generate()
@@ -48,7 +50,7 @@ func GenerateBaseSnowId(num int, n *snowflake.Node) string {
 	case 64:
 		return id.Base64()
 	default:
-		return id.Base32()
+		return gconv.String(id.Int64())
 	}
 }
 

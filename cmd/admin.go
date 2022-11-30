@@ -58,7 +58,7 @@ func AccountCmd() *cli.Command {
 func generateAdmin() error {
 	salt := util.GenerateUuid(32)
 	admin := &models.GinAdmin{
-		Uuid:         util.GenerateBaseSnowId(32, nil),
+		Uuid:         util.GenerateBaseSnowId(0, nil),
 		Account:      account,
 		Password:     util.GeneratePasswordHash(password, salt),
 		Phone:        "12345678901",
