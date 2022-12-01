@@ -44,11 +44,12 @@ func generateCommand() error {
 
 import (
 	"%s/bootstrap"
+	"%s/config"
 	"github.com/urfave/cli/v2"
 )
 
 var (
-	params string
+	%sParams string
 )
 
 // %sCmd command工具创建命令
@@ -58,16 +59,24 @@ func %sCmd() *cli.Command {
         Usage: "Create a new %s",
         Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:        "params",
+				Name:        "env",
+				Aliases:     []string{"e"},
+				Value:       "dev",
+				Usage:       "请选择配置文件 [dev | test | prod]",
+				Destination: &config.ConfEnv,
+				Required:    false,
+			},
+			&cli.StringFlag{
+				Name:        "%sParams",
 				Aliases:     []string{"p"},
 				Value:       "",
-				Usage:       "请输入命令工具名称 如：command",
-				Destination: &params,
+				Usage:       "参数值",
+				Destination: &%sParams,
 				Required:    true,
 			},
 		},
 		Action: func(c *cli.Context) error {
-			bootstrap.BootService(bootstrap.LoggerService)
+			bootstrap.BootService() // 可按需引用服务 bootstrap.LoggerService, bootstrap.MysqlService, bootstrap.RedisService
 			return generate%s()
 		},
 	}
@@ -77,9 +86,10 @@ func %sCmd() *cli.Command {
 func generate%s() error {
 	return nil
 }
-`, projectModuleName, firstUpperCtlName, firstUpperCtlName,
-		cmdName, firstUpperCtlName, firstUpperCtlName,
-		firstUpperCtlName, firstUpperCtlName)
+`,
+		projectModuleName, projectModuleName, cmdName, firstUpperCtlName,
+		firstUpperCtlName, cmdName, firstUpperCtlName, cmdName, cmdName,
+		firstUpperCtlName, firstUpperCtlName, firstUpperCtlName)
 
 	path := "cmd/" + cmdName + ".go"
 	if flag := util.IsPathExist(path); !flag {
