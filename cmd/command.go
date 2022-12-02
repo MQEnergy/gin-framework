@@ -11,6 +11,7 @@ import (
 
 var (
 	name string
+	dir  string
 )
 
 // CommandCmd 创建command工具
@@ -27,6 +28,14 @@ func CommandCmd() *cli.Command {
 				Destination: &name,
 				Required:    true,
 			},
+			&cli.StringFlag{
+				Name:        "dir",
+				Aliases:     []string{"d"},
+				Value:       "",
+				Usage:       "请输入命令工具目录 如：test",
+				Destination: &dir,
+				Required:    false,
+			},
 		},
 		Action: func(c *cli.Context) error {
 			bootstrap.BootService(bootstrap.LoggerService)
@@ -38,9 +47,20 @@ func CommandCmd() *cli.Command {
 // generateCommand 生成command命令工具
 func generateCommand() error {
 	cmdName := strings.ToLower(name)
+	cmdDir := strings.ToLower(dir)
 	firstUpperCtlName := strings.ToUpper(cmdName[:1]) + cmdName[1:]
 	projectModuleName := util.GetProjectModuleName()
-	content := fmt.Sprintf(`package cmd
+	path := "cmd/"
+	packageName := "cmd"
+	if cmdDir != "" {
+		path += cmdDir + "/"
+		if err := util.MakeMultiDir(path); err != nil {
+			return err
+		}
+		packageName = cmdDir
+	}
+	path += cmdName + ".go"
+	content := fmt.Sprintf(`package %s
 
 import (
 	"%s/bootstrap"
@@ -87,18 +107,17 @@ func generate%s() error {
 	return nil
 }
 `,
-		projectModuleName, projectModuleName, cmdName, firstUpperCtlName,
-		firstUpperCtlName, cmdName, firstUpperCtlName, cmdName, cmdName,
-		firstUpperCtlName, firstUpperCtlName, firstUpperCtlName)
+		packageName, projectModuleName, projectModuleName, cmdName,
+		firstUpperCtlName, firstUpperCtlName, cmdName, firstUpperCtlName,
+		cmdName, cmdName, firstUpperCtlName, firstUpperCtlName, firstUpperCtlName)
 
-	path := "cmd/" + cmdName + ".go"
 	if flag := util.IsPathExist(path); !flag {
 		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
 			fmt.Println(fmt.Sprintf("\x1b[31m%s\x1b[0m", cmdName+".go create failed"))
 			return nil
 		}
 		fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", cmdName+".go create success"))
-		fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", "1、需要在main.go的Commands中引用如下：cmd."+firstUpperCtlName+"Cmd()"))
+		fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", "1、需要在main.go的Commands中引用如下："+packageName+"."+firstUpperCtlName+"Cmd()"))
 		fmt.Println(fmt.Sprintf("\u001B[34m%s\u001B[0m", "2、查看帮助：go run main.go "+cmdName+" --help"))
 		return nil
 	}
