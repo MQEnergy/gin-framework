@@ -73,8 +73,15 @@ func getRequestParams(ctx *gin.Context) string {
 		}
 		return strings.Join(params, "&")
 	}
+	if ctx.ContentType() == "multipart/form-data" {
+		multipartForm, _ := ctx.MultipartForm()
+		marshal, _ := json.Marshal(multipartForm.Value)
+		return string(marshal)
+	}
 	if ctx.ContentType() != "application/json" {
-		ctx.Request.ParseForm()
+		if err := ctx.Request.ParseForm(); err != nil {
+			return ""
+		}
 		return ctx.Request.PostForm.Encode()
 	}
 	rawData, _ := ctx.GetRawData()
