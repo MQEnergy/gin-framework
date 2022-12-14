@@ -3,6 +3,7 @@ server:
   defaultPageSize: 10 # 默认分页条数
   maxPageSize: 500    # 最大分页条数
   fileUploadPath: './' # 文件上传路径
+  fileHostUrl: 'http://127.0.0.1:9527/' # 文件访问域名
 jwt:
   tokenExpire: 864000   # token过期时间
   tokenKey: 'Authorization' # token的键名

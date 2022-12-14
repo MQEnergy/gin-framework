@@ -25,6 +25,7 @@ type (
 		DefaultPageSize int    `yaml:"defaultPageSize" default:"10"`
 		MaxPageSize     int    `yaml:"maxPageSize" default:"500"`
 		FileUploadPath  string `yaml:"fileUploadPath"`
+		FileHostUrl     string `yaml:"fileHostUrl" default:""`
 	}
 	Jwt struct {
 		TokenExpire int64  `yaml:"tokenExpire" default:"864000"`
