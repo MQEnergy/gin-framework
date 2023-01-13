@@ -16,15 +16,15 @@ var Attachment = AttachmentController{}
 
 // Upload 上传图片
 func (c *AttachmentController) Upload(ctx *gin.Context) {
-	var requestParams attachment.UploadRequest
-	if err := c.ValidateReqParams(ctx, &requestParams); err != nil {
+	var reqParams attachment.UploadRequest
+	if err := c.ValidateReqParams(ctx, &reqParams); err != nil {
 		response.BadRequestException(ctx, err.Error())
 		return
 	}
-	file, err := util.UploadFile(requestParams.FilePath, ctx)
+	fileHeader, err := util.NewUpload(0, nil).UploadFile(reqParams.FileName, reqParams.FilePath)
 	if err != nil {
 		response.BadRequestException(ctx, err.Error())
 		return
 	}
-	response.SuccessJson(ctx, "", file)
+	response.SuccessJson(ctx, "", fileHeader)
 }

@@ -35,10 +35,16 @@ func (c *Controller) View(ctx *gin.Context) {
 // ValidateReqParams 验证请求参数
 func (c *Controller) ValidateReqParams(ctx *gin.Context, requestParams interface{}) error {
 	var err error
-	if ctx.ContentType() != "application/json" {
-		err = ctx.Bind(requestParams)
-	} else {
-		err = ctx.BindJSON(requestParams)
+	switch ctx.ContentType() {
+	case "application/json":
+		err = ctx.ShouldBindJSON(requestParams)
+	case "application/xml":
+		err = ctx.ShouldBindXML(requestParams)
+	case "":
+		err = ctx.ShouldBindUri(requestParams)
+		err = ctx.ShouldBindQuery(requestParams)
+	default:
+		err = ctx.ShouldBind(requestParams)
 	}
 	if err != nil {
 		translate := validator.Translate(err)

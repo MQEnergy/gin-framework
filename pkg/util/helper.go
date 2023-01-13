@@ -10,11 +10,14 @@ import (
 	"github.com/hashicorp/go-uuid"
 	"gorm.io/gorm/schema"
 	"io"
+	"io/ioutil"
+	"mime/multipart"
 	"os"
 	"os/exec"
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // InAnySlice 判断某个字符串是否在字符串切片中
@@ -117,13 +120,57 @@ func MakeMultiDir(filePath string) error {
 }
 
 // MakeFileOrPath 创建文件/文件夹
-func MakeFileOrPath(path string) bool {
-	create, err := os.Create(path)
-	defer create.Close()
+func MakeFileOrPath(path string) (*os.File, error) {
+	file, err := os.Create(path)
 	if err != nil {
-		return false
+		return nil, err
 	}
-	return true
+	defer file.Close()
+	return file, nil
+}
+
+// WriteContentToFile
+// @Description: 写文件
+// @param filePath
+// @return error
+func WriteContentToFile(file *multipart.FileHeader, filePath string) error {
+	f, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	open, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer open.Close()
+	fileBytes, err := ioutil.ReadAll(open)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write(fileBytes); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MakeTimeFormatDir
+// @Description: 创建时间格式的目录 如：upload/{path}/2023-01-07/
+// @param rootPath 根目录
+// @param pathName 子目录名称
+// @param timeFormat 时间格式 如：2006-01-02、20060102
+// @return string
+// @return error
+func MakeTimeFormatDir(rootPath, pathName, timeFormat string) (string, error) {
+	filePath := "upload/"
+	if pathName != "" {
+		filePath += pathName + "/"
+	}
+	filePath += time.Now().Format(timeFormat) + "/"
+	if err := MakeMultiDir(rootPath + filePath); err != nil {
+		return "", err
+	}
+	return filePath, nil
 }
 
 // String2Int 将数组的string转int
