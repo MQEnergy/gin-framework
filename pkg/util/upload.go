@@ -63,7 +63,7 @@ func (u *Upload) UploadFile(file *multipart.FileHeader, path string) (*FileHeade
 		return nil, errors.New("超过最大上传大小 不能超过" + strconv.Itoa(u.MaxUploadSize/(1000*1000)) + "M")
 	}
 	if !InAnySlice[string](u.AllowTypes, fileType) {
-		return nil, errors.New("上传文件格式错误 支持格式" + strings.Join(AllowTypes, ","))
+		return nil, errors.New("上传文件格式错误 支持格式" + strings.Join(u.AllowTypes, ","))
 	}
 	// 创建时间目录
 	filePath, err := MakeTimeFormatDir(global.Cfg.Server.FileUploadPath, path, "2006-01-02")
