@@ -1,4 +1,4 @@
-# :zap::rocket: 以gin框架为基础，封装一套基于go1.18+的适用于面向api编程的快速开发框架
+# :zap::rocket: Based on the gin framework, we have developed a user-friendly, simple, and fast development framework for API programming using go1.18+.
 
 ```
  ██████╗ ██╗███╗   ██╗      ███████╗██████╗  █████╗ ███╗   ███╗███████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
@@ -14,97 +14,100 @@
 [![GitHub license](https://img.shields.io/github/license/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/MQEnergy/gin-framework)](https://github.com/MQEnergy/gin-framework/stargazers)
 
-# 一、目录结构
+[中文文档](README.zh_CN.md)
+
+# I、Directory Structure
 
 ```
 ├── Dockerfile
 ├── LICENSE
-├── Makefile                        # makefile 
+├── Makefile                        # makefile
 ├── README.md
-├── app                             # 模块存放目录
-│   ├── amqp                        # 消息队列
-│   ├── controller                  # 控制器
-│   └── service                     # 服务层
-├── bootstrap                       # 初始化程序加载服务
-├── cmd                             # command命令
-│   ├── admin.go                    # 生成admin后台账号
-│   ├── controller.go               # 生成controller控制器
-│   ├── migrate.go                  # 生成migrate数据库迁移
-│   ├── model.go                    # 生成model数据模型
-│   ├── service.go                  # 生成服务层
+├── app                             # Directory holding modules
+│   ├── amqp                        # Message queue
+│   ├── controller                  # Controller
+│   └── service                     # Service layer
+├── bootstrap                       # Initialization program loading service
+├── cmd                             # Command commands
+│   ├── admin.go                    # Generate admin backend account
+│   ├── controller.go               # Generate controller
+│   ├── migrate.go                  # Generate migrate database migration
+│   ├── model.go                    # Generate model data model
+│   ├── service.go                  # Generate service layer
 ├── config
-│   ├── config.go                   # yaml配置文件映射成结构体
-│   ├── white_list.go               # 白名单
-│   └── yaml                        # yaml配置文件目录
-├── global                          # 全局变量和全局方法
+│   ├── config.go                   # Map yaml configuration file to structure
+│   ├── white_list.go               # Whitelist
+│   └── yaml                        # yaml configuration file directory
+├── global                          # Global variables and global methods
 ├── go.mod
 ├── go.sum
 ├── main.go
-├── middleware                      # 中间件
-├── migrations                      # 迁移文件
-├── models                          # 模型
-├── pkg                             # 自定义的常用服务，JWT,助手函数等
+├── middleware                      # Middleware
+├── migrations                      # Migration files
+├── models                          # Models
+├── pkg                             # Custom common services, JWT, helper functions, etc.
 │   ├── auth                        # jwt
-│   ├── lib                         # 日志服务，数据库服务，redis服务等
-│   ├── paginator                   # 分页器
-│   ├── response                    # http请求返回的状态和格式化
-│   ├── util                        # 助手函数
-│   └── validator                   # 参数验证器
-├── router                          # 路由配置
-├── runtime                         # 运行时产生的文件 如日志等
-├── types                           # 所有自定义的结构体
-```
-#### 目前已集成和实现：
-- [x] 支持 [jwt](https://github.com/dgrijalva/jwt-go) Authorization token验证组件
-- [x] 支持 [cors](https://github.com/gin-contrib/cors) 接口跨域组件
-- [x] 支持 [gorm](https://gorm.io) 数据库操作组件
-- [x] 支持 [gorm-model](https://github.com/MQEnergy/gorm-model) 自主实现的基于gorm生成的映射数据表的model结构体
-- [x] 支持 [logrus](https://github.com/sirupsen/logrus) 日志收集组件
-- [x] 支持 [go-redis](https://github.com/go-redis/redis) redis连接组件
-- [x] 支持 [migrate](https://github.com/golang-migrate/migrate) 数据库迁移组件
-- [x] 支持 [controller、service](https://github.com/MQEnergy/gin-framework/tree/main/command) 命令行方式生成代码工具
-- [x] 支持 [go-websocket](https://github.com/MQEnergy/go-websocket) 基于 gorilla/websocket 实现的即时通讯组件（单个客户端，多个客户端，群组，广播推送等）
-- [x] 支持 [go-rabbitmq](https://github.com/MQEnergy/go-rabbitmq) 消息队列组件 基于rabbitmq官方 [amqp](https://github.com/streadway/amqp) 组件封装实现的消费者和生产者
-- [x] 支持 [casbin](https://github.com/casbin/casbin) rbac权限 集成于中间件中 [casbin_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/casbin_auth.go)
-- [x] 支持 [requestId](https://github.com/gin-contrib/requestid) 中间件 实现了方便链路追踪日志记录中间件 [requestid_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/requestid_auth.go)
-- [x] 支持 [viper](https://github.com/spf13/viper) yaml、json、toml等配置文件解析组件
-- [x] 支持 [validator](https://github.com/go-playground/validator) 数据字段验证器组件，同时支持中文
-- [x] 支持 [snowflake](https://github.com/bwmarrin/snowflake) 生成雪花算法全局唯一ID
-- [x] 实现 ip白名单配置 集成于中间件中 [ip_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/ip_auth.go)
-- [x] 实现 [ticker](https://github.com/MQEnergy/gin-framework/blob/main/pkg/util/ticker.go) 定时器组件 
-- [x] 实现 基于gorm的 [pagination](https://github.com/MQEnergy/gin-framework/blob/main/pkg/paginator/pagination.go) 分页构造器组件
-- [x] 实现 [code](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/code.go) 统一定义的返回码，[exception](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/exception.go) 统一错误返回处理组件
-
-#### 下一步计划：
-- [ ] 支持 定时任务 cron
-- [ ] 支持 [pprof](https://github.com/gin-contrib/pprof) 性能剖析组件
-- [ ] 支持 trace 项目内部链路追踪
-- [ ] 支持 [rate](https://pkg.go.dev/golang.org/x/time/rate) 接口限流组件
-- [ ] 支持 [grpc](https://github.com/grpc/grpc-go) rpc组件
-
-# 二、启动服务
-
-```
-注意启动前需要将 mysql服务和redis服务开启，并配置config.dev.yaml文件(默认读取dev环境)中的mysql和redis配置
+│   ├── lib                         # Log service, database service, redis service, etc.
+│   ├── paginator                   # Paginator
+│   ├── response                    # Http request returns status and formatting
+│   ├── util                        # Helper function
+│   └── validator                   # Parameter validator
+├── router                          # Route configuration
+├── runtime                         # Files produced at runtime, such as logs, etc.
+├── types                           # All custom structures
 ```
 
-## 1、安装依赖和初始化
+#### Currently integrated and implemented:
+- [x] Support for [jwt](https://github.com/dgrijalva/jwt-go) Authorization token validation component
+- [x] Support for [cors](https://github.com/gin-contrib/cors) interface cross-domain component
+- [x] Support for [gorm](https://gorm.io) database operation component
+- [x] Support for [gorm-model](https://github.com/MQEnergy/gorm-model) self-implemented model structure based on gorm-generated mapping data tables
+- [x] Support for [logrus](https://github.com/sirupsen/logrus) log collection component
+- [x] Support for [go-redis](https://github.com/go-redis/redis) redis connection component
+- [x] Support for [migrate](https://github.com/golang-migrate/migrate) database migration component
+- [x] Support for [controller, service](https://github.com/MQEnergy/gin-framework/tree/main/command) command-line code generation tool
+- [x] Support for [go-websocket](https://github.com/MQEnergy/go-websocket) real-time communication component based on gorilla/websocket (single client, multiple clients, groups, broadcast, etc.)
+- [x] Support for [go-rabbitmq](https://github.com/MQEnergy/go-rabbitmq) message queue component implemented based on rabbitmq's official [amqp](https://github.com/streadway/amqp) consumer and producer encapsulation
+- [x] Support for [casbin](https://github.com/casbin/casbin) rbac permissions integrated in middleware [casbin_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/casbin_auth.go)
+- [x] Support for [requestId](https://github.com/gin-contrib/requestid) middleware that implements convenient tracking log middleware [requestid_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/requestid_auth.go)
+- [x] Support for [viper](https://github.com/spf13/viper) configuration file parsing component for yaml, json, toml, etc.
+- [x] Support for [validator](https://github.com/go-playground/validator) data field validator component, supporting Chinese language
+- [x] Support for [snowflake](https://github.com/bwmarrin/snowflake) generate globally unique IDs with snowflake algorithm
+- [x] Implementation of ip whitelist configuration integrated in middleware [ip_auth.go](https://github.com/MQEnergy/gin-framework/blob/main/middleware/ip_auth.go)
+- [x] Implementation of [ticker](https://github.com/MQEnergy/gin-framework/blob/main/pkg/util/ticker.go) timer component
+- [x] Implementation of [pagination](https://github.com/MQEnergy/gin-framework/blob/main/pkg/paginator/pagination.go) builder component based on gorm
+- [x] Implementation of [code](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/code.go) unified defined return code, [exception](https://github.com/MQEnergy/gin-framework/tree/main/pkg/response/exception.go) unified error return handling component
+  
+#### Next step plans:
+- [ ] Support cron for schedule tasks
+- [ ] Support performance analysis component [pprof](https://github.com/gin-contrib/pprof)
+- [ ] Support internal link tracking for trace project
+- [ ] Support interface flow control component [rate](https://pkg.go.dev/golang.org/x/time/rate)
+- [ ] Support [grpc](https://github.com/grpc/grpc-go) rpc component
+
+# II. Start the service.
+
+```
+Note that before starting, you need to enable the MySQL and Redis services, and configure the MySQL and Redis settings in the config.dev.yaml file (which defaults to the dev environment).
+```
+
+## 1、Install dependencies and initialize.
 
 ```bash
 go mod tidy 
 ```
 
-## 2、服务启动
+## 2、Service started.
 
 ```bash
 go run main.go 
 
-# 查看 main.go的参数
+# View parameters of main.go.
 go run main.go --help
 ```
 
-## 3、访问如下表示成功启动
-请求：http://127.0.0.1:9527/ping
+## 3、The visit indicates that successful startup.
+Request：http://127.0.0.1:9527/ping
 ```json
 {
     "status": 200,
@@ -115,61 +118,60 @@ go run main.go --help
 }
 ```
 
-## 4、安装热更新
+## 4、Install hot updates.
 
 ```bash
 go install github.com/cosmtrek/air@latest
 ```
 
-命令行敲入：air 即可执行热更新 代码编辑即更新
+Type in the command line: "air" to execute hot update. The code edits will update automatically.
 
-## 5、部署casbin权限（重要！（按以下步骤执行））
+## 5、Deploy Casbin authorization (Important! (Follow the steps below))
 ```
-此步骤针对于backend接口进行权限访问
+This step is intended for accessing permission for backend interfaces.
 ```
-### 1）执行migrate
+### 1）Perform migrate.
 ```bash
 go run main.go migrate -s=all
 
-# 具体参数查看help
+# Please check the specific parameters in the "help" section.
 go run main.go migrate -help
 ```
-### 2）请求 `/routes` 接口
+### 2）Request the `/routes` interface.
 ```
-此接口会创建一个基于casbin的超级管理员权限
+This interface will create a super administrator role based on casbin.
 ```
 
-## 6、打包上线
+## 6、Packaging and Launching Online
 
 ```bash
-# 查看make命令行
+# Viewing the make command line
 make help
 
-# 基础打包，生成可执行文件（根据当前系统）
+# Basic packaging to generate executable file (based on the current system)
 make build
 
-# 打包windows
+# Packaging for Windows
 make windows
 
-# 打包darwin
+# Packaging for Darwin
 make darwin
 
-# 打包linux
+# Packaging for Linux
 make linux
 ```
-在releases中查看打包的文件
+View packaged files in the releases section.
 
-# 三、组件使用
+# III、Component Usage
 
-## 1、基于gorm的查询分页构造器
-引用包
+## 1、Query pagination constructor based on GORM.
 
 ```go
 import "github.com/MQEnergy/gin-framework/pkg/paginator"
 ```
 
-### 一、基础用法
-#### 1）单表分页基础用法：
+### I、Basic Usage
+#### 1）Basic usage of pagination for a single table:
 
 ```go
 var memberList = make([]models.GinAdmin, 0)
@@ -182,20 +184,20 @@ paginator, err := paginator.NewBuilder().
 return paginator, err
 ```
 
-#### 2）连表joins查询用法：
-定义接收struct
+#### 2）Usage of join queries in databases:
+Define receiving struct.
 ```go
 type BaseUser models.GinUser
 type GinUserInfo models.GinUserInfo
 
-// UserList 获取关联列表
+// UserList get user lists.
 type UserList struct {
 	BaseUser
 	GinUserInfo `gorm:"foreignKey:user_id" json:"user_info"`
 }
 ```
 
-用法一：
+Usage 1:
 ```go
 var userList = make([]user.UserList, 0)
 pagination, err := paginator.NewBuilder().
@@ -211,7 +213,7 @@ pagination, err := paginator.NewBuilder().
 return pagination, err
 ```
 
-用法二：
+Usage two:
 ```go
 var userList = make([]user.UserList, 0)
 multiFields := []paginator.SelectTableField{
@@ -230,15 +232,14 @@ pagination, err := paginator.NewBuilder().
 return pagination, err
 ```
 
-#### 3）预加载preload查询用法（强烈建议用法）：
+#### 3）Preloading query usage (strongly recommended usage):
 
 ```
-注意：
-与joins查询方式定义的struct有些许差别，preload方式定义struct名称必须与model当前表的struct名称一致，
-且关联表的struct名称不能跟model对于的struct名称一样 例如：定义的`UserInfo` 写法如下
+Note:
+There is a slight difference between the struct defined by the preload method and the struct defined by the joins query. The name of the struct defined by the preload method must be consistent with the name of the struct for the current table of the model. Also, the name of the struct for the associated table cannot be the same as the name of the struct for the model. For example, the definition of "UserInfo" is as follows:
 ```    
 
-定义接收struct
+Definition of receiving a struct.
 ```go
 type BaseUser models.GinUser
 type GinUserInfo models.GinUserInfo
@@ -249,7 +250,7 @@ type GinUser struct {
 }
 ```
 
-用法如下：
+Usage instructions as follows:
 ```go
 var userList = make([]user.GinUser, 0)
 pagination, err := paginator.NewBuilder().
@@ -260,17 +261,17 @@ pagination, err := paginator.NewBuilder().
 return pagination, err
 ```
 ```
-此写法不建议使用WithFields、WithField查询字段，建议直接定义接收struct规定的查询字段即可
+This method does not recommend using WithFields or WithField to query fields. Instead, it is recommended to directly define the query fields specified by the receiving struct.
 ```
 
-访问地址：http://127.0.0.1:9527/user/index?page=1 返回数据格式如下：
+Visit address: http://127.0.0.1:9527/user/index?page=1 The returned data format is as follows:
 
 ```json
 {
   "status": 200,
   "errcode": 0,
   "requestid": "9ac7f4f2-1271-4f87-8df7-599a478af9cb",
-  "message": "请求成功",
+  "message": "Request Success",
   "data": {
     "list": [],
     "current_page": 1,
@@ -280,74 +281,74 @@ return pagination, err
   }
 }
 ```
-#### 4）案例查看：
-1）用法如下 获取用户列表：
+#### 4）View case:
+1) Usage: Retrieve User List:
 ```
 entities/user/gin_user.go
 app/controller/backend/user.go
 app/service/backend/user.go
 router/routes/common.go
 ```
-### 二、具体方法
+### II. Specific Methods
 <details>
-<summary>查看使用</summary>
+<summary>View usage.</summary>
 
-#### 1）`必须在链式操作中` db连接方法
+#### 1）`Must be used in a chained operation.` DB Connection Method
 ```go
 WithDB(db *gorm.DB) *PageBuilder
 ```
-传入全局global.DB
 
-#### 2）`必须在链式操作中` model连接方法
+#### 2）`Must be used in a chained operation.` Model connection method.
 ```go
 WithModel(model interface{}) *PageBuilder
 ```
-传入查询主表model  例如：models.GinAdmin 参数不能传结构体取地址方式 如：&models.GinAdmin
 
-#### 3）`非必须在链式操作中` 单表查询或过滤字段方法
+Pass the main table model as a parameter for the query, for example: models.GinAdmin. You cannot pass a structure address as a parameter, like &models.GinAdmin.
+
+#### 3）`Not necessary in chained operations.` Single table query or filtering field method.
 ```go
 WithField(fields []string) *PageBuilder 
 ```
 
-fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
+The last parameter of "fields" defaults to "_select" (can be omitted), but if "_omit" is passed, it filters out the fields transmitted earlier.
 
-注意：
-- _select / _omit 必须在最后
-- WithModel 参数不能传结构体取地址 例如：&models.GinAdmin 必须 models.GinAdmin 不然 _omit 参数失效
-- 此注意事项适用于 `WithFields`方法、`WithMultiFields`方法
+Note:
+- _select / _omit must be the last parameters.
+- WithModel parameter cannot be passed as a pointer to a struct. For example: &models.GinAdmin must be models.GinAdmin, otherwise the _omit parameter will be ineffective.
+- This note applies to the WithFields method and WithMultiFields method.
 
-用法如下：
+Usage as follows:
 ```go
-// 表示过滤前面字段
+// Indicates filtering of front fields.
 WithField([]string{"created_at", "updated_at", "_omit"})
 
-// 表示查询前面的字段
+// Indicates the fields to be queried.
 WithField([]string{"created_at", "updated_at", "_select"})
 WithField([]string{"created_at", "updated_at"})
 ```
 
-#### 4）`非必须在链式操作中` 多表查询或过滤字段方法（preload模式下 关联表查询有问题，preload关联查询不建议使用此方法）
+#### 4）`Not necessary in chain operations.` Multi-table queries or filtering field methods (when using the preload mode, there may be issues with associated table queries, and it is not recommended to use the preload association query method).
 ```go
 WithFields(model interface{}, table string, fields []string) *PageBuilder
 ```
-fields 最后一个参数默认为_select（可不传），如传_omit为过滤前面传输的字段。
+The last argument for fields is default to "_select" (can be omitted), if "_omit" is passed, it will filter the fields transmitted earlier.
 
-用法如下：
+Usage as follows：
 ```go
-// 表示过滤前面字段
+// Indicates filtering the preceding field.
 WithFields(models.GinUser{}, models.GinUserTbName, []string{"password", "salt", "_omit"})
 
-// 表示查询前面的字段
+// "Indicates the field before the search."
 WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids", "_select"})
 WithFields(models.GinUserInfo{}, models.GinUserInfoTbName, []string{"id", "user_id", "role_ids"})
 ```
 
-#### 5）`非必须在链式操作中` 多表多字段查询（可替代WithFields方法）
+#### 5）`Not necessary in chain operations.` Multiple table and field queries (can replace WithFields method)
 ```go
 WithMultiFields(fields []SelectTableField) *PageBuilder
 ```
 
-用法如下：
+Usage as follows：
 ```go
 WithMultiFields([]paginator.SelectTableField{
     {Model: models.GinUser{}, Table: models.GinUserTbName, Field: []string{"password", "salt", "_omit"}},
@@ -355,45 +356,45 @@ WithMultiFields([]paginator.SelectTableField{
 })
 ```
 
-#### 6）`非必须在链式操作中` 多表关联查询主动预加载（暂不支持条件）
+#### 6）`Not necessary in chain operations.` Multiple table association query with proactive preloading (conditions not currently supported).
     
 ```go
  WithPreloads(querys []string) *PageBuilder 
 ```
 
-用法如下：
+Usage as follows：
 ```go
 WithPreloads([]string{"UserInfo", "UserRecord"})
 ```
 
-#### 7）`非必须在链式操作中` 关联查询主动预加载（可传条件，条件参考gorm）
+#### 7）`Not necessary in chain operations.` Active preloading of associated queries (can pass conditions, conditions refer to Gorm).
 
 ```go
 WithPreload(query string, args ...interface{}) *PageBuilder
 ```
 
-用法如下：
+Usage as follows：
 ```go
 WithPreload("UserInfo", "user_id = ?", "1")
 ```
 
-#### 8）`非必须在链式操作中` 数据查询条件方法
+#### 8）`Not necessary in chain operations.` Method for Data Query Conditions.
 
 ```go
 WithCondition(query interface{}, args ...interface{}) *PageBuilder
 ```
 
-传入查询条件 支持gorm中where条件中的查询方式（非struct方式） query, args参数参照gorm的where条件传入方式
+Pass in query conditions that support the querying format used in the 'where' conditions in GORM (non-struct format). The 'query' and 'args' parameters should follow the same method of passing in 'where' conditions as in GORM.
 
-#### 9）`非必须在链式操作中` 数据查询条件方法
+#### 9）`Not necessary in chain operations.` Method for Data Query Conditions.
 
 ```go
 WithJoins(joinType string, joinFields []OnJoins) *PageBuilder
 ```
 
-joinType：join类型 可传入：left、right、inner，joinFields结构体： LeftTableField：如：主表.ID  RightTableField：如：关联表.主表ID
+joinType: Type of join. It can be left, right or inner. joinFields structure: LeftTableField, such as the main table's ID, and RightTableField, such as the related table's main table ID.
 
-用法如下：
+Usage as follows：
 ```go
 WithJoins("left", []paginator.OnJoins{{
     LeftTableField:  paginator.JoinTableField{Table: models.GinUserTbName, Field: "id"},
@@ -401,89 +402,87 @@ WithJoins("left", []paginator.OnJoins{{
 }})
 ```
 
-#### 10）`必须在链式操作中最后一环` 分页返回方法
+#### 10）`The last link must be in the chain operation.` Page return method.
 
 ```go
 Pagination(dst interface{}, currentPage, pageSize int) (Page, error)
 ```
 
-dst 传入接收数据的struct结构体 注意：必须是应用方式传递 如：&userList，
-model，currentPage 为当前页码，pageSize为每页查询数量
+"dst" is a "struct" structure that receives incoming data. Note: It must be passed in application mode, such as "&userList". "model" and "currentPage" represent the current page number, and "pageSize" represents the number of queries per page.
 
-#### 11）`非必须在链式操作中` 对接原生查询方式
+#### 11）`Not necessary in chain operations.` Connecting with native query method.
 
 ```go
  NewDB() *gorm.DB
 ```
+After using this method, all methods inside the pagination for chained operations are unavailable. You can continue using the native methods of GORM afterwards.
 
-用此方法之后的链式操作下pagination里面的方法均不可用，后面跟gorm原生方法即可
-
-用法如下：
+Usage as follows：
 ```go
 NewDB().Where("id = ?", id).First(&userList)
 ```
 
-#### 12）获取当前页码
+#### 12）Get current page number.
 
 ```go
 paginator.CurrentPage
 ```
 
-#### 13）获取分页列表
+#### 13）Get paginated list.
 
 ```go
 paginator.List
 ```
 
-#### 14）获取数据总数
+#### 14）Get total number of data.
 
 ```go
 paginator.Total
 ```
 
-#### 15）获取最后一页页码
+#### 15）Get the last page number.
 
 ```go
 paginator.LastPage
 ```
 
-#### 16）获取每页数据条数
+#### 16）Get the number of data per page.
 
 ```go
 paginator.PerPage
 ```
 </details>
 
-## 2、基于gin上传组件
+## 2、Upload component based on Gin.
 
 ```go
 UploadFile(path string, r *gin.Context) (*FileHeader, error)
 ```
 
-默认存储在项目中upload目录，如果没有会自动创建 path：upload目录模块目录 如：user 则目录是：upload/user/{yyyy-mm-dd}/... 
+By default, the files are stored in the "upload" directory of the project. If it does not exist, it will be created automatically. The path will be "upload" directory module directory, such as "user". The directory structure will be "upload/user/{yyyy-mm-dd}/...".
 
-用法如下：
+Usage as follows：
 ```
 app/controller/backend/attachment.go
 pkg/util/upload.go
 router/routes/common.go
 ```
-## 3、rabbitmq组件使用
-配置yaml配置文件中的amqp参数
-### 1）启动消费者
-测试案例
+## 3、Using RabbitMQ Component
+Configure the amqp parameters in the yaml configuration file.
+### 1）Start the consumer.
+Test case
 ```shell
 go run command/test/consumer.go
 ```
-### 2）启动生产者
-测试案例
+### 2）Start the producer.
+Test case
 ```shell
 go run command/test/producer.go
 ```
 
-# 四、工具
+# IV、Tools
 
-运行 go run main.go --help 可查看到以下命令集
+Running "go run main.go --help" will display the following command set.
 
 ```
 COMMANDS:
@@ -495,207 +494,85 @@ COMMANDS:
   help, h     Shows a list of commands or help for one command
 ```
 
-## 1、执行migrate
+## 1、Execute migrate.
 <details>
-<summary>查看使用</summary>
+<summary>View Usage</summary>
 
 ```bash
-# 安装migrate cli工具
+# Install migrate cli tool.
 curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$platform-amd64.tar.gz | tar xvz
 
-# MacOS安装
+# MacOS Installation
 brew install golang-migrate
 
-# Window 使用scoop安装 https://scoop.sh/
+# Install Window with scoop https://scoop.sh/
 scoop install migrate
 
-# 创建迁移文件语法例如:
+# "Creating migration file syntax, for example:"
 migrate create -ext sql -dir migrations -seq create_users_table
 
-# 第一种方式执行迁移
-# 执行迁移操作：
+# The first way to execute migration.
+# Carrying out migration operation:
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations up
-# 执行回滚操作：
+# Performing rollback operation:
 migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations down
 
-# 第二种方式执行迁移
-# 查看help命令
+# The second way to perform migration.
+# View help command.
 go run main.go migrate --help
 
-# 格式如下：
+# The format is as follows：
 go run main.go migrate -s {step} -e {env}
-# env： dev, test, prod与config.*.yaml文件保持一致 默认是dev
-# step：执行的迁移文件数量（回滚的文件数量）例如：1，2，3... 如果执行所有传 all
+# env: Keep consistent with the config.*.yaml file among dev, test, and prod. The default is dev.
+# step: The number of migration files to be executed (or rolled back), for example, 1, 2, 3... If you want to execute all, use "all".
 
-# 执行所有迁移操作：
+# Perform all migration operations:
 go run main.go migrate -s all
 
-# 执行部分迁移操作：
-# 如：go run main.go migrate -s 1
+# Perform partial migration operations：
+# eg.：go run main.go migrate -s 1
 
-# 执行回滚操作：
-# 如：go run main.go migrate -s -1
+# Performing rollback operation：
+# eg.：go run main.go migrate -s -1
 ```
 </details>
 
-## 2、自动生成model
+## 2、Automatically generate models.
 
 ```bash
-# 执行生成所有model
+# Execute the command to generate all models.
 go run main.go model -tb=all {env}
 
-# 具体参数查看help
+# Please refer to the help for specific parameters.
 go run main.go model -help
 ```
 
-## 3、自动生成controller
+## 3、Auto-generate controller.
 
 ```bash
-go run main.go controller -c={controller名称} -m={module名称}
-# 例如：go run main.go controller -c=admin -m=backend
+go run main.go controller -c={controller name} -m={module name}
+# eg.：go run main.go controller -c=admin -m=backend
 
-# 具体参数查看help
+# Please refer to the help for specific parameters.
 go run main.go controller -help
 ```
 
-## 4、自动生成service
+## 4、Automatically generating service.
 
 ```bash
-go run main.go service -s={service名称} -m={module名称}
-# module名称是app/controller目录下的模块名称
-# 例如：go run main.go service -s=admin -m=backend
+go run main.go service -s={service name} -m={module name}
+# The module name is the module named "name" located in the app/controller directory.
+# eg.：go run main.go service -s=admin -m=backend
 
-# 具体参数查看help
+# Please refer to the help for specific parameters.
 go run main.go service -help
 ```
 
-## 5、创建后台管理员账号（基于gin_admin表的，可自行修改代码基于其他表）
+## 5、Create a back-end administrator account (based on the gin_admin table, you can modify the code based on other tables as needed).
 
 ```bash
-go run main.go account -c={账号名称} -p={密码}  
+go run main.go account -c={account name} -p={password}  
 
-# 具体参数查看help
+# Check the specific parameters in the help documentation.
 go run main.go account -help
 ```
-
-# 五、参考
-
-<details>
-<summary>查看使用</summary>
-
-## 初始化一个接口项目需要安装的依赖包（主要）
-### 初始化go.mod
-
-```bash
-go mod init github.com/MQEnergy/gin-framework
-go mod tidy
-```
-
-### 安装gin框架
-
-```bash
-go get -u github.com/gin-gonic/gin
-```
-
-### 安装model自动生成包
-
-```bash
-go get -u github.com/MQEnergy/gorm-model
-```
-
-### 安装gorm
-
-```bash
-go get -u gorm.io/gorm
-# 如果下载不了 十之八九是因为 GOSUMDB的原因 
-export GOSUMDB=
-# GOSUMDB置空就行
-```
-
-### 安装命令行工具
-
-```bash
-go get -u github.com/urfave/cli/v2
-```
-
-### 安装log日志
-
-```bash
-go get -u github.com/sirupsen/logrus
-go get -u github.com/lestrrat-go/file-rotatelogs
-```
-
-### 安装redis
-
-```bash
-go get -u github.com/go-redis/redis/v8
-go get -u github.com/go-redsync/redsync/v4
-```
-
-### 安装jwt
-
-```bash
-go get -u github.com/dgrijalva/jwt-go
-```
-
-### 安装cors跨域
-
-```bash
-go get -u github.com/gin-contrib/cors
-```
-
-### 安装casbin
-
-```bash
-go get -u github.com/casbin/casbin/v2
-go get -u github.com/casbin/gorm-adapter/v3
-```
-
-### 安装snowflake
-
-```bash
-go get -u github.com/bwmarrin/snowflake
-```
-
-### 安装golang-migrate迁移组件
-
-```bash
-go get -u github.com/golang-migrate/migrate/v4
-
-# 安装migrate cli工具
-curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$platform-amd64.tar.gz | tar xvz
-
-# MacOS安装
-brew install golang-migrate
-
-# Window 使用scoop安装 https://scoop.sh/
-scoop install migrate
-
-# 创建迁移文件语法例如:
-migrate create -ext sql -dir migrations -seq create_users_table
-
-# 执行迁移操作：
-migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations up
-# 执行回滚操作：
-migrate -database 'mysql://root:123456@tcp(127.0.0.1:3306)/gin_framework' -path ./migrations down
-```
-
-### 安装热更新
-
-```bash
-go install github.com/cosmtrek/air@latest
-```
-
-### 基于Go 1.18+泛型的Lodash风格的Go库
-
-```bash
-go get -u github.com/samber/lo
-```
-
-### 配置文件解析库
-
-```bash
-go get -u github.com/spf13/viper
-```
-
-</details>
