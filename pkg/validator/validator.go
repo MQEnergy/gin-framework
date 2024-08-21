@@ -37,10 +37,8 @@ func Translate(errs error) []string {
 		for _, err := range validationErrors {
 			result = append(result, err.Translate(trans))
 		}
-		break
 	case *json.UnmarshalTypeError:
 		result = append(result, "参数格式错误")
-		break
 	default:
 		result = append(result, "参数错误")
 	}
